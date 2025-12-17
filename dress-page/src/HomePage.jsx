@@ -14,6 +14,7 @@ function HomePage() {
     { name: "Dry Fruits", image: "dryfruits.jpg" },
     { name: "Snacks", image: "snacks.jpg" },
     { name: "Home Appliances", image: "fridge.jpg" },
+    { name: "Home Appliances", image: "fridge.jpg" },
 ];
 
     
