@@ -1,18 +1,51 @@
-import React from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "./Navbar.jsx";
 
 function HomePage() {
-   const categories = [
-   { name: "Electronics", image: "mobile.jpg" },
+  const categories = [
+  { name: "Electronics", image: "mobile.jpg" },
     { name: "Women Dresses", image: "dress1.webp" },
     { name: "Men Dresses", image: "men2.jpg" },
-    { name: "Dry Fruits", image: "dates.jpg" },
+    { name: "Vegetables", image: "veg2.webp" },
     { name: "Home Appliances", image: "fridge.webp" },
+    { name: "Kids Wear", image: "OIP (1).webp" },
+    { name: "Footwear", image: "OIP (2).webp" },  
+    { name: "Bicycles", image: "allbikes.jpg" }, 
+    { name: "Accessories", image: "acces.jpg" }, 
+  
    ];
 
-  const dresses = [
+  const scrollRef = useRef(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const onScroll = () => {
+      setCanScrollLeft(el.scrollLeft > 0);
+      setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 1);
+    };
+    onScroll();
+    el.addEventListener("scroll", onScroll);
+    window.addEventListener("resize", onScroll);
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+    };
+  }, []);
+
+  const scrollByAmount = (direction) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const amount = el.clientWidth * 0.7;
+    el.scrollBy({ left: direction === "right" ? amount : -amount, behavior: "smooth" });
+  };
+
+  const dresses = [ 
     { id: 1, name: "Half Saree", price: "₹1400", image: "bluesofa.webp" },
-    { id: 2, name: "Traditional Dress", price: "₹4000", image: "dates.jpg" },
+    { id: 2, name: "Traditional Dress", price: "₹4000", image: "th.webp" },
     { id: 3, name: "Pink Dress", price: "₹5000", image: "fridge.webp" },
     { id: 4, name: "Red Dress", price: "₹500", image: "red.jpg" },
     { id: 5, name: "Flower Dress", price: "₹1000", image: "camara.jpg" },
@@ -26,7 +59,7 @@ function HomePage() {
       <Navbar />
 
       {/* 🔍 Search Bar */}
-      <div className="bg-white p-3 md:p-4 shadow">
+      <div className="bg-white p-3 md:p-4 shadow mt-4 max-w-3xl mx-auto rounded-lg ">
         <input
           type="text"
           placeholder="Search for Laptops, Dry Fruits, Kurtis..."
@@ -40,20 +73,62 @@ function HomePage() {
           Categories
         </h2>
 
-        <div className="flex gap-4 overflow-x-auto scrollbar-hide">
-          {categories.map((cat, index) => (
-            <div
-              key={index}
-              className="text-center min-w-[70px] sm:min-w-[90px]"
-            >
-              <img
-                src={cat.image}
-                alt={cat.name}
-                className="w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded-full border object-cover"
-              />
-              <p className="text-xs sm:text-sm mt-1">{cat.name}</p>
-            </div>
-          ))}
+        <div className="relative">
+          <button
+            onClick={() => scrollByAmount('left')}
+            disabled={!canScrollLeft}
+            aria-label="Scroll left"
+            className="absolute left-1 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            ‹
+          </button>
+
+          <div
+            ref={scrollRef}
+            className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth px-8"
+          >
+            {categories.map((cat, index) => {
+              const lname = cat.name.toLowerCase();
+
+              // Determine route for known categories
+              let route = null;
+              if (lname.includes("elect")) route = "/electro";
+              else if (lname.includes("women") || lname.includes("woman")) route = "/women";
+              else if (lname.includes("men") || lname.includes("man")) route = "/men";
+              else if (lname.includes("veg") || lname.includes("veget")) route = "/vegetables";
+              else if (lname.includes("home") || lname.includes("appliance")) route = "/appliances";
+
+              const content = (
+                <div className="inline-block cursor-pointer transform hover:scale-105 transition shadow-sm hover:shadow-md">
+                  <div className="p-1 rounded-full bg-pink-50">
+                    <img src={cat.image} alt={cat.name} className="w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded-full border object-cover" />
+                  </div>
+                  <p className="text-xs sm:text-sm mt-1 text-pink-600 font-medium">{cat.name}</p>
+                </div>
+              );
+
+              return (
+                <div key={index} className="text-center min-w-[70px] sm:min-w-[90px]">
+                  {route ? (
+                    <Link to={route} aria-label={cat.name} className="inline-block">
+                      {content}
+                    </Link>
+                  ) : (
+                    content
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <button
+            onClick={() => scrollByAmount('right')}
+            disabled={!canScrollRight}
+            aria-label="Scroll right"
+            className="absolute right-1 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-2 shadow disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            ›
+          </button>
         </div>
       </section>
 
@@ -71,30 +146,49 @@ function HomePage() {
         </h2>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
-          {dresses.map((dress) => (
-            <div
-              key={dress.id}
-              className="bg-white rounded-lg shadow hover:shadow-lg transition p-2"
-            >
-              <img
-                src={dress.image}
-                alt={dress.name}
-                className="w-full h-36 sm:h-40 md:h-44 object-contain"
-              />
+          {dresses.map((dress) => {
+            const isWomen = /dress|saree|kurta|lehenga/i.test(dress.name);
+            const isMen = /men|man|pant|pants|shirt|t-shirt|tshirt|trouser|jacket|shorts/i.test(dress.name);
+            const card = (
+              <div className="bg-white rounded-lg shadow hover:shadow-lg transition p-2">
+                <img
+                  src={dress.image}
+                  alt={dress.name}
+                  className="w-full h-36 sm:h-40 md:h-44 object-contain"
+                />
 
-              <h3 className="text-sm md:text-base font-semibold mt-2">
-                {dress.name}
-              </h3>
+                <h3 className="text-sm md:text-base font-semibold mt-2">
+                  {dress.name}
+                </h3>
 
-              <p className="text-pink-600 font-bold text-sm md:text-base">
-                {dress.price}
-              </p>
+                <p className="text-pink-600 font-bold text-sm md:text-base">
+                  {dress.price}
+                </p>
 
-              <button className="mt-2 w-full bg-pink-500 hover:bg-pink-600 text-white py-1.5 rounded text-sm">
-                Add to Cart
-              </button>
-            </div>
-          ))}
+                <button className="mt-2 w-full bg-pink-600 hover:bg-pink-700 text-white py-1.5 rounded text-sm">
+                  Add to Cart
+                </button>
+              </div>
+            );
+
+            if (isWomen) {
+              return (
+                <Link to="/women" key={dress.id} className="block">
+                  {card}
+                </Link>
+              );
+            }
+
+            if (isMen) {
+              return (
+                <Link to="/men" key={dress.id} className="block">
+                  {card}
+                </Link>
+              );
+            }
+
+            return <div key={dress.id}>{card}</div>;
+          })}
         </div>
       </section>
     {/* Trust Section */}

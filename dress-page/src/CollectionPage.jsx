@@ -33,7 +33,7 @@ function CollectionPage() {
   { id: 20, name: "Baby Dress", price: "₹799", image: "/baby.webp", rating: 4.4 },
   { id: 21, name: "Camera", price: "₹24,999", image: "/camara.jpg", rating: 4.6 },
   { id: 22, name: "Blue Kurta", price: "₹899", image: "/blue.webp", rating: 4.2 },
-  { id: 23, name: "Refrigerator", price: "₹16,999", image: "/fridge2.webp", rating: 4.5 },
+  { id: 23, name: "Refrigerator", price: "₹16,999", image: "/fridge.webp", rating: 4.5 },
   { id: 24, name: "Kurta", price: "₹999", image: "/blue2.webp", rating: 4.1 },
   { id: 25, name: "White Kurta", price: "₹1,199", image: "/white.webp", rating: 4.3 },
   { id: 26, name: "Headphones", price: "₹1,499", image: "/headphone.webp", rating: 4.4 },
@@ -41,8 +41,8 @@ function CollectionPage() {
   { id: 28, name: "Walnuts", price: "₹799", image: "/walnut.jpg", rating: 4.5 },
   { id: 29, name: "Kids Dress", price: "₹899", image: "/kid1.webp", rating: 4.3 },
   { id: 30, name: "Baby Dress", price: "₹749", image: "/baby.webp", rating: 4.4 },
-  { id: 31, name: "GlowSync Smart Desk Lamp", price: "₹3,999", image: "/i/product01.jpg" , rating: 4.6 },
-    { id: 32, name: "EcoNote Reusable Notebook", price: "₹899", image: "/product02.jpg" , rating: 4.2 },
+  { id: 31, name: "GlowSync Smart Desk Lamp", price: "₹3,999", image: "/OIP.webp" , rating: 4.6 },
+    { id: 32, name: "EcoNote Reusable Notebook", price: "₹899", image: "/boku.webp" , rating: 4.2 },
     { id: 33, name: "FocusCube Productivity Timer", price: "₹1,499", image: "/images/products/product03.jpg", rating: 4.4 },
     { id: 34, name: "ModuKey Modular Keyboard Keys", price: "₹2,499", image: "/images/products/product04.jpg", rating: 4.5 },
 
@@ -149,7 +149,7 @@ function CollectionPage() {
                   Free Delivery
                 </p>
 
-                <button className="w-full mt-3 bg-pink-500 text-white py-2 rounded hover:bg-pink-600">
+                <button className="w-full mt-3 bg-pink-600 text-white py-2 rounded hover:bg-pink-700">
                   Add to Cart
                 </button>
               </div>

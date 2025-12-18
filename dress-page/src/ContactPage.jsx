@@ -26,7 +26,7 @@ function ContactPage() {
       </section>
 
       {/* Info Cards */}
-      <section className="w-full bg-gradient-to-r from-pink-50 to-purple-50 py-8 px-4">
+      <section className="w-full bg-gradient-to-r from-pink-50 to-white py-8 px-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 max-w-6xl mx-auto">
           {[
             { title: "Email", value: "kaviboutique@gmail.com", icon: "📧" },
@@ -35,9 +35,9 @@ function ContactPage() {
           ].map((item, i) => (
             <div
               key={i}
-              className="bg-white p-5 sm:p-6 rounded-2xl shadow-md border border-pink-100 text-center"
+              className="bg-white p-5 sm:p-6 rounded-2xl shadow-md border border-pink-50 text-center"
             >
-              <div className="w-11 h-11 sm:w-12 sm:h-12 mx-auto mb-3 flex items-center justify-center rounded-full bg-pink-100 text-xl sm:text-2xl">
+              <div className="w-11 h-11 sm:w-12 sm:h-12 mx-auto mb-3 flex items-center justify-center rounded-full bg-pink-50 text-xl sm:text-2xl">
                 {item.icon}
               </div>
 
@@ -135,7 +135,7 @@ function ContactPage() {
 
       <button
         type="submit"
-        className="w-full py-2.5 bg-pink-500 text-white font-semibold rounded-lg hover:bg-pink-600 transition"
+        className="w-full py-2.5 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700 transition"
       >
         Send Message
       </button>

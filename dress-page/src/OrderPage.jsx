@@ -82,7 +82,7 @@ function OrderPage() {
                   className="h-full object-contain"
                 />
 
-                <span className="absolute top-2 left-2 bg-pink-500 text-white text-xs px-2 py-1 rounded">
+                <span className="absolute top-2 left-2 bg-pink-600 text-white text-xs px-2 py-1 rounded">
                   {p.tag}
                 </span>
 
@@ -131,7 +131,7 @@ function OrderPage() {
 
                 <button
                   onClick={() => addToCart(p)}
-                  className="w-full bg-pink-500 text-white py-2 rounded-lg hover:bg-pink-600"
+                  className="w-full bg-pink-600 text-white py-2 rounded-lg hover:bg-pink-700"
                 >
                   Add to Cart
                 </button>
@@ -209,7 +209,7 @@ function OrderPage() {
   {/* Place Order */}
   <button
     disabled={cart.length === 0}
-    className="w-full mt-4 bg-pink-500 text-white py-3 rounded-lg hover:bg-pink-600 disabled:bg-gray-300"
+    className="w-full mt-4 bg-pink-600 text-white py-3 rounded-lg hover:bg-pink-700 disabled:bg-gray-300"
   >
     Place Order
   </button>

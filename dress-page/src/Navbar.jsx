@@ -6,7 +6,7 @@ function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="bg-pink-500 text-white px-4 py-4">
+    <nav className="bg-pink-600 text-black underline px-4 py-4 shadow-md md:px-8 lg:px-16 ">
       <div className="flex items-center justify-between">
 
         {/* Logo */}
@@ -24,11 +24,11 @@ function Navbar() {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-8">
-          <button onClick={() => navigate("/")}>Home</button>
-          <button onClick={() => navigate("/about")}>About</button>
-          <button onClick={() => navigate("/collection")}>Collection</button>
-          <button onClick={() => navigate("/contact")}>Contact</button>
-          <button onClick={() => navigate("/order")}>Order</button>
+          <button onClick={() => navigate("/")} className="cursor-pointer">Home</button>
+          <button onClick={() => navigate("/about")} className="cursor-pointer">About</button>
+          <button onClick={() => navigate("/collection")} className="cursor-pointer">Collection</button>
+          <button onClick={() => navigate("/contact")} className="cursor-pointer">Contact</button>
+          <button onClick={() => navigate("/order")} className="cursor-pointer">Order</button>
         </div>
 
         {/* Mobile Toggle */}
@@ -42,7 +42,7 @@ function Navbar() {
 
       {/* Mobile Menu */}
       {open && (
-        <div className="md:hidden mt-4 bg-pink-400 rounded-lg p-4 flex flex-col gap-4 text-center">
+        <div className="md:hidden mt-4 bg-white rounded-lg p-4 flex flex-col gap-4 text-center shadow border border-gray-200">
           <button onClick={() => {navigate("/"); setOpen(false);}}>Home</button>
           <button onClick={() => {navigate("/about"); setOpen(false);}}>About</button>
           <button onClick={() => {navigate("/collection"); setOpen(false);}}>Collection</button>

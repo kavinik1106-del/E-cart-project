@@ -62,7 +62,7 @@ function AboutPage() {
               >
                 {/* Overlay for text readability */}
                 <div className="absolute inset-0 bg-white bg-opacity-30 flex flex-col justify-center items-center p-4">
-                  <h2 className="text-3xl font-bold text-pink-500">{item.value}</h2>
+                  <h2 className="text-3xl font-bold text-pink-600">{item.value}</h2>
                   <p className="text-black mt-1 mb-2 font-semibold">{item.label}</p>
                   <ul className="text-pink-800 text-sm space-y-1">
                     {item.features.map((feature, idx) => (
