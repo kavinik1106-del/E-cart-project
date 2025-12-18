@@ -15,11 +15,11 @@ function Navbar() {
           onClick={() => navigate("/")}
         >
           <img
-            src="logo2.jpg"
+            src="/logo5.jpg"
             alt="Kavi Boutique Logo"
             className="w-10 h-10 rounded-full"
           />
-          <span className="text-lg font-bold">Kavi Boutique</span>
+          <span className="text-lg font-bold">Click2Buy</span>
         </div>
 
         {/* Desktop Menu */}
@@ -28,6 +28,7 @@ function Navbar() {
           <button onClick={() => navigate("/about")}>About</button>
           <button onClick={() => navigate("/collection")}>Collection</button>
           <button onClick={() => navigate("/contact")}>Contact</button>
+          <button onClick={() => navigate("/order")}>Order</button>
         </div>
 
         {/* Mobile Toggle */}
@@ -46,6 +47,7 @@ function Navbar() {
           <button onClick={() => {navigate("/about"); setOpen(false);}}>About</button>
           <button onClick={() => {navigate("/collection"); setOpen(false);}}>Collection</button>
           <button onClick={() => {navigate("/contact"); setOpen(false);}}>Contact</button>
+          <button onClick={() => {navigate("/order"); setOpen(false);}}>Order</button>
         </div>
       )}
     </nav>

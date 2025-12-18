@@ -16,20 +16,13 @@ function ContactPage() {
       {/* Hero Section */}
       <section
         className="relative text-white text-center px-4 
-                   h-56 sm:h-72 md:h-96
+                   h-56 sm:h-72 md:h-150
                    bg-cover bg-center flex items-center justify-center"
-        style={{ backgroundImage: "url('kidbanner.jpg')" }}
+        style={{ backgroundImage: "url('dressbanner.jpg')" }}
       >
-        <div className="absolute inset-0 bg-black/50"></div>
+        
 
-        <div className="relative z-10 max-w-xl sm:max-w-2xl">
-          <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold mb-3">
-            Contact Kavi Boutique
-          </h1>
-          <p className="text-sm sm:text-base md:text-lg opacity-90">
-            We’re happy to help you with orders, support & queries
-          </p>
-        </div>
+        
       </section>
 
       {/* Info Cards */}
@@ -60,51 +53,105 @@ function ContactPage() {
         </div>
       </section>
 
-      {/* Contact Form */}
-      <section className="max-w-xl sm:max-w-2xl mx-auto mt-12 px-4">
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-gray-800 mb-6">
-          Send Us a Message
-        </h2>
+      {/* Contact Section */}
+<section className="max-w-5xl mx-auto mt-12 px-4 grid md:grid-cols-2 gap-10">
 
-        <form
-          onSubmit={handleSubmit}
-          className="bg-white p-5 sm:p-8 rounded-2xl shadow-lg space-y-5"
-        >
-          <input
-            type="text"
-            placeholder="Your Name"
-            required
-            className="w-full px-4 py-2.5 sm:py-3 border rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-pink-500 outline-none"
-          />
+  {/* Left – Contact Details */}
+  <div className="space-y-6">
+    <h2 className="text-2xl md:text-3xl font-bold text-gray-800">
+      Get in Touch
+    </h2>
 
-          <input
-            type="email"
-            placeholder="Your Email"
-            required
-            className="w-full px-4 py-2.5 sm:py-3 border rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-pink-500 outline-none"
-          />
+    <p className="text-gray-600 text-sm md:text-base">
+      Have questions or need help? We’re here for you.  
+      Reach out to us anytime.
+    </p>
 
-          <textarea
-            rows="4"
-            placeholder="Your Message"
-            required
-            className="w-full px-4 py-2.5 sm:py-3 border rounded-lg text-sm sm:text-base focus:ring-2 focus:ring-pink-500 outline-none resize-none"
-          />
+    <div className="space-y-4 text-sm md:text-base">
+      <p>
+        📍 <span className="font-semibold">Address:</span><br />
+        Click2Buy, Chennai, Tamil Nadu, India
+      </p>
 
-          <button
-            type="submit"
-            className="w-full py-2.5 sm:py-3 bg-pink-500 text-white font-semibold rounded-lg hover:bg-pink-600 transition"
-          >
-            Send Message
-          </button>
+      <p>
+        📞 <span className="font-semibold">Phone:</span><br />
+        +91 98765 43210
+      </p>
 
-          {submitted && (
-            <p className="text-green-600 text-center text-sm sm:text-base font-medium">
-              ✅ Message sent successfully!
-            </p>
-          )}
-        </form>
-      </section>
+      <p>
+        📧 <span className="font-semibold">Email:</span><br />
+        support@click2buy.com
+      </p>
+
+      <p>
+        ⏰ <span className="font-semibold">Working Hours:</span><br />
+        Mon – Sat (9:00 AM – 6:00 PM)
+      </p>
+    </div>
+  </div>
+
+  {/* Right – Contact Form */}
+  <div>
+    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-center text-gray-800 mb-6">
+      Send Us a Message
+    </h2>
+
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white p-5 sm:p-8 rounded-2xl shadow-lg space-y-5"
+    >
+      <input
+        type="text"
+        placeholder="Your Name"
+        required
+        className="w-full px-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-pink-500 outline-none"
+      />
+
+      <input
+        type="email"
+        placeholder="Your Email"
+        required
+        className="w-full px-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-pink-500 outline-none"
+      />
+
+      {/* Subject */}
+      <select
+        required
+        className="w-full px-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-pink-500 outline-none"
+      >
+        <option value="">Select Subject</option>
+        <option>Order Related</option>
+        <option>Payment Issue</option>
+        <option>Delivery Issue</option>
+        <option>General Query</option>
+      </select>
+
+      <textarea
+        rows="4"
+        placeholder="Your Message"
+        required
+        className="w-full px-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-pink-500 outline-none resize-none"
+      />
+
+      <button
+        type="submit"
+        className="w-full py-2.5 bg-pink-500 text-white font-semibold rounded-lg hover:bg-pink-600 transition"
+      >
+        Send Message
+      </button>
+
+      <p className="text-xs text-gray-500 text-center">
+        We respect your privacy. Your details are safe with us.
+      </p>
+
+      {submitted && (
+        <p className="text-green-600 text-center text-sm font-medium">
+          ✅ Message sent successfully! We will contact you soon.
+        </p>
+      )}
+    </form>
+  </div>
+</section>
 
       {/* Google Map */}
       <section className="max-w-6xl mx-auto mt-16 px-4">
@@ -122,7 +169,7 @@ function ContactPage() {
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 text-center py-5 mt-16 text-xs sm:text-sm">
         © 2025{" "}
-        <span className="text-white font-semibold">Kavi Boutique</span>.  
+        <span className="text-white font-semibold">Click2Buy</span>.  
         Made with ❤️ in Chennai
       </footer>
     </div>

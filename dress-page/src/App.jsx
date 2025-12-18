@@ -4,6 +4,9 @@ import HomePage from "./HomePage.jsx";
 import AboutPage from "./AboutPage.jsx";
 import ContactPage from "./ContactPage.jsx";
 import CollectionPage from "./CollectionPage.jsx";
+import OrderPage from "./OrderPage.jsx";
+
+
 
 function App() {
   return (
@@ -12,6 +15,9 @@ function App() {
       <Route path="/about" element={<AboutPage />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/collection" element={<CollectionPage />} />
+       <Route path="/order" element={<OrderPage />} />
+       
+
     </Routes>
   );
 }

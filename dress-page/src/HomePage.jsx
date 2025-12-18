@@ -2,32 +2,23 @@ import React from "react";
 import Navbar from "./Navbar.jsx";
 
 function HomePage() {
-  const categories = [
-    { name: "Sarees", image: "saree2.jpg" },
-    { name: "Kurtis", image: "dress1.webp" },
-    { name: "Dresses", image: "winter.webp" },
-    { name: "Men", image: "vetti.webp" },
-    { name: "Kids", image: "kid.jpg" },
-    { name: "Mobiles", image: "mobile.jpg" },
-    { name: "Laptops", image: "laptop.jpg" },
-    { name: "Headphones", image: "headphone.jpg" },
-    { name: "Dry Fruits", image: "dryfruits.jpg" },
-    { name: "Snacks", image: "snacks.jpg" },
-    { name: "Home Appliances", image: "fridge.jpg" },
-];
-
-    
-  
+   const categories = [
+   { name: "Electronics", image: "mobile.jpg" },
+    { name: "Women Dresses", image: "dress1.webp" },
+    { name: "Men Dresses", image: "men2.jpg" },
+    { name: "Dry Fruits", image: "dates.jpg" },
+    { name: "Home Appliances", image: "fridge.webp" },
+   ];
 
   const dresses = [
-    { id: 1, name: "Half Saree", price: "₹1400", image: "halfsaree.webp" },
-    { id: 2, name: "Traditional Dress", price: "₹4000", image: "vetti.webp" },
-    { id: 3, name: "Pink Dress", price: "₹5000", image: "pinkdress.avif" },
+    { id: 1, name: "Half Saree", price: "₹1400", image: "bluesofa.webp" },
+    { id: 2, name: "Traditional Dress", price: "₹4000", image: "dates.jpg" },
+    { id: 3, name: "Pink Dress", price: "₹5000", image: "fridge.webp" },
     { id: 4, name: "Red Dress", price: "₹500", image: "red.jpg" },
-    { id: 5, name: "Flower Dress", price: "₹1000", image: "flower.webp" },
-    { id: 6, name: "Wedding Dress", price: "₹5200", image: "men2.jpg" },
-    { id: 7, name: "Pink Dress", price: "₹700", image: "pink.jpg" },
-    { id: 8, name: "Kids Dress", price: "₹800", image: "kid1.webp" },
+    { id: 5, name: "Flower Dress", price: "₹1000", image: "camara.jpg" },
+    { id: 6, name: "Wedding Dress", price: "₹5200", image: "mobile.jpg" },
+    { id: 7, name: "Pink Dress", price: "₹700", image: "kismis.webp" },
+    { id: 8, name: "Kids Dress", price: "₹800", image: "saree1.webp" },
   ];
 
   return (
@@ -38,7 +29,7 @@ function HomePage() {
       <div className="bg-white p-3 md:p-4 shadow">
         <input
           type="text"
-          placeholder="Search for Sarees, Dresses, Kurtis..."
+          placeholder="Search for Laptops, Dry Fruits, Kurtis..."
           className="w-full border rounded-lg px-4 py-2 text-sm md:text-base focus:outline-none"
         />
       </div>
@@ -68,9 +59,9 @@ function HomePage() {
 
       {/* 🖼️ Banner */}
       <img
-        src="/offer.webp"
-        alt="Offer Banner"
-        className="w-full h-40 sm:h-52 md:h-64 lg:h-72 object-cover"
+        src="/elebanner.jpg"
+        alt="eleoffer2.avif"
+        className="w-full h-40 sm:h-52 md:h-64 lg:h-90 object-cover"
       />
 
       {/* 🛍️ Products */}
@@ -106,11 +97,37 @@ function HomePage() {
           ))}
         </div>
       </section>
+    {/* Trust Section */}
+<div
+  className="py-60 mt-24 bg-cover bg-center"
+  style={{ backgroundImage: "url('/drybanner.jpg')" }}
+>
+  
+</div>
+<footer className="bg-gray-800 text-white mt-10 py-2">
+  <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-6 text-sm px-4">
+    <div>
+      <h3 className="font-bold mb-2">Click2Buy</h3>
+      <p> Everything you need, at one place</p>
+    </div>
 
-      {/* Footer */}
-<footer className="text-center text-xs md:text-sm text-gray-600 py-4">
-  © 2025 <span className="font-semibold text-black">Kavi Boutique</span>. 
-  <span className="text-pink-500">Made with ❤️ in Chennai</span>
+    <div>
+      <h3 className="font-bold mb-2">Customer Care</h3>
+      <p>Help Center</p>
+      <p>Returns</p>
+      <p>Track Order</p>
+    </div>
+
+    <div>
+      <h3 className="font-bold mb-2">Contact</h3>
+      <p>Email: support@Click2Buy.com</p>
+      <p>Phone: +91 98765 43210</p>
+    </div>
+  </div>
+
+  <p className="text-center text-xs text-gray-400 mt-4">
+    © 2025 Click2Buy. All rights reserved.
+  </p>
 </footer>
 
 
