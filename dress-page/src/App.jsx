@@ -5,6 +5,7 @@ import AboutPage from "./AboutPage.jsx";
 import ContactPage from "./ContactPage.jsx";
 import CollectionPage from "./CollectionPage.jsx";
 import OrderPage from "./OrderPage.jsx";
+import LoginPage from "./LoginPage.jsx";
 
 
 
@@ -16,6 +17,7 @@ function App() {
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/collection" element={<CollectionPage />} />
        <Route path="/order" element={<OrderPage />} />
+       <Route path="/login" element={<LoginPage />} />
        
 
     </Routes>
