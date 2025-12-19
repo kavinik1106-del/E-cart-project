@@ -132,7 +132,7 @@ function OrderPage() {
 
                 <button
                   onClick={() => addToCart(p)}
-                  className="w-full bg-pink-500 text-white py-2 rounded-lg hover:bg-pink-600"
+                  className="w-full bg-pink-600 text-white py-2 rounded-lg hover:bg-pink-700"
                 >
                   Add to Cart
                 </button>

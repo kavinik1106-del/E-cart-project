@@ -153,7 +153,7 @@ function CollectionPage() {
                   Free Delivery
                 </p>
 
-                <button className="w-full mt-3 bg-pink-500 text-white py-2 rounded hover:bg-pink-600">
+                <button className="w-full mt-3 bg-pink-600 text-white py-2 rounded hover:bg-pink-700">
                   Add to Cart
                 </button>
               </div>
