@@ -97,6 +97,13 @@ function HomePage() {
               else if (lname.includes("men") || lname.includes("man")) route = "/men";
               else if (lname.includes("veg") || lname.includes("veget")) route = "/vegetables";
               else if (lname.includes("home") || lname.includes("appliance")) route = "/appliances";
+              else if (lname.includes("kids")) route = "/kidswear";
+              else if (lname.includes("kids")) route = "/kids";
+              else if (lname.includes("footwear") || lname.includes("shoe")) route = "/footwear";
+              else if (lname.includes("access")) route = "/accessories";
+              else if (lname.includes("bicycle") || lname.includes("bike")) route = "/bicycles";
+
+
 
               const content = (
                 <div className="inline-block cursor-pointer transform hover:scale-105 transition shadow-sm hover:shadow-md">
