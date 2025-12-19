@@ -33,7 +33,7 @@ function CollectionPage() {
   { id: 20, name: "Baby Dress", price: "₹799", image: "/baby.webp", rating: 4.4 },
   { id: 21, name: "Camera", price: "₹24,999", image: "/camara.jpg", rating: 4.6 },
   { id: 22, name: "Blue Kurta", price: "₹899", image: "/blue.webp", rating: 4.2 },
-  { id: 23, name: "Refrigerator", price: "₹16,999", image: "/fridge.webp", rating: 4.5 },
+  { id: 23, name: "Refrigerator", price: "₹16,999", image: "/fridge2.png", rating: 4.5 },
   { id: 24, name: "Kurta", price: "₹999", image: "/blue2.webp", rating: 4.1 },
   { id: 25, name: "White Kurta", price: "₹1,199", image: "/white.webp", rating: 4.3 },
   { id: 26, name: "Headphones", price: "₹1,499", image: "/headphone.webp", rating: 4.4 },
@@ -41,31 +41,35 @@ function CollectionPage() {
   { id: 28, name: "Walnuts", price: "₹799", image: "/walnut.jpg", rating: 4.5 },
   { id: 29, name: "Kids Dress", price: "₹899", image: "/kid1.webp", rating: 4.3 },
   { id: 30, name: "Baby Dress", price: "₹749", image: "/baby.webp", rating: 4.4 },
-  { id: 31, name: "GlowSync Smart Desk Lamp", price: "₹3,999", image: "/OIP.webp" , rating: 4.6 },
-    { id: 32, name: "EcoNote Reusable Notebook", price: "₹899", image: "/boku.webp" , rating: 4.2 },
-    { id: 33, name: "FocusCube Productivity Timer", price: "₹1,499", image: "/images/products/product03.jpg", rating: 4.4 },
-    { id: 34, name: "ModuKey Modular Keyboard Keys", price: "₹2,499", image: "/images/products/product04.jpg", rating: 4.5 },
+  { id: 31, name: "GlowSync Smart Desk Lamp", price: "₹3,999", image: "/desklamp.jpg" , rating: 4.6 },
+    { id: 32, name: "EcoNote Reusable Notebook", price: "₹899", image: "/econote.jpg" , rating: 4.2 },
+    { id: 33, name: "FocusCube Productivity Timer", price: "₹1,499", image: "timer.jpg", rating: 4.4 },
+    { id: 34, name: "ModuKey Modular Keyboard Keys", price: "₹2,499", image: "/keyboard.jpg", rating: 4.5 },
 
-    { id: 35, name: "AromaCharge Wireless Diffuser", price: "₹3,299", image: "/images/products/product05.jpg" , rating: 4.3 },
-    { id: 36, name: "FlexiStand Laptop Stand", price: "₹1,999", image: "/images/products/product06.jpg", rating: 4.4 },
-    { id: 37, name: "StudyZen Noise Shield Headphones", price: "₹4,999", image: "/images/products/product07.jpg", },
-    { id: 38, name: "CableNest Magnetic Organizer", price: "₹799", image: "/images/products/product08.jpg", rating: 4.1 },
+    { id: 35, name: "AromaCharge Wireless Diffuser", price: "₹3,299", image: "aroma.jpg" , rating: 4.3 },
+    { id: 36, name: "FlexiStand Laptop Stand", price: "₹1,999", image: "/laptopstand.jpg", rating: 4.4 },
+    { id: 37, name: "StudyZen Noise Shield Headphones", price: "₹4,999", image: "noicehead.jpg", },
+    { id: 38, name: "CableNest Magnetic Organizer", price: "₹799", image: "/magnetcable.jpg", rating: 4.1 },
 
-    { id: 39, name: "MoodLight RGB Wall Panel", price: "₹5,999", image: "/images/products/product09.jpg", rating: 4.5 },
-    { id: 40, name: "SmartCup Temperature Control Mug", price: "₹2,799", image: "/images/products/product10.jpg", rating: 4.2 },
-    { id: 41, name: "PocketScan Mini Scanner", price: "₹3,499", image: "/images/products/product11.jpg", rating: 4.3 },
-    { id: 42, name: "VisionBoard Digital Planner Pad", price: "₹2,299", image: "/images/products/product12.jpg", rating: 4.1 },
+    { id: 39, name: "MoodLight RGB Wall Panel", price: "₹5,999", image: "moonlight.jpg", rating: 4.5 },
+    { id: 40, name: "SmartCup Temperature Control Mug", price: "₹2,799", image: "heatcup.jpg", rating: 4.2 },
+    { id: 41, name: "PocketScan Mini Scanner", price: "₹3,499", image: "printermini.jpg", rating: 4.3 },
+    { id: 42, name: "VisionBoard Digital Planner Pad", price: "₹2,299", image: "pad.jpg", rating: 4.1 },
 
-    { id: 43, name: "AirWrite Smart Pen", price: "₹2,999", image: "/images/products/product13.jpg", rating: 4.4 },
-    { id: 44, name: "DeskDock Charging Hub", price: "₹3,499", image: "/images/products/product14.jpg", rating: 4.2 },
-    { id: 45, name: "SleepWell Smart Eye Mask", price: "₹2,199", image: "/images/products/product15.jpg", rating: 4.3 },
-    { id: 46, name: "SnapBoard Foldable Whiteboard", price: "₹1,499", image: "/images/products/product16.jpg", rating: 4.1 },
+    { id: 43, name: "AirWrite Smart Pen", price: "₹2,999", image: "airpen.jpg", rating: 4.4 },
+    { id: 44, name: "DeskDock Charging Hub", price: "₹3,499", image: "chargerhub.jpg", rating: 4.2 },
+    { id: 45, name: "SleepWell Smart Eye Mask", price: "₹2,199", image: "eyemask.jpg", rating: 4.3 },
+    { id: 46, name: "SnapBoard Foldable Whiteboard", price: "₹1,499", image: "/whiteboard.jpg", rating: 4.1 },
 
-    { id: 47, name: "PostureGuard Seat Pad", price: "₹3,899", image: "/images/products/product17.jpg", rating: 4.0 },
-    { id: 48, name: "TouchDial Creative Controller", price: "₹4,299", image: "/images/products/product18.jpg", rating: 4.5 },
-    { id: 49, name: "HydraGlow Smart Bottle", price: "₹1,799", image: "/images/products/product19.jpg", rating: 4.2 },
-    { id: 50, name: "NoteBeam Projector Pad", price: "₹5,499", image: "/images/products/product20.jpg", rating: 4.3 },
+    { id: 47, name: "PostureGuard Seat Pad", price: "₹3,899", image: "seat.jpg", rating: 4.0 },
+    { id: 48, name: "TouchDial Creative Controller", price: "₹4,299", image: "game.jpg", rating: 4.5 },
+    { id: 49, name: "HydraGlow Smart Bottle", price: "₹1,799", image: "waterbottle.jpg", rating: 4.2 },
+    { id: 50, name: "NoteBeam Projector Pad", price: "₹5,499", image: "projector.jpg", rating: 4.3 },
+    { id: 51, name: "sofa", price: "₹5,499", image: "sofa.webp", rating: 4.3 },
+    { id: 52, name: "wintercoat", price: "₹5,499", image: "winter.webp", rating: 4.3 },
+  
   ];
+  
 
 
 
@@ -107,9 +111,9 @@ function CollectionPage() {
 
       {/* Banner */}
       <img
-        src="/skinbanner.jpg"
+        src="/skinbanner2.jpg"
         alt="Offer"
-        className="w-full h-44 md:h-70 object-cover mt-3"
+        className="w-full h-44 md:h-150 object-cover mt-3"
       />
 
       {/* Product Grid (ONLY ONCE) */}

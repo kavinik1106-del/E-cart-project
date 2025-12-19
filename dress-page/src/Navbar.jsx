@@ -19,16 +19,18 @@ function Navbar() {
             alt="Kavi Boutique Logo"
             className="w-10 h-10 rounded-full"
           />
-          <span className="text-lg font-bold">Click2Buy</span>
+          <span className="text-lg font-bold">StyleNest</span>
         </div>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-8">
-          <button onClick={() => navigate("/")} className="cursor-pointer">Home</button>
-          <button onClick={() => navigate("/about")} className="cursor-pointer">About</button>
-          <button onClick={() => navigate("/collection")} className="cursor-pointer">Collection</button>
-          <button onClick={() => navigate("/contact")} className="cursor-pointer">Contact</button>
-          <button onClick={() => navigate("/order")} className="cursor-pointer">Order</button>
+          <button onClick={() => navigate("/")}>Home</button>
+          <button onClick={() => navigate("/login")}>Login</button>
+          <button onClick={() => navigate("/about")}>About</button>
+          <button onClick={() => navigate("/collection")}>Collection</button>
+          <button onClick={() => navigate("/contact")}>Contact</button>
+          <button onClick={() => navigate("/order")}>Order</button>
+          
         </div>
 
         {/* Mobile Toggle */}

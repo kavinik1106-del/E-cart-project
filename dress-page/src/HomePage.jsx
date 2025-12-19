@@ -208,7 +208,7 @@ function HomePage() {
 <footer className="bg-gray-800 text-white mt-10 py-2">
   <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-6 text-sm px-4">
     <div>
-      <h3 className="font-bold mb-2">Click2Buy</h3>
+      <h3 className="font-bold mb-2">StyleNest</h3>
       <p> Everything you need, at one place</p>
     </div>
 
@@ -221,13 +221,13 @@ function HomePage() {
 
     <div>
       <h3 className="font-bold mb-2">Contact</h3>
-      <p>Email: support@Click2Buy.com</p>
+      <p>Email: support@StyleNest.com</p>
       <p>Phone: +91 98765 43210</p>
     </div>
   </div>
 
   <p className="text-center text-xs text-gray-400 mt-4">
-    © 2025 Click2Buy. All rights reserved.
+    © 2025 StyleNest. All rights reserved.
   </p>
 </footer>
 
