@@ -6,12 +6,12 @@ function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <nav className="bg-pink-600 text-black underline px-4 py-4 shadow-md md:px-8 lg:px-16 ">
+    <nav className="bg-pink-600 text-black underline cursor-pointer px-4 py-4 shadow-md md:px-8 lg:px-16 ">
       <div className="flex items-center justify-between">
 
         {/* Logo */}
         <div
-          className="flex items-center gap-2 cursor-pointer"
+          className="flex items-center gap-2 "
           onClick={() => navigate("/")}
         >
           <img

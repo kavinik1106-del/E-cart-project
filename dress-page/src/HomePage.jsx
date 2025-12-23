@@ -1,6 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar.jsx";
+import { womenProducts } from "./data/womenProducts.js";
+import { menProducts } from "./data/menProducts.js";
+import { vegetableProducts } from "./data/vegetableProducts.js";
+import { shoeProducts } from "./data/shoeProducts.js";
 
 function HomePage() {
   const categories = [
@@ -43,23 +47,29 @@ function HomePage() {
     el.scrollBy({ left: direction === "right" ? amount : -amount, behavior: "smooth" });
   };
 
-  const dresses = [ 
-    { id: 1, name: "Half Saree", price: "₹1400", image: "bluesofa.webp" },
-    { id: 2, name: "Traditional Dress", price: "₹4000", image: "th.webp" },
-    { id: 3, name: "Pink Dress", price: "₹5000", image: "fridge.webp" },
-    { id: 4, name: "Red Dress", price: "₹500", image: "red.jpg" },
-    { id: 5, name: "Flower Dress", price: "₹1000", image: "camara.jpg" },
-    { id: 6, name: "Wedding Dress", price: "₹5200", image: "mobile.jpg" },
-    { id: 7, name: "Pink Dress", price: "₹700", image: "kismis.webp" },
-    { id: 8, name: "Kids Dress", price: "₹800", image: "saree1.webp" },
+  // Popular products from all categories
+  const popularProducts = [
+    ...womenProducts.slice(0, 2),
+    ...menProducts.slice(0, 2),
+    ...vegetableProducts.slice(0, 2),
+    ...shoeProducts.slice(0, 2)
   ];
+
+  // Function to get category route based on product type
+  const getCategoryRoute = (product) => {
+    const type = product.type?.toLowerCase() || '';
+    if (['pant', 'shirt', 't-shirt', 'chudi', 'kurta', 'lehenga', 'dress'].includes(type)) return '/women';
+    if (['sneakers', 'sports shoes', 'formal shoes', 'sandals', 'winter boots', 'flip flops'].includes(type)) return '/shoes';
+    if (['vegetable', 'spice'].includes(type)) return '/vegetables';
+    return '/men';
+  };
 
   return (
     <div className="bg-gray-200 min-h-screen">
       <Navbar />
 
       {/* 🔍 Search Bar */}
-      <div className="bg-white p-3 md:p-4 shadow mt-4 max-w-3xl mx-auto rounded-lg ">
+      <div className="bg-white p-3 md:p-4 shadow mt-4 max-w-10xl mx-auto rounded-lg ">
         <input
           type="text"
           placeholder="Search for Laptops, Dry Fruits, Kurtis..."
@@ -98,7 +108,7 @@ function HomePage() {
               else if (lname.includes("veg") || lname.includes("veget")) route = "/vegetables";
               else if (lname.includes("home") || lname.includes("appliance")) route = "/appliances";
               else if (lname.includes("kids")) route = "/kidswear";
-              else if (lname.includes("kids")) route = "/kids";
+           
               else if (lname.includes("footwear") || lname.includes("shoe")) route = "/footwear";
               else if (lname.includes("access")) route = "/accessories";
               else if (lname.includes("bicycle") || lname.includes("bike")) route = "/bicycles";
@@ -153,48 +163,61 @@ function HomePage() {
         </h2>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
-          {dresses.map((dress) => {
-            const isWomen = /dress|saree|kurta|lehenga/i.test(dress.name);
-            const isMen = /men|man|pant|pants|shirt|t-shirt|tshirt|trouser|jacket|shorts/i.test(dress.name);
-            const card = (
-              <div className="bg-white rounded-lg shadow hover:shadow-lg transition p-2">
-                <img
-                  src={dress.image}
-                  alt={dress.name}
-                  className="w-full h-36 sm:h-40 md:h-44 object-contain"
-                />
+          {popularProducts.map((product) => {
+            const categoryRoute = getCategoryRoute(product);
+            const allProducts = 
+              categoryRoute === '/women' ? womenProducts :
+              categoryRoute === '/shoes' ? shoeProducts :
+              categoryRoute === '/vegetables' ? vegetableProducts :
+              menProducts;
 
-                <h3 className="text-sm md:text-base font-semibold mt-2">
-                  {dress.name}
-                </h3>
+            return (
+              <Link 
+                to={`/product/${product.id}`}
+                state={{ product, related: allProducts }}
+                key={`${product.type}-${product.id}`}
+              >
+                <div className="bg-white rounded-xl shadow-sm hover:shadow-lg transition p-3 h-full">
+                  <div className="relative">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-44 object-contain mb-3"
+                    />
+                    {product.tag && (
+                      <span className="absolute top-2 right-2 bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-semibold">
+                        {product.tag}
+                      </span>
+                    )}
+                  </div>
 
-                <p className="text-pink-600 font-bold text-sm md:text-base">
-                  {dress.price}
-                </p>
+                  <h3 className="text-sm font-semibold text-gray-800 truncate">
+                    {product.name}
+                  </h3>
 
-                <button className="mt-2 w-full bg-pink-600 hover:bg-pink-700 text-white py-1.5 rounded text-sm">
-                  Add to Cart
-                </button>
-              </div>
+                  <div className="flex items-center gap-2 my-2">
+                    <p className="text-pink-600 font-bold">
+                      ₹{product.price}
+                    </p>
+                    {product.mrp && (
+                      <p className="text-gray-400 line-through text-sm">
+                        ₹{product.mrp}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-1 mb-3">
+                    <span className="text-yellow-400 text-sm">★</span>
+                    <span className="text-sm text-gray-700 font-medium">{product.rating || 4.5}</span>
+                    <span className="text-gray-500 text-xs">({product.reviews || 0})</span>
+                  </div>
+
+                  <button className="mt-3 w-full bg-pink-600 hover:bg-pink-700 text-white py-2 rounded-lg text-sm font-semibold transition">
+                    View Details
+                  </button>
+                </div>
+              </Link>
             );
-
-            if (isWomen) {
-              return (
-                <Link to="/women" key={dress.id} className="block">
-                  {card}
-                </Link>
-              );
-            }
-
-            if (isMen) {
-              return (
-                <Link to="/men" key={dress.id} className="block">
-                  {card}
-                </Link>
-              );
-            }
-
-            return <div key={dress.id}>{card}</div>;
           })}
         </div>
       </section>

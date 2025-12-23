@@ -31,15 +31,19 @@ function HomeAppliances() {
           {products.map((p) => (
             <div key={p.id} className="bg-white rounded-lg shadow-md overflow-hidden">
               <div className="h-40 bg-gray-100 flex items-center justify-center">
-                <img src={p.image} alt={p.name} className="h-full object-contain p-3" />
+                <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="w-full h-full flex items-center justify-center">
+                  <img src={p.image} alt={p.name} className="h-full object-contain p-3" />
+                </Link>
               </div>
 
               <div className="p-4">
                 <div className="text-xs text-pink-600 font-semibold">{p.type}</div>
-                <h3 className="mt-1 font-semibold text-sm">{p.name}</h3>
+                <h3 className="mt-1 font-semibold text-sm">
+                  <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="hover:underline">{p.name}</Link>
+                </h3>
                 <div className="mt-2 flex items-center justify-between">
                   <div className="text-pink-600 font-bold">{p.price}</div>
-                  <Link to="/order" className="bg-pink-600 text-white px-3 py-1 rounded hover:bg-pink-700 text-xs">Buy</Link>
+                  <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="bg-pink-600 text-white px-3 py-1 rounded hover:bg-pink-700 text-xs">Details</Link>
                 </div>
               </div>
             </div>

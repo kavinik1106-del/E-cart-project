@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "./Navbar.jsx";
+import { Link } from "react-router-dom";
 import { Heart, Star } from "lucide-react";
 
 function OrderPage() {
@@ -94,7 +95,9 @@ function OrderPage() {
           {products.map((p) => (
             <div key={p.id} className="bg-white rounded-xl shadow">
               <div className="relative h-52 bg-gray-100 flex justify-center items-center">
-                <img src={p.image} alt={p.name} className="h-full object-contain" />
+                <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="w-full h-full flex items-center justify-center">
+                  <img src={p.image} alt={p.name} className="h-full object-contain" />
+                </Link>
                 <span className="absolute top-2 left-2 bg-pink-500 text-white text-xs px-2 py-1 rounded">
                   {p.tag}
                 </span>
@@ -130,12 +133,15 @@ function OrderPage() {
 
                 <p className="text-xs text-green-600">Free Delivery • 7 Days Return</p>
 
-                <button
-                  onClick={() => addToCart(p)}
-                  className="w-full bg-pink-600 text-white py-2 rounded-lg hover:bg-pink-700"
-                >
-                  Add to Cart
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => addToCart(p)}
+                    className="flex-1 bg-pink-600 text-white py-2 rounded-lg hover:bg-pink-700"
+                  >
+                    Add to Cart
+                  </button>
+                  <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="px-3 py-2 border rounded-lg text-sm">Details</Link>
+                </div>
               </div>
             </div>
           ))}
