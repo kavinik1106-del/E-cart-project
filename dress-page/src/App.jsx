@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+
 import HomePage from "./HomePage.jsx";
 import AboutPage from "./AboutPage.jsx";
 import ContactPage from "./ContactPage.jsx";
@@ -15,26 +16,38 @@ import Accessories from "./accessories.jsx";
 import Footwear from "./footwear.jsx";
 import HomeAppliances from "./HomeAppliances.jsx";
 
+/* 🔥 NEW IMPORTS */
+import CartPage from "./CartPage.jsx";
+import WishlistPage from "./WishlistPage.jsx";
+import CheckoutPage from "./CheckoutPage.jsx";
+import { CartProvider } from "./CartContext.jsx";
 
 function App() {
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/about" element={<AboutPage />} />
-      <Route path="/contact" element={<ContactPage />} />
-      <Route path="/collection" element={<CollectionPage />} />
-      <Route path="/kidswear" element={<KidsWear />} />
-      <Route path="/order" element={<OrderPage />} />
-      <Route path="/electro" element={<Electro />} />
-      <Route path="/women" element={<WomenDress />} />
-      <Route path="/footwear" element={<Footwear />} />
-      <Route path="/accessories" element={<Accessories />} />
-      <Route path="/men" element={<MenDress />} />
-      <Route path="/vegetables" element={<Vegetables />} />
-      <Route path="/appliances" element={<HomeAppliances />} />
-      <Route path="/bicycles" element={<Bicycles />} />
+    <CartProvider>
+      <Routes>
+        {/* EXISTING ROUTES */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/collection" element={<CollectionPage />} />
+        <Route path="/kidswear" element={<KidsWear />} />
+        <Route path="/order" element={<OrderPage />} />
+        <Route path="/electro" element={<Electro />} />
+        <Route path="/women" element={<WomenDress />} />
+        <Route path="/footwear" element={<Footwear />} />
+        <Route path="/accessories" element={<Accessories />} />
+        <Route path="/men" element={<MenDress />} />
+        <Route path="/vegetables" element={<Vegetables />} />
+        <Route path="/appliances" element={<HomeAppliances />} />
+        <Route path="/bicycles" element={<Bicycles />} />
 
-    </Routes>
+        {/* 🆕 NEW ROUTES */}
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/wishlist" element={<WishlistPage />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+      </Routes>
+    </CartProvider>
   );
 }
 
