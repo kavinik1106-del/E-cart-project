@@ -96,7 +96,8 @@ function OrderPage() {
       <div className="max-w-7xl mx-auto p-6 grid md:grid-cols-3 gap-8">
         {/* Products */}
         <section className="md:col-span-2 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((p) => (
+          {products.map((p) => {
+            return (
             <div key={p.id} className="bg-white rounded-xl shadow">
               <div className="relative h-52 bg-gray-100 flex justify-center items-center">
                 <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="w-full h-full flex items-center justify-center">
@@ -147,8 +148,9 @@ function OrderPage() {
                   <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="px-3 py-2 border rounded-lg text-sm">Details</Link>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          );
+        })}
         </section>
 
         {/* Order Summary */}

@@ -41,12 +41,8 @@ function App() {
       <Route path="/bicycles" element={<Bicycles />} />
       <Route path="/login" element={<LoginPage />} />
 
-        {/* 🆕 NEW ROUTES */}
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/wishlist" element={<WishlistPage />} />
-        <Route path="/checkout" element={<CheckoutPage />} />
       </Routes>
-    </CartProvider>
+    
   );
 }
 
