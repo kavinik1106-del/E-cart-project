@@ -6,42 +6,6 @@ function CollectionPage() {
     { name: "Electronics", image: "/mobile.jpg" },
     { name: "Women Dresses", image: "/dress1.webp" },
     { name: "Men Dresses", image: "/men2.jpg" },
-<<<<<<< HEAD
-    { name: "Dry Fruits", image: "/dates.jpg" },
-    { name: "Home Appliances", image: "/fridge.webp" },
-  ];
-
-  const dresses = [
-    { id: 1, name: "Double Door Fridge", price: "₹18,999", image: "/doubledoorfringe.avif", rating: 4.4 },
-    { id: 2, name: "Cashew Nuts", price: "₹699", image: "/cashew.webp", rating: 4.2 },
-    { id: 3, name: "Blue Sofa", price: "₹14,999", image: "/bluesofa.webp", rating: 4.5 },
-    { id: 4, name: "Red Kurta", price: "₹1,299", image: "/dress1.webp", rating: 4.1 },
-    { id: 5, name: "Sofa", price: "₹9,999", image: "/sofa.webp", rating: 4.3 },
-    { id: 6, name: "Smart Mobile", price: "₹12,499", image: "/mobile.jpg", rating: 4.6 },
-    { id: 7, name: "Dates Pack", price: "₹399", image: "/dates.jpg", rating: 4.0 },
-    { id: 8, name: "Silk Saree", price: "₹1,899", image: "/saree2.jpg", rating: 4.3 },
-    { id: 9, name: "Smart Watch", price: "₹2,999", image: "/smartwatch.webp", rating: 4.7 },
-    { id: 10, name: "Kurta Set", price: "₹1,599", image: "/dress3.webp", rating: 4.2 },
-  ];
-
-  /* ---------- STATE ---------- */
-  const [wishlist, setWishlist] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [cart, setCart] = useState([]);
-
-  /* ---------- FUNCTIONS ---------- */
-  const toggleWishlist = (product) => {
-    setWishlist((prev) =>
-      prev.some((item) => item.id === product.id)
-        ? prev.filter((item) => item.id !== product.id)
-        : [...prev, product]
-    );
-  };
-
-  const isWishlisted = (id) =>
-    wishlist.some((item) => item.id === id);
-
-=======
     { name: "Dry Fruits", image: "/cashew.webp" },
     { name: "Home Appliances", image: "/fridge.webp" },
   ];
@@ -118,8 +82,6 @@ function CollectionPage() {
 
   const isWishlisted = (id) =>
     wishlist.some((item) => item.id === id);
-
->>>>>>> 51182fdf634ee528192eae6ddc9530f99a78602f
   const handleConfirmAdd = () => {
     setCart((prev) => [...prev, selectedProduct]);
     alert(`${selectedProduct.name} added to cart ✅`);
