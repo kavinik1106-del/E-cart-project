@@ -18,7 +18,7 @@ import HomeAppliances from "./HomeAppliances.jsx";
 import ShoesCategory from "./ShoesCategory.jsx";
 import LoginPage from "./LoginPage.jsx";
 
-
+// afasdfjhaklwuefhiqw
 function App() {
   return (
     <Routes>
