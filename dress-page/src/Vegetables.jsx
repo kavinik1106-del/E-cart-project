@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 
 function Vegetables() {
   const products = [
-    { id: 1, type: "Vegetable", name: "Carrot", price: "₹40/kg", image: "/carrot.jpg" },
-    { id: 2, type: "Vegetable", name: "Beans", price: "₹60/kg", image: "/beans.jpg" },
-    { id: 3, type: "Vegetable", name: "Tomato", price: "₹35/kg", image: "/tomato.jpg" },
-    { id: 4, type: "Spice", name: "Ginger", price: "₹120/kg", image: "/ginger.jpg" },
-    { id: 5, type: "Spice", name: "Turmeric Powder", price: "₹180/100g", image: "/masala1.jpg" },
-    { id: 6, type: "Spice", name: "Garam Masala", price: "₹200/100g", image: "/masala2.jpg" },
+    { id: 1, type: "Vegetable", name: "Carrot", price: "₹40/kg", image: "/carrot.webp" },
+    { id: 2, type: "Vegetable", name: "Beans", price: "₹60/kg", image: "/beans.webp" },
+    { id: 3, type: "Vegetable", name: "Tomato", price: "₹35/kg", image: "/tomo.jpg" },
+    { id: 4, type: "Spice", name: "Ginger", price: "₹120/kg", image: "/ginger.webp" },
+    { id: 5, type: "Spice", name: "Turmeric Powder", price: "₹180/100g", image: "/masala.webp" },
+    { id: 6, type: "Spice", name: "Garam Masala", price: "₹200/100g", image: "/masala2.webp" },
   ];
 
   return (

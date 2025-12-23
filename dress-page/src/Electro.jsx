@@ -8,7 +8,10 @@ function Electro() {
     { id: 3, category: "Watch", name: "Pulse Watch 3", price: "₹7,999", image: "/smartwatch.webp" },
     { id: 4, category: "Tablet", name: "TabOne 10", price: "₹19,499", image: "/OIP (3).webp" },
     { id: 5, category: "Phone", name: "Nova S", price: "₹18,999", image: "/mobile.jpg" },
-    { id: 6, category: "Laptop", name: "Workmate Pro", price: "₹62,999", image: "/laptop.webp" },
+    { id: 6, category: "Laptop", name: "Workmate Pro", price: "₹62,999", image: "/OIP (9).webp" },
+    { id: 7, category: "Watch", name: "Chrono Watch", price: "₹12,999", image: "/th (1).jpg" },
+    { id: 8, category: "Tablet", name: "TabMax 12", price: "₹24,999", image: "/th (2).jpg" },
+
   ];
 
   return (
