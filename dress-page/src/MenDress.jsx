@@ -4,12 +4,14 @@ import { Link } from "react-router-dom";
 
 function MenDress() {
   const products = [
-    { id: 1, type: "Pant", name: "Classic Chino", price: "₹999", image: "/men1.avif" },
-    { id: 2, type: "Shirt", name: "Oxford Shirt", price: "₹799", image: "/men2.jpg" },
-    { id: 3, type: "T-Shirt", name: "Comfort Tee", price: "₹399", image: "/men1.avif" },
-    { id: 4, type: "Jacket", name: "Denim Jacket", price: "₹1,999", image: "/men2.jpg" },
-    { id: 5, type: "Shorts", name: "Casual Shorts", price: "₹449", image: "/men1.avif" },
-    { id: 6, type: "Kurta", name: "Men Kurta", price: "₹1,099", image: "/men2.jpg" },
+    { id: 1, type: "Pant", name: "Classic Chino", price: "₹999", image: "/chino.avif" },
+    { id: 2, type: "Shirt", name: "Oxford Shirt", price: "₹799", image: "/OIP.jpg" },
+    { id: 3, type: "T-Shirt", name: "Comfort Tee", price: "₹399", image: "/OIP (7).webp" },
+    { id: 4, type: "Jacket", name: "Denim Jacket", price: "₹1,999", image: "/denim.webp" },
+    { id: 5, type: "Shorts", name: "Casual Shorts", price: "₹449", image: "/shorts.avif" },
+    { id: 6, type: "Sweater", name: "Wool Sweater", price: "₹1,299", image: "/wool.webp" },
+    { id: 7, type: "Kurta", name: "Men Kurta", price: "₹1,099", image: "/kurta.jpg" },
+      { id: 8, type: "Sherwani", name: "Wedding Sherwani", price: "₹5,999", image: "/sherwa.webp" },
   ];
 
   return (
