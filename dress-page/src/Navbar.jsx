@@ -46,6 +46,7 @@ function Navbar() {
       {open && (
         <div className="md:hidden mt-4 bg-white rounded-lg p-4 flex flex-col gap-4 text-center shadow border border-gray-200">
           <button onClick={() => {navigate("/"); setOpen(false);}}>Home</button>
+          <button onClick={() => {navigate("/login"); setOpen(false);}}>Login</button>
           <button onClick={() => {navigate("/about"); setOpen(false);}}>About</button>
           <button onClick={() => {navigate("/collection"); setOpen(false);}}>Collection</button>
           <button onClick={() => {navigate("/contact"); setOpen(false);}}>Contact</button>
