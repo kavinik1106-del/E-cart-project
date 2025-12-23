@@ -15,6 +15,10 @@ import Bicycles from "./bicycles.jsx";
 import Accessories from "./accessories.jsx";
 import Footwear from "./footwear.jsx";
 import HomeAppliances from "./HomeAppliances.jsx";
+import LoginPage from "./LoginPage.jsx";
+import PremiumHomePage from "./PremiumHomePage.jsx";
+import CartPagePro from "./CartPagePro.jsx";
+import WishlistPagePro from "./WishlistPagePro.jsx";
 
 /* 🔥 NEW IMPORTS */
 import CartPage from "./CartPage.jsx";
@@ -27,7 +31,7 @@ function App() {
     <CartProvider>
       <Routes>
         {/* EXISTING ROUTES */}
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<PremiumHomePage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/collection" element={<CollectionPage />} />
@@ -41,10 +45,11 @@ function App() {
         <Route path="/vegetables" element={<Vegetables />} />
         <Route path="/appliances" element={<HomeAppliances />} />
         <Route path="/bicycles" element={<Bicycles />} />
+        <Route path="/login" element={<LoginPage />} />
 
         {/* 🆕 NEW ROUTES */}
-        <Route path="/cart" element={<CartPage />} />
-        <Route path="/wishlist" element={<WishlistPage />} />
+        <Route path="/cart" element={<CartPagePro />} />
+        <Route path="/wishlist" element={<WishlistPagePro />} />
         <Route path="/checkout" element={<CheckoutPage />} />
       </Routes>
     </CartProvider>

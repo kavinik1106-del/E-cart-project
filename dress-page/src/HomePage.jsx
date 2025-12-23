@@ -8,7 +8,7 @@ function HomePage() {
     { name: "Women Dresses", image: "dress1.webp" },
     { name: "Men Dresses", image: "men2.jpg" },
     { name: "Vegetables", image: "veg2.webp" },
-    { name: "Home Appliances", image: "fridge.webp" },
+    { name: "Home Appliances", image: "OIP (1).jpg" },
     { name: "Kids Wear", image: "OIP (1).webp" },
     { name: "Footwear", image: "OIP (2).webp" },  
     { name: "Bicycles", image: "allbikes.jpg" }, 

@@ -4,12 +4,17 @@ import { Link } from "react-router-dom";
 
 function WomenDress() {
   const products = [
-    { id: 1, type: "Pant", name: "Comfy Pants", price: "₹899", image: "/pinkdress.avif" },
-    { id: 2, type: "Shirt", name: "Casual Shirt", price: "₹699", image: "/yellowsaree.avif" },
-    { id: 3, type: "Chudi", name: "Silk Chudi", price: "₹1,199", image: "/pinkdress.avif" },
-    { id: 4, type: "T-Shirt", name: "Everyday Tee", price: "₹399", image: "/men1.avif" },
-    { id: 5, type: "Kurta", name: "Anarkali Kurta", price: "₹1,499", image: "/pinkdress.avif" },
-    { id: 6, type: "Lehenga", name: "Festive Lehenga", price: "₹2,999", image: "/yellowsaree.avif" },
+    { id: 1, type: "Pant", name: "Comfy Pants", price: "₹899", image: "/cpant.webp" },
+    { id: 2, type: "Shirt", name: "Casual Shirt", price: "₹699", image: "/OIP (4).webp" },
+    { id: 3, type: "Chudi", name: "Silk Chudi", price: "₹1,199", image: "/chutti.webp" },
+    { id: 4, type: "T-Shirt", name: "Everyday Tee", price: "₹399", image: "/OIP (5).webp" },
+    { id: 5, type: "Kurta", name: "Anarkali Kurta", price: "₹1,499", image: "/oip1.avif" },
+    { id: 6, type: "Lehenga", name: "Festive Lehenga", price: "₹2,999", image: "/OIP (6).webp" },
+    { id: 7, type: "Lehenga", name: "Midi calf", price: "₹2,999", image: "/mdi.webp" },
+    { id: 8, type: "Lehenga", name: "Chiffon dress", price: "₹2,999", image: "chiff.webp" },
+    
+    
+
   ];
 
   return (

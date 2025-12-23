@@ -5,11 +5,13 @@ import { Link } from "react-router-dom";
 function HomeAppliances() {
   const products = [
     { id: 1, type: "Kitchen", name: "Plates Set", price: "₹499", image: "/plates.jpg" },
-    { id: 2, type: "Glassware", name: "Glass Set", price: "₹299", image: "/glass.jpg" },
-    { id: 3, type: "Bottle", name: "Water Bottle", price: "₹249", image: "/bottle.jpg" },
+    { id: 2, type: "Glassware", name: "Glass Set", price: "₹299", image: "/glasss.jpg" },
+    { id: 3, type: "Bottle", name: "Water Bottle", price: "₹249", image: "/th.jpg" },
     { id: 4, type: "Electronics", name: "Ceiling Fan", price: "₹2,499", image: "/fan.jpg" },
-    { id: 5, type: "Lighting", name: "Tube Light", price: "₹349", image: "/tubelight.jpg" },
-    { id: 6, type: "Accessory", name: "Spice Box", price: "₹199", image: "/masala1.jpg" },
+    { id: 5, type: "Lighting", name: "Tube Light", price: "₹349", image: "/tubelight.webp" },
+    { id: 6, type: "Accessory", name: "Spice Box", price: "₹199", image: "/box.jpg" },
+    { id: 7, type: "Bottle opener", name: "Bottle Opener", price: "₹99", image: "/OIP (8).webp" },
+    { id: 8, type: "Iron", name: "Iron Box", price: "₹999", image: "/R.jpg" },
   ];
 
   return (
