@@ -1,15 +1,17 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Heart, Star } from "lucide-react";
 import { useCart } from "../contexts/CartContext";
 
 function ProductCard({ product, products = [], showRating = false }) {
+  const navigate = useNavigate();
   const { addToCart } = useCart();
   const [isWishlisted, setIsWishlisted] = React.useState(false);
 
   const handleQuickAdd = (e) => {
     e.preventDefault();
     addToCart(product, 1);
+    navigate('/order');
   };
 
   return (
