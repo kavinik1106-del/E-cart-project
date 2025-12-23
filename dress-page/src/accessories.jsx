@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "./Navbar.jsx";
+import { Link } from "react-router-dom";
 
 function Accessories() {
   const products = [
@@ -245,11 +246,13 @@ function Accessories() {
               className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition"
             >
               <div className="h-40 bg-gray-100 flex items-center justify-center">
-                <img
-                  src={p.image}
-                  alt={p.name}
-                  className="h-full object-contain p-3"
-                />
+                <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="w-full h-full flex items-center justify-center">
+                  <img
+                    src={p.image}
+                    alt={p.name}
+                    className="h-full object-contain p-3"
+                  />
+                </Link>
               </div>
 
               <div className="p-4">
@@ -258,7 +261,7 @@ function Accessories() {
                 </div>
 
                 <h3 className="mt-1 font-semibold text-sm">
-                  {p.name}
+                  <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="hover:underline">{p.name}</Link>
                 </h3>
 
                 {/* Rating */}
@@ -271,9 +274,9 @@ function Accessories() {
                     {p.price}
                   </div>
 
-                  <button className="bg-pink-600 text-white px-3 py-1 rounded hover:bg-pink-700 text-xs">
-                    Buy
-                  </button>
+                  <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="bg-pink-600 text-white px-3 py-1 rounded hover:bg-pink-700 text-xs">
+                    Details
+                  </Link>
                 </div>
               </div>
             </div>
