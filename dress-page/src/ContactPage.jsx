@@ -12,6 +12,17 @@ import {
 function ContactPage() {
   const [activeBox, setActiveBox] = useState(null);
   const [activeFAQ, setActiveFAQ] = useState(null);
+  const [formData, setFormData] = useState({
+    fullName: "",
+    email: "",
+    mobileNumber: "",
+    orderId: "",
+    issueType: "Order Related Issue",
+    message: ""
+  });
+  const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const faqs = [
     {
@@ -31,6 +42,53 @@ function ContactPage() {
       a: "Please check your bank balance or try another payment option.",
     },
   ];
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setErrorMessage("");
+    setSuccessMessage("");
+
+    try {
+      const response = await fetch("http://localhost:5000/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSuccessMessage("Thank you! Your message has been submitted successfully. We'll respond within 24 hours.");
+        setFormData({
+          fullName: "",
+          email: "",
+          mobileNumber: "",
+          orderId: "",
+          issueType: "Order Related Issue",
+          message: ""
+        });
+        setTimeout(() => setSuccessMessage(""), 5000);
+      } else {
+        setErrorMessage(data.error || "Failed to submit the form. Please try again.");
+      }
+    } catch (error) {
+      setErrorMessage("Error submitting form. Please check your connection and try again.");
+      console.error("Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -190,13 +248,63 @@ function ContactPage() {
             Please provide accurate details so we can resolve your issue faster.
           </p>
 
-          <form className="space-y-4">
-            <input className="w-full border rounded-lg px-4 py-3 text-sm" placeholder="Full Name" />
-            <input className="w-full border rounded-lg px-4 py-3 text-sm" placeholder="Email Address" />
-            <input className="w-full border rounded-lg px-4 py-3 text-sm" placeholder="Mobile Number" />
-            <input className="w-full border rounded-lg px-4 py-3 text-sm" placeholder="Order ID (optional)" />
+          {successMessage && (
+            <div className="mb-4 p-4 bg-green-50 text-green-700 rounded-lg border border-green-200">
+              ✓ {successMessage}
+            </div>
+          )}
 
-            <select className="w-full border rounded-lg px-4 py-3 text-sm text-gray-600">
+          {errorMessage && (
+            <div className="mb-4 p-4 bg-red-50 text-red-700 rounded-lg border border-red-200">
+              ✗ {errorMessage}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="text"
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleInputChange}
+              required
+              className="w-full border rounded-lg px-4 py-3 text-sm"
+              placeholder="Full Name"
+            />
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleInputChange}
+              required
+              className="w-full border rounded-lg px-4 py-3 text-sm"
+              placeholder="Email Address"
+            />
+            <input
+              type="text"
+              name="mobileNumber"
+              value={formData.mobileNumber}
+              onChange={handleInputChange}
+              required
+              pattern="[0-9]{10}"
+              className="w-full border rounded-lg px-4 py-3 text-sm"
+              placeholder="Mobile Number (10 digits)"
+            />
+            <input
+              type="text"
+              name="orderId"
+              value={formData.orderId}
+              onChange={handleInputChange}
+              className="w-full border rounded-lg px-4 py-3 text-sm"
+              placeholder="Order ID (optional)"
+            />
+
+            <select
+              name="issueType"
+              value={formData.issueType}
+              onChange={handleInputChange}
+              required
+              className="w-full border rounded-lg px-4 py-3 text-sm text-gray-600"
+            >
               <option>Select Issue Type</option>
               <option>Order Related Issue</option>
               <option>Payment / Refund</option>
@@ -206,13 +314,21 @@ function ContactPage() {
             </select>
 
             <textarea
+              name="message"
+              value={formData.message}
+              onChange={handleInputChange}
+              required
               className="w-full border rounded-lg px-4 py-3 text-sm"
               rows="4"
               placeholder="Describe your issue in detail"
             />
 
-            <button className="w-full bg-pink-500 hover:bg-pink-600 text-white py-3 rounded-lg font-semibold">
-              Submit Request
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-pink-500 hover:bg-pink-600 disabled:bg-gray-400 text-white py-3 rounded-lg font-semibold"
+            >
+              {loading ? "Submitting..." : "Submit Request"}
             </button>
 
             <p className="text-xs text-gray-500 text-center">

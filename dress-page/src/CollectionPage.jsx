@@ -82,7 +82,6 @@ function CollectionPage() {
 
   const isWishlisted = (id) =>
     wishlist.some((item) => item.id === id);
-
   const handleConfirmAdd = () => {
     setCart((prev) => [...prev, selectedProduct]);
     alert(`${selectedProduct.name} added to cart ✅`);

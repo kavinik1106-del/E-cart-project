@@ -46,29 +46,28 @@ function OrderPage() {
   const [cart, setCart] = useState([]);
 
   const addToCart = (product) => {
-    const exists = cart.find((p) => p.id === product.id);
-    if (exists) {
-      setCart(
-        cart.map((p) =>
+    setCart((prev) => {
+      const exists = prev.find((p) => p.id === product.id);
+      if (exists) {
+        return prev.map((p) =>
           p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
-        )
-      );
-    } else {
-      setCart([...cart, { ...product, quantity: 1 }]);
-    }
+        );
+      }
+      return [...prev, { ...product, quantity: 1 }];
+    });
   };
 
   const increaseQty = (id) => {
-    setCart(
-      cart.map((item) =>
+    setCart((prev) =>
+      prev.map((item) =>
         item.id === id ? { ...item, quantity: item.quantity + 1 } : item
       )
     );
   };
 
   const decreaseQty = (id) => {
-    setCart(
-      cart
+    setCart((prev) =>
+      prev
         .map((item) =>
           item.id === id ? { ...item, quantity: item.quantity - 1 } : item
         )
@@ -77,12 +76,17 @@ function OrderPage() {
   };
 
   const removeItem = (id) => {
-    setCart(cart.filter((item) => item.id !== id));
+    setCart((prev) => prev.filter((item) => item.id !== id));
+  };
+
+  const placeOrder = () => {
+    alert("🎉 Order placed successfully!");
+    setCart([]);
   };
 
   const total = cart.reduce((sum, p) => sum + p.price * p.quantity, 0);
   const totalMRP = cart.reduce((sum, p) => sum + p.mrp * p.quantity, 0);
-  const discount = totalMRP - total;
+  const discount = Math.max(totalMRP - total, 0);
   const delivery = total > 999 ? 0 : 49;
 
   return (
@@ -106,32 +110,32 @@ function OrderPage() {
                 </button>
               </div>
 
-              <div className="p-4 space-y-2">
-                <h3 className="font-semibold text-sm">{p.name}</h3>
+                <div className="p-4 space-y-2">
+                  <h3 className="font-semibold text-sm">{p.name}</h3>
 
-                <div className="flex items-center text-sm">
-                  <Star size={14} className="text-green-600 fill-green-600" />
-                  <span className="ml-1">{p.rating}</span>
-                  <span className="text-gray-400 ml-1">({p.reviews})</span>
-                </div>
+                  <div className="flex items-center text-sm">
+                    <Star size={14} className="text-green-600 fill-green-600" />
+                    <span className="ml-1">{p.rating}</span>
+                    <span className="text-gray-400 ml-1">({p.reviews})</span>
+                  </div>
 
-                <p className="text-xs text-gray-600">{p.description}</p>
+                  <p className="text-xs text-gray-600">{p.description}</p>
 
-                <ul className="text-xs text-gray-500 list-disc list-inside">
-                  {p.highlights.map((h, i) => (
-                    <li key={i}>{h}</li>
-                  ))}
-                </ul>
+                  <ul className="text-xs text-gray-500 list-disc list-inside">
+                    {p.highlights.map((h, i) => (
+                      <li key={i}>{h}</li>
+                    ))}
+                  </ul>
 
-                <div>
-                  <span className="text-lg font-bold text-pink-600">₹{p.price}</span>
-                  <span className="line-through text-gray-400 text-sm ml-2">₹{p.mrp}</span>
-                  <span className="text-green-600 text-sm ml-2">
-                    {Math.round(((p.mrp - p.price) / p.mrp) * 100)}% OFF
-                  </span>
-                </div>
+                  <div>
+                    <span className="text-lg font-bold text-pink-600">₹{p.price}</span>
+                    <span className="line-through text-gray-400 text-sm ml-2">₹{p.mrp}</span>
+                    <span className="text-green-600 text-sm ml-2">
+                      {Math.round(((p.mrp - p.price) / p.mrp) * 100)}% OFF
+                    </span>
+                  </div>
 
-                <p className="text-xs text-green-600">Free Delivery • 7 Days Return</p>
+                  <p className="text-xs text-green-600">Free Delivery • 7 Days Return</p>
 
                 <div className="flex gap-2">
                   <button
@@ -143,8 +147,8 @@ function OrderPage() {
                   <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="px-3 py-2 border rounded-lg text-sm">Details</Link>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </section>
 
         {/* Order Summary */}
@@ -157,7 +161,11 @@ function OrderPage() {
             <div className="space-y-4 text-sm">
               {cart.map((item) => (
                 <div key={item.id} className="flex gap-3 border-b pb-3">
-                  <img src={item.image} alt={item.name} className="w-20 h-20 rounded" />
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="w-20 h-20 object-cover rounded"
+                  />
 
                   <div className="flex-1 space-y-1">
                     <p className="font-medium">{item.name}</p>
@@ -175,7 +183,10 @@ function OrderPage() {
                       <span>{item.quantity}</span>
                       <button onClick={() => increaseQty(item.id)} className="px-2 border rounded">+</button>
 
-                      <button onClick={() => removeItem(item.id)} className="text-pink-600 text-xs ml-3">
+                      <button
+                        onClick={() => removeItem(item.id)}
+                        className="text-pink-600 text-xs ml-3"
+                      >
                         Remove
                       </button>
                     </div>
@@ -200,7 +211,9 @@ function OrderPage() {
 
             <div className="flex justify-between">
               <span>Delivery Charges</span>
-              <span className="text-green-600">{delivery === 0 ? "FREE" : `₹${delivery}`}</span>
+              <span className="text-green-600">
+                {delivery === 0 ? "FREE" : `₹${delivery}`}
+              </span>
             </div>
 
             <hr />
@@ -210,16 +223,13 @@ function OrderPage() {
               <span>₹{total + delivery}</span>
             </div>
 
-            <p className="text-green-700 text-xs">You saved ₹{discount} on this order</p>
-          </div>
-
-          <div className="mt-4 bg-pink-50 p-3 rounded text-xs space-y-1">
-            <p>✔ 7 Days Easy Return</p>
-            <p>✔ Cash on Delivery Available</p>
-            <p>✔ Trusted by 1 Crore+ Customers</p>
+            <p className="text-green-700 text-xs">
+              You saved ₹{discount} on this order
+            </p>
           </div>
 
           <button
+            onClick={placeOrder}
             disabled={cart.length === 0}
             className="w-full mt-4 bg-pink-500 text-white py-3 rounded-lg hover:bg-pink-600 disabled:bg-gray-300"
           >
