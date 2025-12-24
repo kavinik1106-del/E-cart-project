@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "./Navbar";
-import { useCart } from "./CartContext";
+import { useCart } from "./contexts/CartContext";
 
 function WishlistPage() {
   const { wishlist, toggleWishlist, addToCart } = useCart();

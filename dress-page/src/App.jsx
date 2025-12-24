@@ -5,6 +5,10 @@ import HomePage from "./HomePage.jsx";
 import AboutPage from "./AboutPage.jsx";
 import ContactPage from "./ContactPage.jsx";
 import CollectionPage from "./CollectionPage.jsx";
+
+import ProductDetailPage from "./ProductDetailPage.jsx"
+import ProductDetail from "./ProductDetail.jsx";
+
 import KidsWear from "./kidswear.jsx";
 import OrderPage from "./OrderPage.jsx";
 import Electro from "./Electro.jsx";
@@ -15,14 +19,20 @@ import Bicycles from "./bicycles.jsx";
 import Accessories from "./accessories.jsx";
 import Footwear from "./footwear.jsx";
 import HomeAppliances from "./HomeAppliances.jsx";
+import ShoesCategory from "./ShoesCategory.jsx";
 import LoginPage from "./LoginPage.jsx";
+
 
 /* 🔥 NEW IMPORTS */
 import CartPage from "./CartPage.jsx";
 import WishlistPage from "./WishlistPage.jsx";
 import CheckoutPage from "./CheckoutPage.jsx";
-import { CartProvider } from "./CartContext.jsx";
-
+import { CartProvider } from "./contexts/CartContext.jsx";
+import AdminPanel from "./admin/AdminPanel.jsx";
+import AdminLogin from "./admin/AdminLogin.jsx";
+import AdminProducts from "./admin/AdminProducts.jsx";
+import ProtectedRoute from "./admin/ProtectedRoute.jsx";
+// afasdfjhaklwuefhiqw
 function App() {
   return (
     <CartProvider>
@@ -43,13 +53,19 @@ function App() {
         <Route path="/appliances" element={<HomeAppliances />} />
         <Route path="/bicycles" element={<Bicycles />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/product/:id" element={<ProductDetailPage />} />
 
         {/* 🆕 NEW ROUTES */}
         <Route path="/cart" element={<CartPage />} />
         <Route path="/wishlist" element={<WishlistPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
-      </Routes>
+        <Route path="/admin/login" element={<AdminLogin />} />
+        <Route path="/admin" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+        <Route path="/admin/products" element={<ProtectedRoute><AdminProducts /></ProtectedRoute>} />
+
+    </Routes>
     </CartProvider>
+    
   );
 }
 
