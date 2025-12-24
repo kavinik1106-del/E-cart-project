@@ -1,17 +1,105 @@
 import React from "react";
 import Navbar from "./Navbar.jsx";
-import { Link } from "react-router-dom";
+import ProductCard from "./ProductCard.jsx";
 
 function MenDress() {
   const products = [
-    { id: 1, type: "Pant", name: "Classic Chino", price: "₹999", image: "/chino.avif" },
-    { id: 2, type: "Shirt", name: "Oxford Shirt", price: "₹799", image: "/OIP.jpg" },
-    { id: 3, type: "T-Shirt", name: "Comfort Tee", price: "₹399", image: "/OIP (7).webp" },
-    { id: 4, type: "Jacket", name: "Denim Jacket", price: "₹1,999", image: "/denim.webp" },
-    { id: 5, type: "Shorts", name: "Casual Shorts", price: "₹449", image: "/shorts.avif" },
-    { id: 6, type: "Sweater", name: "Wool Sweater", price: "₹1,299", image: "/wool.webp" },
-    { id: 7, type: "Kurta", name: "Men Kurta", price: "₹1,099", image: "/kurta.jpg" },
-      { id: 8, type: "Sherwani", name: "Wedding Sherwani", price: "₹5,999", image: "/sherwa.webp" },
+    { 
+      id: 101, 
+      type: "Pant", 
+      name: "Classic Chino", 
+      price: "999",
+      mrp: "1999",
+      image: "/chino.avif",
+      category: "Men Dresses",
+      rating: 4.5,
+      reviews: 234,
+      tag: "Bestseller"
+    },
+    { 
+      id: 102, 
+      type: "Shirt", 
+      name: "Oxford Shirt", 
+      price: "799",
+      mrp: "1499",
+      image: "/OIP.jpg",
+      category: "Men Dresses",
+      rating: 4.4,
+      reviews: 187,
+      tag: "Popular"
+    },
+    { 
+      id: 103, 
+      type: "T-Shirt", 
+      name: "Comfort Tee", 
+      price: "399",
+      mrp: "699",
+      image: "/OIP (7).webp",
+      category: "Men Dresses",
+      rating: 4.3,
+      reviews: 290,
+      tag: "Sale"
+    },
+    { 
+      id: 104, 
+      type: "Jacket", 
+      name: "Denim Jacket", 
+      price: "1999",
+      mrp: "3299",
+      image: "/denim.webp",
+      category: "Men Dresses",
+      rating: 4.6,
+      reviews: 156,
+      tag: "Trending"
+    },
+    { 
+      id: 105, 
+      type: "Shorts", 
+      name: "Casual Shorts", 
+      price: "449",
+      mrp: "899",
+      image: "/shorts.avif",
+      category: "Men Dresses",
+      rating: 4.2,
+      reviews: 145,
+      tag: "New"
+    },
+    { 
+      id: 106, 
+      type: "Sweater", 
+      name: "Wool Sweater", 
+      price: "1299",
+      mrp: "2199",
+      image: "/wool.webp",
+      category: "Men Dresses",
+      rating: 4.5,
+      reviews: 203,
+      tag: "Premium"
+    },
+    { 
+      id: 107, 
+      type: "Kurta", 
+      name: "Men Kurta", 
+      price: "1099",
+      mrp: "1899",
+      image: "/kurta.jpg",
+      category: "Men Dresses",
+      rating: 4.4,
+      reviews: 167,
+      tag: "Popular"
+    },
+    { 
+      id: 108, 
+      type: "Sherwani", 
+      name: "Wedding Sherwani", 
+      price: "5999",
+      mrp: "9999",
+      image: "/sherwa.webp",
+      category: "Men Dresses",
+      rating: 4.7,
+      reviews: 89,
+      tag: "Premium"
+    },
   ];
 
   return (
@@ -28,21 +116,13 @@ function MenDress() {
 
       <main className="max-w-7xl mx-auto px-4 py-8">
         <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-          {products.map((p) => (
-            <div key={p.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="h-40 bg-gray-100 flex items-center justify-center">
-                <img src={p.image} alt={p.name} className="h-full object-contain p-3" />
-              </div>
-
-              <div className="p-4">
-                <div className="text-xs text-pink-600 font-semibold">{p.type}</div>
-                <h3 className="mt-1 font-semibold text-sm">{p.name}</h3>
-                <div className="mt-2 flex items-center justify-between">
-                  <div className="text-pink-600 font-bold">{p.price}</div>
-                  <Link to="/order" className="bg-pink-600 text-white px-3 py-1 rounded hover:bg-pink-700 text-xs">Buy</Link>
-                </div>
-              </div>
-            </div>
+          {products.map((product) => (
+            <ProductCard 
+              key={product.id} 
+              product={product} 
+              products={products}
+              showRating={true}
+            />
           ))}
         </section>
       </main>
@@ -51,3 +131,4 @@ function MenDress() {
 }
 
 export default MenDress;
+

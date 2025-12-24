@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar.jsx";
+import ProductCard from "./ProductCard.jsx";
 
 function HomePage() {
   const categories = [
@@ -44,14 +45,102 @@ function HomePage() {
   };
 
   const dresses = [ 
-    { id: 1, name: "Half Saree", price: "₹1400", image: "bluesofa.webp" },
-    { id: 2, name: "Traditional Dress", price: "₹4000", image: "th.webp" },
-    { id: 3, name: "Pink Dress", price: "₹5000", image: "fridge.webp" },
-    { id: 4, name: "Red Dress", price: "₹500", image: "red.jpg" },
-    { id: 5, name: "Flower Dress", price: "₹1000", image: "camara.jpg" },
-    { id: 6, name: "Wedding Dress", price: "₹5200", image: "mobile.jpg" },
-    { id: 7, name: "Pink Dress", price: "₹700", image: "kismis.webp" },
-    { id: 8, name: "Kids Dress", price: "₹800", image: "saree1.webp" },
+    { 
+      id: 1, 
+      name: "Half Saree", 
+      price: "1400",
+      mrp: "2500",
+      image: "bluesofa.webp",
+      category: "Women Dresses",
+      type: "Saree",
+      rating: 4.5,
+      reviews: 150,
+      tag: "Trending"
+    },
+    { 
+      id: 2, 
+      name: "Traditional Dress", 
+      price: "4000",
+      mrp: "5500",
+      image: "th.webp",
+      category: "Women Dresses",
+      type: "Dress",
+      rating: 4.6,
+      reviews: 200,
+      tag: "Bestseller"
+    },
+    { 
+      id: 3, 
+      name: "Pink Dress", 
+      price: "5000",
+      mrp: "7500",
+      image: "fridge.webp",
+      category: "Women Dresses",
+      type: "Dress",
+      rating: 4.4,
+      reviews: 180,
+      tag: "New"
+    },
+    { 
+      id: 4, 
+      name: "Red Dress", 
+      price: "500",
+      mrp: "1200",
+      image: "red.jpg",
+      category: "Women Dresses",
+      type: "Casual",
+      rating: 4.3,
+      reviews: 120,
+      tag: "Sale"
+    },
+    { 
+      id: 5, 
+      name: "Flower Dress", 
+      price: "1000",
+      mrp: "2000",
+      image: "camara.jpg",
+      category: "Women Dresses",
+      type: "Casual",
+      rating: 4.5,
+      reviews: 160,
+      tag: "Popular"
+    },
+    { 
+      id: 6, 
+      name: "Wedding Dress", 
+      price: "5200",
+      mrp: "8000",
+      image: "mobile.jpg",
+      category: "Women Dresses",
+      type: "Formal",
+      rating: 4.7,
+      reviews: 220,
+      tag: "Premium"
+    },
+    { 
+      id: 7, 
+      name: "Pink Dress", 
+      price: "700",
+      mrp: "1400",
+      image: "kismis.webp",
+      category: "Women Dresses",
+      type: "Casual",
+      rating: 4.2,
+      reviews: 100,
+      tag: "Trending"
+    },
+    { 
+      id: 8, 
+      name: "Kids Dress", 
+      price: "800",
+      mrp: "1500",
+      image: "saree1.webp",
+      category: "Kids Wear",
+      type: "Dress",
+      rating: 4.4,
+      reviews: 140,
+      tag: "Popular"
+    },
   ];
 
   return (
@@ -59,7 +148,7 @@ function HomePage() {
       <Navbar />
 
       {/* 🔍 Search Bar */}
-      <div className="bg-white p-3 md:p-4 shadow mt-4 max-w-3xl mx-auto rounded-lg ">
+      <div className="bg-white p-3 md:p-4 shadow mt-4 max-w-8xl mx-auto rounded-lg ">
         <input
           type="text"
           placeholder="Search for Laptops, Dry Fruits, Kurtis..."
@@ -67,12 +156,9 @@ function HomePage() {
         />
       </div>
 
-      {/* 🎯 Categories */}
-      <section className="bg-white mt-2 p-3 md:p-4">
-        <h2 className="font-bold text-base md:text-lg mb-3">
-          Categories
-        </h2>
-
+      {/* 📦 Category Carousel */}
+      <section className="p-3 md:p-6">
+        <h2 className="font-bold text-base md:text-lg mb-4">Categories</h2>
         <div className="relative">
           <button
             onClick={() => scrollByAmount('left')}
@@ -82,35 +168,28 @@ function HomePage() {
           >
             ‹
           </button>
-
           <div
             ref={scrollRef}
-            className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth px-8"
+            className="flex gap-4 overflow-x-auto scroll-smooth pb-2 px-8"
+            style={{ scrollBehavior: "smooth" }}
           >
             {categories.map((cat, index) => {
-              const lname = cat.name.toLowerCase();
+              const routes = {
+                "Electronics": "/electro",
+                "Women Dresses": "/women",
+                "Men Dresses": "/men",
+                "Vegetables": "/vegetables",
+                "Home Appliances": "/appliances",
+                "Kids Wear": "/kidswear",
+                "Footwear": "/footwear",
+                "Bicycles": "/bicycles",
+                "Accessories": "/accessories",
+              };
 
-              // Determine route for known categories
-              let route = null;
-              if (lname.includes("elect")) route = "/electro";
-              else if (lname.includes("women") || lname.includes("woman")) route = "/women";
-              else if (lname.includes("men") || lname.includes("man")) route = "/men";
-              else if (lname.includes("veg") || lname.includes("veget")) route = "/vegetables";
-              else if (lname.includes("home") || lname.includes("appliance")) route = "/appliances";
-              else if (lname.includes("kids")) route = "/kidswear";
-              else if (lname.includes("kids")) route = "/kids";
-              else if (lname.includes("footwear") || lname.includes("shoe")) route = "/footwear";
-              else if (lname.includes("access")) route = "/accessories";
-              else if (lname.includes("bicycle") || lname.includes("bike")) route = "/bicycles";
-
-
-
+              const route = routes[cat.name];
               const content = (
-                <div className="inline-block cursor-pointer transform hover:scale-105 transition shadow-sm hover:shadow-md">
-                  <div className="p-1 rounded-full bg-pink-50">
-                    <img src={cat.image} alt={cat.name} className="w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded-full border object-cover" />
-                  </div>
-                  <p className="text-xs sm:text-sm mt-1 text-pink-600 font-medium">{cat.name}</p>
+                <div className="p-1 rounded-full bg-pink-50">
+                  <img src={cat.image} alt={cat.name} className="w-14 h-14 sm:w-16 sm:h-16 mx-auto rounded-full border object-cover" />
                 </div>
               );
 
@@ -123,6 +202,7 @@ function HomePage() {
                   ) : (
                     content
                   )}
+                  <p className="text-xs sm:text-sm mt-1 text-pink-600 font-medium">{cat.name}</p>
                 </div>
               );
             })}
@@ -153,49 +233,14 @@ function HomePage() {
         </h2>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
-          {dresses.map((dress) => {
-            const isWomen = /dress|saree|kurta|lehenga/i.test(dress.name);
-            const isMen = /men|man|pant|pants|shirt|t-shirt|tshirt|trouser|jacket|shorts/i.test(dress.name);
-            const card = (
-              <div className="bg-white rounded-lg shadow hover:shadow-lg transition p-2">
-                <img
-                  src={dress.image}
-                  alt={dress.name}
-                  className="w-full h-36 sm:h-40 md:h-44 object-contain"
-                />
-
-                <h3 className="text-sm md:text-base font-semibold mt-2">
-                  {dress.name}
-                </h3>
-
-                <p className="text-pink-600 font-bold text-sm md:text-base">
-                  {dress.price}
-                </p>
-
-                <button className="mt-2 w-full bg-pink-600 hover:bg-pink-700 text-white py-1.5 rounded text-sm">
-                  Add to Cart
-                </button>
-              </div>
-            );
-
-            if (isWomen) {
-              return (
-                <Link to="/women" key={dress.id} className="block">
-                  {card}
-                </Link>
-              );
-            }
-
-            if (isMen) {
-              return (
-                <Link to="/men" key={dress.id} className="block">
-                  {card}
-                </Link>
-              );
-            }
-
-            return <div key={dress.id}>{card}</div>;
-          })}
+          {dresses.map((product) => (
+            <ProductCard 
+              key={product.id} 
+              product={product} 
+              products={dresses}
+              showRating={true}
+            />
+          ))}
         </div>
       </section>
     {/* Trust Section */}

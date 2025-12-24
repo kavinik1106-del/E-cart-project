@@ -31,6 +31,7 @@ function Navbar() {
           <button onClick={() => navigate("/contact")}>Contact</button>
           <button onClick={() => navigate("/order")}>Order</button>
           
+          
         </div>
 
         {/* Mobile Toggle */}

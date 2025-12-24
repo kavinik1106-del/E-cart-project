@@ -6,7 +6,7 @@ function CollectionPage() {
     { name: "Electronics", image: "/mobile.jpg" },
     { name: "Women Dresses", image: "/dress1.webp" },
     { name: "Men Dresses", image: "/men2.jpg" },
-<<<<<<< HEAD
+
     { name: "Dry Fruits", image: "/dates.jpg" },
     { name: "Home Appliances", image: "/fridge.webp" },
   ];
@@ -24,28 +24,7 @@ function CollectionPage() {
     { id: 10, name: "Kurta Set", price: "₹1,599", image: "/dress3.webp", rating: 4.2 },
   ];
 
-  /* ---------- STATE ---------- */
-  const [wishlist, setWishlist] = useState([]);
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [cart, setCart] = useState([]);
-
-  /* ---------- FUNCTIONS ---------- */
-  const toggleWishlist = (product) => {
-    setWishlist((prev) =>
-      prev.some((item) => item.id === product.id)
-        ? prev.filter((item) => item.id !== product.id)
-        : [...prev, product]
-    );
-  };
-
-  const isWishlisted = (id) =>
-    wishlist.some((item) => item.id === id);
-
-=======
-    { name: "Dry Fruits", image: "/cashew.webp" },
-    { name: "Home Appliances", image: "/fridge.webp" },
-  ];
-
+ 
   /* ---------- PRODUCTS ---------- */
   const products = [
   { id: 1, name: "Double Door Fridge", price: "₹18,999", image: "/doubledoorfringe.avif", rating: 4.4 },
@@ -119,7 +98,7 @@ function CollectionPage() {
   const isWishlisted = (id) =>
     wishlist.some((item) => item.id === id);
 
->>>>>>> 51182fdf634ee528192eae6ddc9530f99a78602f
+
   const handleConfirmAdd = () => {
     setCart((prev) => [...prev, selectedProduct]);
     alert(`${selectedProduct.name} added to cart ✅`);

@@ -5,6 +5,7 @@ import HomePage from "./HomePage.jsx";
 import AboutPage from "./AboutPage.jsx";
 import ContactPage from "./ContactPage.jsx";
 import CollectionPage from "./CollectionPage.jsx";
+import ProductDetailPage from "./ProductDetailPage.jsx";
 import KidsWear from "./kidswear.jsx";
 import OrderPage from "./OrderPage.jsx";
 import Electro from "./Electro.jsx";
@@ -16,22 +17,19 @@ import Accessories from "./accessories.jsx";
 import Footwear from "./footwear.jsx";
 import HomeAppliances from "./HomeAppliances.jsx";
 import LoginPage from "./LoginPage.jsx";
-import PremiumHomePage from "./PremiumHomePage.jsx";
-import CartPagePro from "./CartPagePro.jsx";
-import WishlistPagePro from "./WishlistPagePro.jsx";
 
 /* 🔥 NEW IMPORTS */
 import CartPage from "./CartPage.jsx";
 import WishlistPage from "./WishlistPage.jsx";
 import CheckoutPage from "./CheckoutPage.jsx";
-import { CartProvider } from "./CartContext.jsx";
+import { CartProvider } from "./contexts/CartContext.jsx";
 
 function App() {
   return (
     <CartProvider>
       <Routes>
         {/* EXISTING ROUTES */}
-        <Route path="/" element={<PremiumHomePage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/contact" element={<ContactPage />} />
         <Route path="/collection" element={<CollectionPage />} />
@@ -46,10 +44,11 @@ function App() {
         <Route path="/appliances" element={<HomeAppliances />} />
         <Route path="/bicycles" element={<Bicycles />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/product/:id" element={<ProductDetailPage />} />
 
         {/* 🆕 NEW ROUTES */}
-        <Route path="/cart" element={<CartPagePro />} />
-        <Route path="/wishlist" element={<WishlistPagePro />} />
+        <Route path="/cart" element={<CartPage />} />
+        <Route path="/wishlist" element={<WishlistPage />} />
         <Route path="/checkout" element={<CheckoutPage />} />
       </Routes>
     </CartProvider>
