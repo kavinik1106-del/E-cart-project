@@ -4,6 +4,8 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import pool from './config/database.js';
 import contactRoutes from './routes/contactRoutes.js';
+import authRoutes from './routes/authRoutes.js';
+import orderRoutes from './routes/orderRoutes.js';
 import { errorHandler, notFoundHandler, requestLogger } from './middleware/middleware.js';
 import logger from './utils/logger.js';
 
@@ -43,6 +45,8 @@ app.get('/api/health', (req, res) => {
 
 app.use('/api/contact', contactRoutes);
 app.use('/api/contacts', contactRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Error handling
 app.use(notFoundHandler);
@@ -59,6 +63,19 @@ app.listen(PORT, () => {
   logger.info('  PUT    /api/contacts/:id');
   logger.info('  DELETE /api/contacts/:id');
   logger.info('  GET    /api/contacts/stats');
+  logger.info('  POST   /api/auth/register');
+  logger.info('  POST   /api/auth/login');
+  logger.info('  GET    /api/auth/profile/:id');
+  logger.info('  PUT    /api/auth/profile/:id');
+  logger.info('  GET    /api/auth/users');
+  logger.info('  POST   /api/orders');
+  logger.info('  GET    /api/orders/:id');
+  logger.info('  GET    /api/orders/user/:userId');
+  logger.info('  GET    /api/orders');
+  logger.info('  PUT    /api/orders/:id/status');
+  logger.info('  PUT    /api/orders/:id/payment-status');
+  logger.info('  PUT    /api/orders/:id/cancel');
 });
 
 export default app;
+

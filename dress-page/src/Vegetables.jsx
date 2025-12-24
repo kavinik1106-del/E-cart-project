@@ -1,46 +1,45 @@
 import React from "react";
 import Navbar from "./Navbar.jsx";
-import { Link } from "react-router-dom";
+import ProductCard from "./components/ProductCard.jsx";
+import { vegetableProducts } from "./data/vegetableProducts.js";
 
 function Vegetables() {
-  const products = [
-    { id: 1, type: "Vegetable", name: "Carrot", price: "₹40/kg", image: "/carrot.webp" },
-    { id: 2, type: "Vegetable", name: "Beans", price: "₹60/kg", image: "/beans.webp" },
-    { id: 3, type: "Vegetable", name: "Tomato", price: "₹35/kg", image: "/tomo.jpg" },
-    { id: 4, type: "Spice", name: "Ginger", price: "₹120/kg", image: "/ginger.webp" },
-    { id: 5, type: "Spice", name: "Turmeric Powder", price: "₹180/100g", image: "/masala.webp" },
-    { id: 6, type: "Spice", name: "Garam Masala", price: "₹200/100g", image: "/masala2.webp" },
-  ];
-
   return (
-    <div className="min-h-screen bg-pink-50">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50">
       <Navbar />
 
-      {/* Rounded pink header card separated from navbar */}
-      <div className="max-w-3xl mx-auto mt-6 px-4">
-        <div className="bg-pink-600 text-white rounded-2xl p-5 text-center shadow-md">
-          <h1 className="text-2xl font-bold">Vegetables & Spices</h1>
-          <p className="text-sm mt-1">Fresh vegetables, masalas & everyday staples</p>
+      {/* Header Banner */}
+      <div className="max-w-6xl mx-auto mt-6 px-4">
+        <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-2xl p-8 text-center shadow-lg">
+          <h1 className="text-4xl font-bold mb-2">Fresh & Organic</h1>
+          <p className="text-green-100">Farm fresh vegetables and authentic Indian spices delivered daily</p>
         </div>
       </div>
 
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-          {products.map((p) => (
-            <div key={p.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="h-40 bg-gray-100 flex items-center justify-center">
-                <img src={p.image} alt={p.name} className="h-full object-contain p-3" />
-              </div>
+      {/* Filter & Sort Bar */}
+      <div className="max-w-6xl mx-auto px-4 py-6 flex gap-4 justify-between items-center">
+        <div className="text-sm text-gray-600">
+          Showing <span className="font-semibold">{vegetableProducts.length}</span> products
+        </div>
+        <select className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent">
+          <option>Sort by: Recommended</option>
+          <option>Price: Low to High</option>
+          <option>Price: High to Low</option>
+          <option>Best Ratings</option>
+          <option>Freshest</option>
+        </select>
+      </div>
 
-              <div className="p-4">
-                <div className="text-xs text-pink-600 font-semibold">{p.type}</div>
-                <h3 className="mt-1 font-semibold text-sm">{p.name}</h3>
-                <div className="mt-2 flex items-center justify-between">
-                  <div className="text-pink-600 font-bold">{p.price}</div>
-                  <Link to="/order" className="bg-pink-600 text-white px-3 py-1 rounded hover:bg-pink-700 text-xs">Buy</Link>
-                </div>
-              </div>
-            </div>
+      {/* Products Grid */}
+      <main className="max-w-6xl mx-auto px-4 pb-12">
+        <section className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+          {vegetableProducts.map((product) => (
+            <ProductCard 
+              key={product.id} 
+              product={product} 
+              products={vegetableProducts}
+              showRating={true}
+            />
           ))}
         </section>
       </main>
