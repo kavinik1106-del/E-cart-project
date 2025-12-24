@@ -22,6 +22,7 @@ import LoginPage from "./LoginPage.jsx";
 // afasdfjhaklwuefhiqw
 function App() {
   return (
+    <CartProvider>
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/about" element={<AboutPage />} />
