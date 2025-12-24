@@ -31,8 +31,11 @@ import { CartProvider } from "./contexts/CartContext.jsx";
 import AdminPanel from "./admin/AdminPanel.jsx";
 import AdminLogin from "./admin/AdminLogin.jsx";
 import AdminProducts from "./admin/AdminProducts.jsx";
+import AdminOrders from "./admin/AdminOrders.jsx";
+import AdminCustomers from "./admin/AdminCustomers.jsx";
+import AdminSettings from "./admin/AdminSettings.jsx";
 import ProtectedRoute from "./admin/ProtectedRoute.jsx";
-// afasdfjhaklwuefhiqw
+
 function App() {
   return (
     <CartProvider>
@@ -62,6 +65,9 @@ function App() {
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
         <Route path="/admin/products" element={<ProtectedRoute><AdminProducts /></ProtectedRoute>} />
+        <Route path="/admin/orders" element={<ProtectedRoute><AdminOrders /></ProtectedRoute>} />
+        <Route path="/admin/customers" element={<ProtectedRoute><AdminCustomers /></ProtectedRoute>} />
+        <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
 
     </Routes>
     </CartProvider>
@@ -69,4 +75,4 @@ function App() {
   );
 }
 
-export default App;
+export default App;    

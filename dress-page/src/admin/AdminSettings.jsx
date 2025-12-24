@@ -1,0 +1,327 @@
+import React, { useState } from "react";
+import { Save, Eye, EyeOff, Lock, Bell, Shield, Palette } from "lucide-react";
+import AdminLayout from "./AdminLayout";
+
+function AdminSettingsContent() {
+  const [settings, setSettings] = useState({
+    storeName: "ShopHub",
+    storeEmail: "support@shophub.com",
+    storePhone: "+91-9876543210",
+    currency: "INR",
+    taxRate: "18",
+    emailNotifications: true,
+    orderNotifications: true,
+    lowStockAlert: true,
+    darkMode: false,
+  });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [changePassword, setChangePassword] = useState({
+    current: "",
+    new: "",
+    confirm: "",
+  });
+  const [saved, setSaved] = useState(false);
+
+  const handleSettingChange = (key, value) => {
+    setSettings((prev) => ({ ...prev, [key]: value }));
+    setSaved(false);
+  };
+
+  const handleSaveSettings = () => {
+    setSaved(true);
+    setTimeout(() => setSaved(false), 3000);
+  };
+
+  const handlePasswordChange = () => {
+    if (changePassword.new !== changePassword.confirm) {
+      alert("Passwords do not match");
+      return;
+    }
+    alert("Password changed successfully!");
+    setChangePassword({ current: "", new: "", confirm: "" });
+  };
+
+  return (
+    <div className="space-y-6 max-w-4xl">
+      {/* Header */}
+      <div>
+        <h1 className="text-3xl font-bold text-gray-800">Settings</h1>
+        <p className="text-gray-500 text-sm mt-1">Manage your store settings and preferences</p>
+      </div>
+
+      {/* Store Settings */}
+      <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
+        <div className="border-b pb-4">
+          <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+            <Shield size={20} />
+            Store Settings
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Store Name
+            </label>
+            <input
+              type="text"
+              value={settings.storeName}
+              onChange={(e) => handleSettingChange("storeName", e.target.value)}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Store Email
+            </label>
+            <input
+              type="email"
+              value={settings.storeEmail}
+              onChange={(e) => handleSettingChange("storeEmail", e.target.value)}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Store Phone
+            </label>
+            <input
+              type="tel"
+              value={settings.storePhone}
+              onChange={(e) => handleSettingChange("storePhone", e.target.value)}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Currency
+            </label>
+            <select
+              value={settings.currency}
+              onChange={(e) => handleSettingChange("currency", e.target.value)}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option>INR</option>
+              <option>USD</option>
+              <option>EUR</option>
+              <option>GBP</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Tax Rate (%)
+            </label>
+            <input
+              type="number"
+              value={settings.taxRate}
+              onChange={(e) => handleSettingChange("taxRate", e.target.value)}
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+
+        <div className="flex gap-3 pt-4 border-t">
+          <button
+            onClick={handleSaveSettings}
+            className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
+          >
+            <Save size={18} />
+            Save Changes
+          </button>
+          {saved && (
+            <span className="text-green-600 font-medium flex items-center">
+              ✓ Settings saved successfully
+            </span>
+          )}
+        </div>
+      </div>
+
+      {/* Notification Settings */}
+      <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
+        <div className="border-b pb-4">
+          <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+            <Bell size={20} />
+            Notification Settings
+          </h2>
+        </div>
+
+        <div className="space-y-4">
+          {[
+            {
+              key: "emailNotifications",
+              label: "Email Notifications",
+              desc: "Receive notifications via email",
+            },
+            {
+              key: "orderNotifications",
+              label: "Order Notifications",
+              desc: "Get alerts for new orders",
+            },
+            {
+              key: "lowStockAlert",
+              label: "Low Stock Alerts",
+              desc: "Notify when product stock is low",
+            },
+          ].map((notif) => (
+            <div
+              key={notif.key}
+              className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
+            >
+              <div>
+                <p className="font-semibold text-gray-800">{notif.label}</p>
+                <p className="text-sm text-gray-500">{notif.desc}</p>
+              </div>
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={settings[notif.key]}
+                  onChange={(e) =>
+                    handleSettingChange(notif.key, e.target.checked)
+                  }
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+          ))}
+        </div>
+
+        <div className="flex gap-3 pt-4 border-t">
+          <button
+            onClick={handleSaveSettings}
+            className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
+          >
+            <Save size={18} />
+            Save Changes
+          </button>
+        </div>
+      </div>
+
+      {/* Security Settings */}
+      <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
+        <div className="border-b pb-4">
+          <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+            <Lock size={20} />
+            Security Settings
+          </h2>
+        </div>
+
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Current Password
+            </label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={changePassword.current}
+                onChange={(e) =>
+                  setChangePassword({ ...changePassword, current: e.target.value })
+                }
+                placeholder="Enter current password"
+                className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-2.5 text-gray-500 hover:text-gray-700"
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              New Password
+            </label>
+            <input
+              type="password"
+              value={changePassword.new}
+              onChange={(e) =>
+                setChangePassword({ ...changePassword, new: e.target.value })
+              }
+              placeholder="Enter new password"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700 mb-2">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              value={changePassword.confirm}
+              onChange={(e) =>
+                setChangePassword({ ...changePassword, confirm: e.target.value })
+              }
+              placeholder="Confirm new password"
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+
+        <div className="flex gap-3 pt-4 border-t">
+          <button
+            onClick={handlePasswordChange}
+            className="flex items-center gap-2 px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium"
+          >
+            <Lock size={18} />
+            Change Password
+          </button>
+        </div>
+      </div>
+
+      {/* Appearance Settings */}
+      <div className="bg-white rounded-lg shadow-md p-6 space-y-6">
+        <div className="border-b pb-4">
+          <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+            <Palette size={20} />
+            Appearance
+          </h2>
+        </div>
+
+        <div className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition">
+          <div>
+            <p className="font-semibold text-gray-800">Dark Mode</p>
+            <p className="text-sm text-gray-500">Enable dark theme for the admin panel</p>
+          </div>
+          <label className="relative inline-flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              checked={settings.darkMode}
+              onChange={(e) => handleSettingChange("darkMode", e.target.checked)}
+              className="sr-only peer"
+            />
+            <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+          </label>
+        </div>
+
+        <div className="flex gap-3 pt-4 border-t">
+          <button
+            onClick={handleSaveSettings}
+            className="flex items-center gap-2 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
+          >
+            <Save size={18} />
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AdminSettings() {
+  return (
+    <AdminLayout>
+      <AdminSettingsContent />
+    </AdminLayout>
+  );
+}
+
+export default AdminSettings;
