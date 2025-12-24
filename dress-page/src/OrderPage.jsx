@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useCart } from "./CartContext.jsx";
 import Navbar from "./Navbar.jsx";
 import { Link } from "react-router-dom";
 import { Heart, Star } from "lucide-react";
@@ -43,46 +44,12 @@ function OrderPage() {
     },
   ];
 
-  const [cart, setCart] = useState([]);
-
-  const addToCart = (product) => {
-    setCart((prev) => {
-      const exists = prev.find((p) => p.id === product.id);
-      if (exists) {
-        return prev.map((p) =>
-          p.id === product.id ? { ...p, quantity: p.quantity + 1 } : p
-        );
-      }
-      return [...prev, { ...product, quantity: 1 }];
-    });
-  };
-
-  const increaseQty = (id) => {
-    setCart((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    );
-  };
-
-  const decreaseQty = (id) => {
-    setCart((prev) =>
-      prev
-        .map((item) =>
-          item.id === id ? { ...item, quantity: item.quantity - 1 } : item
-        )
-        .filter((item) => item.quantity > 0)
-    );
-  };
-
-  const removeItem = (id) => {
-    setCart((prev) => prev.filter((item) => item.id !== id));
-  };
+  const { cart, increaseQty, decreaseQty, removeFromCart, clearCart, addToCart } = useCart();
 
   const placeOrder = () => {
     alert("🎉 Order placed successfully!");
-    setCart([]);
-  };
+    clearCart();
+  };;
 
   const total = cart.reduce((sum, p) => sum + p.price * p.quantity, 0);
   const totalMRP = cart.reduce((sum, p) => sum + p.mrp * p.quantity, 0);
@@ -96,7 +63,8 @@ function OrderPage() {
       <div className="max-w-7xl mx-auto p-6 grid md:grid-cols-3 gap-8">
         {/* Products */}
         <section className="md:col-span-2 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {products.map((p) => (
+          {products.map((p) => {
+            return (
             <div key={p.id} className="bg-white rounded-xl shadow">
               <div className="relative h-52 bg-gray-100 flex justify-center items-center">
                 <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="w-full h-full flex items-center justify-center">
@@ -147,8 +115,9 @@ function OrderPage() {
                   <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="px-3 py-2 border rounded-lg text-sm">Details</Link>
                 </div>
               </div>
-            );
-          })}
+            </div>
+          );
+        })}
         </section>
 
         {/* Order Summary */}
@@ -184,7 +153,7 @@ function OrderPage() {
                       <button onClick={() => increaseQty(item.id)} className="px-2 border rounded">+</button>
 
                       <button
-                        onClick={() => removeItem(item.id)}
+                        onClick={() => removeFromCart(item.id)}
                         className="text-pink-600 text-xs ml-3"
                       >
                         Remove

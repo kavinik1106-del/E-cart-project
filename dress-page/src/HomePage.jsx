@@ -1,12 +1,16 @@
 import React, { useRef, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Navbar from "./Navbar.jsx";
 import { womenProducts } from "./data/womenProducts.js";
 import { menProducts } from "./data/menProducts.js";
 import { vegetableProducts } from "./data/vegetableProducts.js";
 import { shoeProducts } from "./data/shoeProducts.js";
+import { useCart } from "./CartContext.jsx";
 
 function HomePage() {
+  const navigate = useNavigate();
+  const { addToCart } = useCart();
+
   const categories = [
   { name: "Electronics", image: "mobile.jpg" },
     { name: "Women Dresses", image: "dress1.webp" },
@@ -172,61 +176,88 @@ function HomePage() {
               menProducts;
 
             return (
-              <Link 
-                to={`/product/${product.id}`}
-                state={{ product, related: allProducts }}
+              <div
                 key={`${product.type}-${product.id}`}
+                className="bg-white rounded-xl shadow-sm hover:shadow-lg transition p-3 h-full cursor-pointer"
+                onClick={() => navigate(`/product/${product.id}`, { state: { product, related: allProducts } })}
               >
-                <div className="bg-white rounded-xl shadow-sm hover:shadow-lg transition p-3 h-full">
-                  <div className="relative">
-                    <img
-                      src={product.image}
-                      alt={product.name}
-                      className="w-full h-44 object-contain mb-3"
-                    />
-                    {product.tag && (
-                      <span className="absolute top-2 right-2 bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-semibold">
-                        {product.tag}
-                      </span>
-                    )}
-                  </div>
+                <div className="relative">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-44 object-contain mb-3"
+                  />
+                  {product.tag && (
+                    <span className="absolute top-2 right-2 bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-semibold">
+                      {product.tag}
+                    </span>
+                  )}
+                </div>
 
-                  <h3 className="text-sm font-semibold text-gray-800 truncate">
-                    {product.name}
-                  </h3>
+                <h3 className="text-sm font-semibold text-gray-800 truncate">
+                  {product.name}
+                </h3>
 
-                  <div className="flex items-center gap-2 my-2">
-                    <p className="text-pink-600 font-bold">
-                      ₹{product.price}
+                <div className="flex items-center gap-2 my-2">
+                  <p className="text-pink-600 font-bold">
+                    ₹{product.price}
+                  </p>
+                  {product.mrp && (
+                    <p className="text-gray-400 line-through text-sm">
+                      ₹{product.mrp}
                     </p>
-                    {product.mrp && (
-                      <p className="text-gray-400 line-through text-sm">
-                        ₹{product.mrp}
-                      </p>
-                    )}
-                  </div>
+                  )}
+                </div>
 
-                  <div className="flex items-center gap-1 mb-3">
-                    <span className="text-yellow-400 text-sm">★</span>
-                    <span className="text-sm text-gray-700 font-medium">{product.rating || 4.5}</span>
-                    <span className="text-gray-500 text-xs">({product.reviews || 0})</span>
-                  </div>
+                <div className="flex items-center gap-1 mb-3">
+                  <span className="text-yellow-400 text-sm">★</span>
+                  <span className="text-sm text-gray-700 font-medium">{product.rating || 4.5}</span>
+                  <span className="text-gray-500 text-xs">({product.reviews || 0})</span>
+                </div>
 
-                  <button className="mt-3 w-full bg-pink-600 hover:bg-pink-700 text-white py-2 rounded-lg text-sm font-semibold transition">
+                <div className="flex gap-2">
+                  <button
+                    onClick={(e) => {
+                      // prevent card click
+                      e.stopPropagation();
+                      navigate(`/product/${product.id}`, { state: { product, related: allProducts } });
+                    }}
+                    className="flex-1 mt-3 bg-pink-600 hover:bg-pink-700 text-white py-2 rounded-lg text-sm font-semibold transition"
+                  >
                     View Details
                   </button>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      addToCart(product);
+                      // optional: navigate('/order');
+                    }}
+                    className="mt-3 px-3 bg-white border rounded-lg text-sm font-semibold"
+                  >
+                    Add
+                  </button>
                 </div>
-              </Link>
+              </div>
             );
           })}
         </div>
       </section>
-    {/* Trust Section */}
-<div
-  className="py-60 mt-24 bg-cover bg-center"
-  style={{ backgroundImage: "url('/drybanner.jpg')" }}
->
-  
+{/* Trust / Feature Section */}
+<div className="py-16 mt-12 bg-cover bg-center rounded-lg" style={{ backgroundImage: "url('/drybanner.jpg')" }}>
+  <div className="max-w-7xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-4 p-6 bg-black/30 backdrop-blur-sm rounded-md">
+    {[
+      { img: '/pinkdress.avif', label: 'Women Dresses', link: '/women' },
+      { img: '/men1.avif', label: 'Men', link: '/men' },
+      { img: '/veg2.webp', label: 'Vegetables', link: '/vegetables' },
+      { img: '/homeoffer.avif', label: 'Home', link: '/appliances' },
+    ].map((it) => (
+      <div key={it.label} className="text-center p-2 bg-white/80 rounded cursor-pointer hover:scale-105 transition" onClick={() => navigate(it.link)}>
+        <img src={it.img} alt={it.label} className="w-full h-20 object-cover rounded" />
+        <p className="mt-2 text-sm font-medium text-gray-800">{it.label}</p>
+      </div>
+    ))}
+  </div>
 </div>
 <footer className="bg-gray-800 text-white mt-10 py-2">
   <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-6 text-sm px-4">
