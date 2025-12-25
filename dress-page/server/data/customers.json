@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "phone": "+1-555-0100",
+    "location": "New York",
+    "orders": 12,
+    "spent": 45000,
+    "joined": "2024-01-15"
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "email": "jane@example.com",
+    "phone": "+1-555-0101",
+    "location": "Los Angeles",
+    "orders": 8,
+    "spent": 32000,
+    "joined": "2024-02-20"
+  }
+]

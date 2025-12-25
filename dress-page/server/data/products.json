@@ -1,0 +1,29 @@
+[
+  {
+    "id": 1,
+    "name": "Premium Casual Shirt",
+    "type": "shirts",
+    "price": 1500,
+    "stock": 45,
+    "image": "shirt1.avif",
+    "description": "Premium quality casual shirt"
+  },
+  {
+    "id": 2,
+    "name": "Formal Business Suit",
+    "type": "suits",
+    "price": 8500,
+    "stock": 12,
+    "image": "formalsuit.avif",
+    "description": "Professional formal suit"
+  },
+  {
+    "id": 3,
+    "name": "Chino Pants",
+    "type": "pants",
+    "price": 2500,
+    "stock": 38,
+    "image": "chino.avif",
+    "description": "Comfortable chino pants"
+  }
+]

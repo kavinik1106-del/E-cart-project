@@ -32,7 +32,7 @@ function AdminLayout({ children }) {
         <div className="p-4 border-b border-blue-700 flex items-center justify-between">
           <div className={`flex items-center gap-3 ${!sidebarOpen && "justify-center w-full"}`}>
             <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg flex items-center justify-center font-bold text-lg">A</div>
-            {sidebarOpen && <span className="font-bold text-xl">ShopHub</span>}
+            {sidebarOpen && <span className="font-bold text-xl">StyleNest</span>}
           </div>
         </div>
 
