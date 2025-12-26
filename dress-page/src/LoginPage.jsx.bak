@@ -137,7 +137,7 @@ function LoginPage() {
                   />
                   <span
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-4 text-xs text-blue-500 cursor-pointer"
+                    className="absolute right-3 top-4 text-xs text-pink-500 cursor-pointer"
                   >
                     {showPassword ? "HIDE" : "SHOW"}
                   </span>

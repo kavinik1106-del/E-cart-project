@@ -20,14 +20,14 @@ import Accessories from "./accessories.jsx";
 import Footwear from "./footwear.jsx";
 import HomeAppliances from "./HomeAppliances.jsx";
 import ShoesCategory from "./ShoesCategory.jsx";
-import LoginPage from "./LoginPage.jsx";
+import LoginPage from "./LoginPageAPI.jsx";
 
 
 /* 🔥 NEW IMPORTS */
 import CartPage from "./CartPage.jsx";
 import WishlistPage from "./WishlistPage.jsx";
 import CheckoutPage from "./CheckoutPage.jsx";
-import { CartProvider } from "./contexts/CartContext.jsx";
+import { CartProvider, useCart } from "./contexts/CartContext.jsx";
 import AdminPanel from "./admin/AdminPanel.jsx";
 import AdminLogin from "./admin/AdminLogin.jsx";
 import AdminProducts from "./admin/AdminProducts.jsx";
@@ -35,10 +35,13 @@ import AdminOrders from "./admin/AdminOrders.jsx";
 import AdminCustomers from "./admin/AdminCustomers.jsx";
 import AdminSettings from "./admin/AdminSettings.jsx";
 import ProtectedRoute from "./admin/ProtectedRoute.jsx";
+import Toast from "./components/Toast.jsx";
 
-function App() {
+function AppContent() {
+  const { toast } = useCart();
+
   return (
-    <CartProvider>
+    <>
       <Routes>
         {/* EXISTING ROUTES */}
         <Route path="/" element={<HomePage />} />
@@ -70,6 +73,21 @@ function App() {
         <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
 
     </Routes>
+    {toast && (
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        onClose={() => {}}
+      />
+    )}
+    </>
+  );
+}
+
+function App() {
+  return (
+    <CartProvider>
+      <AppContent />
     </CartProvider>
     
   );

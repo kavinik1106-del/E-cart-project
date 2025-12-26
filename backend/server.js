@@ -6,6 +6,7 @@ import pool from './config/database.js';
 import contactRoutes from './routes/contactRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 import { errorHandler, notFoundHandler, requestLogger } from './middleware/middleware.js';
 import logger from './utils/logger.js';
 
@@ -61,6 +62,7 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/contacts', contactRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/admin', adminRoutes);
 
 // Error handling
 app.use(notFoundHandler);
@@ -79,8 +81,11 @@ const server = app.listen(PORT, () => {
   logger.info('  GET    /api/contacts/stats');
   logger.info('  POST   /api/auth/register');
   logger.info('  POST   /api/auth/login');
+  logger.info('  POST   /api/auth/logout');
   logger.info('  GET    /api/auth/profile/:id');
   logger.info('  PUT    /api/auth/profile/:id');
+  logger.info('  GET    /api/auth/login-history/:userId');
+  logger.info('  GET    /api/auth/session-stats/:userId');
   logger.info('  GET    /api/auth/users');
   logger.info('  POST   /api/orders');
   logger.info('  GET    /api/orders/:id');

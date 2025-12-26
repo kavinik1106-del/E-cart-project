@@ -95,7 +95,7 @@ function ContactPage() {
       <Navbar />
 
      {/* Banner */}
-      <div className="bg-gradient-to-r from-pink-500 to-pink-600 text-white py-14">
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-14">
         <h1 className="text-4xl font-bold text-center">
           StyleNest Customer Support
         </h1>
@@ -110,9 +110,9 @@ function ContactPage() {
         <div
           onClick={() => setActiveBox("chat")}
           className={`bg-white rounded-xl shadow p-6 text-center cursor-pointer
-          ${activeBox === "chat" ? "ring-2 ring-pink-500" : ""}`}
+          ${activeBox === "chat" ? "ring-2 ring-blue-500" : ""}`}
         >
-          <MessageCircle className="mx-auto text-pink-500 mb-3" size={30} />
+          <MessageCircle className="mx-auto text-blue-500 mb-3" size={30} />
           <h3 className="font-semibold">Live Chat</h3>
           <p className="text-sm text-gray-600 mt-2">
             Instant messaging support
@@ -122,9 +122,9 @@ function ContactPage() {
         <div
           onClick={() => setActiveBox("help")}
           className={`bg-white rounded-xl shadow p-6 text-center cursor-pointer
-          ${activeBox === "help" ? "ring-2 ring-pink-500" : ""}`}
+          ${activeBox === "help" ? "ring-2 ring-blue-500" : ""}`}
         >
-          <HelpCircle className="mx-auto text-pink-500 mb-3" size={30} />
+          <HelpCircle className="mx-auto text-blue-500 mb-3" size={30} />
           <h3 className="font-semibold">Help Center</h3>
           <p className="text-sm text-gray-600 mt-2">
             FAQs & self-service
@@ -134,9 +134,9 @@ function ContactPage() {
         <div
           onClick={() => setActiveBox("call")}
           className={`bg-white rounded-xl shadow p-6 text-center cursor-pointer
-          ${activeBox === "call" ? "ring-2 ring-pink-500" : ""}`}
+          ${activeBox === "call" ? "ring-2 ring-blue-500" : ""}`}
         >
-          <Phone className="mx-auto text-pink-500 mb-3" size={30} />
+          <Phone className="mx-auto text-blue-500 mb-3" size={30} />
           <h3 className="font-semibold">Call Support</h3>
           <p className="text-sm text-gray-600 mt-2">
             Talk to our team
@@ -157,7 +157,7 @@ function ContactPage() {
                   <div className="bg-gray-100 p-3 rounded-lg">
                     👋 Hi! How can we help you today?
                   </div>
-                  <div className="bg-pink-100 p-3 rounded-lg text-right">
+                  <div className="bg-blue-100 p-3 rounded-lg text-right">
                     I need help with my order
                   </div>
                   <div className="bg-gray-100 p-3 rounded-lg">
@@ -182,7 +182,7 @@ function ContactPage() {
                       className={`w-full text-left p-4 rounded-lg border font-medium
                       ${
                         activeFAQ === index
-                          ? "bg-pink-50 border-pink-400"
+                          ? "bg-blue-50 border-blue-400"
                           : "bg-white"
                       }`}
                     >
@@ -222,19 +222,19 @@ function ContactPage() {
           <h2 className="text-2xl font-semibold">Get in Touch</h2>
 
           <div className="flex gap-4">
-            <Mail className="text-pink-500" />
+            <Mail className="text-blue-500" />
             <p className="text-sm text-gray-600">support@stylenest.com</p>
           </div>
 
           <div className="flex gap-4">
-            <MapPin className="text-pink-500" />
+            <MapPin className="text-blue-500" />
             <p className="text-sm text-gray-600">
               Chennai, Tamil Nadu, India
             </p>
           </div>
 
           <div className="flex gap-4">
-            <Clock className="text-pink-500" />
+            <Clock className="text-blue-500" />
             <p className="text-sm text-gray-600">
               Mon – Sat (9 AM – 8 PM)
             </p>
@@ -326,7 +326,7 @@ function ContactPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-pink-500 hover:bg-pink-600 disabled:bg-gray-400 text-white py-3 rounded-lg font-semibold"
+              className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 disabled:bg-gray-400 text-white py-3 rounded-lg font-semibold transition-all duration-200"
             >
               {loading ? "Submitting..." : "Submit Request"}
             </button>

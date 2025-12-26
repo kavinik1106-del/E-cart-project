@@ -27,12 +27,12 @@ function AdminLayout({ children }) {
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className={`${sidebarOpen ? "w-64" : "w-20"} bg-gradient-to-b from-blue-900 to-blue-800 text-white transition-all duration-300 overflow-y-auto flex flex-col shadow-lg`}>
+      <div className={`${sidebarOpen ? "w-64" : "w-20"} bg-gradient-to-b from-blue-900 to-purple-800 text-white transition-all duration-300 overflow-y-auto flex flex-col shadow-lg`}>
         {/* Logo */}
         <div className="p-4 border-b border-blue-700 flex items-center justify-between">
           <div className={`flex items-center gap-3 ${!sidebarOpen && "justify-center w-full"}`}>
             <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg flex items-center justify-center font-bold text-lg">A</div>
-            {sidebarOpen && <span className="font-bold text-xl">ShopHub</span>}
+            {sidebarOpen && <span className="font-bold text-xl">StyleNest</span>}
           </div>
         </div>
 
@@ -46,7 +46,7 @@ function AdminLayout({ children }) {
                 onClick={() => navigate(item.path)}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                   isActive(item.path)
-                    ? "bg-orange-500 shadow-lg"
+                    ? "bg-purple-500 shadow-lg"
                     : "hover:bg-blue-700 text-blue-100"
                 }`}
               >

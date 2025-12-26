@@ -66,11 +66,11 @@ export default function LoginPage() {
       if (data.success) {
         setMessageType('success');
         setMessage('Login successful! Redirecting...');
-        
+
         // Store user data in localStorage
         localStorage.setItem('user', JSON.stringify(data.data.user));
         localStorage.setItem('token', data.data.token);
-        
+
         setTimeout(() => {
           navigate('/');
         }, 2000);
@@ -135,7 +135,7 @@ export default function LoginPage() {
       if (data.success) {
         setMessageType('success');
         setMessage('Registration successful! Please login.');
-        
+
         // Reset form
         setRegisterData({
           email: '',
@@ -164,172 +164,232 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <h1 className="login-title">E-Cart</h1>
-        
-        <div className="tabs">
-          <button
-            className={`tab-button ${activeTab === 'login' ? 'active' : ''}`}
-            onClick={() => setActiveTab('login')}
-          >
-            Login
-          </button>
-          <button
-            className={`tab-button ${activeTab === 'register' ? 'active' : ''}`}
-            onClick={() => setActiveTab('register')}
-          >
-            Sign Up
-          </button>
+    <div className="login-page">
+      <div className="login-container">
+        {/* Logo/Brand */}
+        <div className="brand-section">
+          <h1 className="brand-logo">StyleNest</h1>
+          <p className="brand-tagline">Your Fashion Destination</p>
         </div>
 
-        {message && (
-          <div className={`message ${messageType}`}>
-            {message}
+        {/* Login/Register Card */}
+        <div className="auth-card">
+          <div className="auth-header">
+            <h2 className="auth-title">
+              {activeTab === 'login' ? 'Sign in' : 'Create account'}
+            </h2>
+            {activeTab === 'login' && (
+              <p className="auth-subtitle">Welcome back! Please sign in to your account.</p>
+            )}
           </div>
-        )}
 
-        {/* LOGIN FORM */}
-        {activeTab === 'login' && (
-          <form onSubmit={handleLogin} className="form">
-            <div className="form-group">
-              <label htmlFor="login-email">Email Address</label>
-              <input
-                type="email"
-                id="login-email"
-                name="email"
-                value={loginData.email}
-                onChange={handleLoginChange}
-                placeholder="Enter your email"
-                required
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="login-password">Password</label>
-              <input
-                type="password"
-                id="login-password"
-                name="password"
-                value={loginData.password}
-                onChange={handleLoginChange}
-                placeholder="Enter your password"
-                required
-              />
-            </div>
-
+          {/* Tab Switcher */}
+          <div className="tab-switcher">
             <button
-              type="submit"
-              className="submit-button"
-              disabled={loading}
+              className={`tab-btn ${activeTab === 'login' ? 'active' : ''}`}
+              onClick={() => setActiveTab('login')}
             >
-              {loading ? 'Logging in...' : 'Login'}
+              Sign in
             </button>
+            <button
+              className={`tab-btn ${activeTab === 'register' ? 'active' : ''}`}
+              onClick={() => setActiveTab('register')}
+            >
+              New customer? Create account
+            </button>
+          </div>
 
-            <p className="forgot-password">
-              <a href="#forgot">Forgot Password?</a>
-            </p>
-          </form>
-        )}
+          {/* Message Display */}
+          {message && (
+            <div className={`message ${messageType}`}>
+              {message}
+            </div>
+          )}
 
-        {/* REGISTER FORM */}
-        {activeTab === 'register' && (
-          <form onSubmit={handleRegister} className="form">
-            <div className="form-row">
+          {/* LOGIN FORM */}
+          {activeTab === 'login' && (
+            <form onSubmit={handleLogin} className="auth-form">
               <div className="form-group">
-                <label htmlFor="first-name">First Name</label>
+                <label htmlFor="login-email">Email or mobile phone number</label>
                 <input
-                  type="text"
-                  id="first-name"
-                  name="first_name"
-                  value={registerData.first_name}
-                  onChange={handleRegisterChange}
-                  placeholder="First name"
+                  type="email"
+                  id="login-email"
+                  name="email"
+                  value={loginData.email}
+                  onChange={handleLoginChange}
+                  placeholder="Enter your email"
+                  required
+                  className="form-input"
                 />
               </div>
 
               <div className="form-group">
-                <label htmlFor="last-name">Last Name</label>
+                <label htmlFor="login-password">Password</label>
                 <input
-                  type="text"
-                  id="last-name"
-                  name="last_name"
-                  value={registerData.last_name}
-                  onChange={handleRegisterChange}
-                  placeholder="Last name"
+                  type="password"
+                  id="login-password"
+                  name="password"
+                  value={loginData.password}
+                  onChange={handleLoginChange}
+                  placeholder="Enter your password"
+                  required
+                  className="form-input"
                 />
               </div>
-            </div>
 
-            <div className="form-group">
-              <label htmlFor="reg-email">Email Address</label>
-              <input
-                type="email"
-                id="reg-email"
-                name="email"
-                value={registerData.email}
-                onChange={handleRegisterChange}
-                placeholder="Enter your email"
-                required
-              />
-            </div>
+              <div className="form-options">
+                <label className="checkbox-label">
+                  <input type="checkbox" className="checkbox-input" />
+                  <span className="checkmark"></span>
+                  Keep me signed in
+                </label>
+                <a href="#forgot" className="forgot-link">Forgot your password?</a>
+              </div>
 
-            <div className="form-group">
-              <label htmlFor="phone">Phone Number</label>
-              <input
-                type="tel"
-                id="phone"
-                name="phone"
-                value={registerData.phone}
-                onChange={handleRegisterChange}
-                placeholder="Enter your phone number"
-              />
-            </div>
+              <button
+                type="submit"
+                className="auth-button"
+                disabled={loading}
+              >
+                {loading ? 'Signing in...' : 'Sign in'}
+              </button>
 
-            <div className="form-group">
-              <label htmlFor="reg-password">Password</label>
-              <input
-                type="password"
-                id="reg-password"
-                name="password"
-                value={registerData.password}
-                onChange={handleRegisterChange}
-                placeholder="Enter your password (min 6 characters)"
-                required
-              />
-            </div>
+              <div className="form-footer">
+                <p className="terms-text">
+                  By continuing, you agree to StyleNest's{' '}
+                  <a href="#conditions" className="link">Conditions of Use</a> and{' '}
+                  <a href="#privacy" className="link">Privacy Notice</a>.
+                </p>
+              </div>
+            </form>
+          )}
 
-            <div className="form-group">
-              <label htmlFor="confirm-password">Confirm Password</label>
-              <input
-                type="password"
-                id="confirm-password"
-                name="confirmPassword"
-                value={registerData.confirmPassword}
-                onChange={handleRegisterChange}
-                placeholder="Confirm your password"
-                required
-              />
-            </div>
+          {/* REGISTER FORM */}
+          {activeTab === 'register' && (
+            <form onSubmit={handleRegister} className="auth-form">
+              <div className="form-row">
+                <div className="form-group">
+                  <label htmlFor="first-name">First name</label>
+                  <input
+                    type="text"
+                    id="first-name"
+                    name="first_name"
+                    value={registerData.first_name}
+                    onChange={handleRegisterChange}
+                    placeholder="First name"
+                    className="form-input"
+                  />
+                </div>
 
-            <button
-              type="submit"
-              className="submit-button"
-              disabled={loading}
-            >
-              {loading ? 'Creating Account...' : 'Create Account'}
-            </button>
+                <div className="form-group">
+                  <label htmlFor="last-name">Last name</label>
+                  <input
+                    type="text"
+                    id="last-name"
+                    name="last_name"
+                    value={registerData.last_name}
+                    onChange={handleRegisterChange}
+                    placeholder="Last name"
+                    className="form-input"
+                  />
+                </div>
+              </div>
 
-            <p className="terms">
-              By signing up, you agree to our <a href="#terms">Terms & Conditions</a>
-            </p>
-          </form>
-        )}
+              <div className="form-group">
+                <label htmlFor="reg-email">Email</label>
+                <input
+                  type="email"
+                  id="reg-email"
+                  name="email"
+                  value={registerData.email}
+                  onChange={handleRegisterChange}
+                  placeholder="Enter your email"
+                  required
+                  className="form-input"
+                />
+              </div>
 
-        <div className="demo-info">
-          <p>Demo Credentials:</p>
-          <p>Email: <strong>demo@example.com</strong></p>
-          <p>Password: <strong>demo123</strong></p>
+              <div className="form-group">
+                <label htmlFor="phone">Mobile number (optional)</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  value={registerData.phone}
+                  onChange={handleRegisterChange}
+                  placeholder="Enter your mobile number"
+                  className="form-input"
+                />
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="reg-password">Password</label>
+                <input
+                  type="password"
+                  id="reg-password"
+                  name="password"
+                  value={registerData.password}
+                  onChange={handleRegisterChange}
+                  placeholder="At least 6 characters"
+                  required
+                  className="form-input"
+                />
+                <div className="password-hint">
+                  Passwords must be at least 6 characters.
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label htmlFor="confirm-password">Re-enter password</label>
+                <input
+                  type="password"
+                  id="confirm-password"
+                  name="confirmPassword"
+                  value={registerData.confirmPassword}
+                  onChange={handleRegisterChange}
+                  placeholder="Re-enter your password"
+                  required
+                  className="form-input"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="auth-button"
+                disabled={loading}
+              >
+                {loading ? 'Creating account...' : 'Create your StyleNest account'}
+              </button>
+
+              <div className="form-footer">
+                <p className="terms-text">
+                  By creating an account, you agree to StyleNest's{' '}
+                  <a href="#conditions" className="link">Conditions of Use</a> and{' '}
+                  <a href="#privacy" className="link">Privacy Notice</a>.
+                </p>
+              </div>
+            </form>
+          )}
+        </div>
+
+        {/* Footer Links */}
+        <div className="footer-links">
+          <div className="footer-section">
+            <h4>Need help?</h4>
+            <ul>
+              <li><a href="#forgot">Forgot Password</a></li>
+              <li><a href="#help">Help Center</a></li>
+              <li><a href="#contact">Contact Us</a></li>
+            </ul>
+          </div>
+          <div className="footer-section">
+            <h4>Shopping</h4>
+            <ul>
+              <li><a href="#deals">Today's Deals</a></li>
+              <li><a href="#categories">Shop by Category</a></li>
+              <li><a href="#new">New Arrivals</a></li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

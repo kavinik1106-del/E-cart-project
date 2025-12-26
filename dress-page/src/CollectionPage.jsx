@@ -125,7 +125,7 @@ function CollectionPage() {
                 </h3>
 
                 <div className="flex justify-between items-center mt-2">
-                  <p className="font-bold text-pink-600">₹{product.price}</p>
+                  <p className="font-bold text-blue-600">₹{product.price}</p>
                   <span className="bg-green-600 text-white text-xs px-2 py-1 rounded">
                     ⭐ {product.rating}
                   </span>
@@ -145,7 +145,7 @@ function CollectionPage() {
                 ) : (
                   <button
                     onClick={() => handleAddToCart(product)}
-                    className="w-full mt-3 bg-pink-500 text-white py-2 rounded hover:bg-pink-600 transition text-sm font-medium"
+                    className="w-full mt-3 bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition text-sm font-medium"
                   >
                     Add to Cart
                   </button>

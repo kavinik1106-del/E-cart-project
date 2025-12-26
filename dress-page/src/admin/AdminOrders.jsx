@@ -1,70 +1,49 @@
-import React, { useState } from "react";
-import { Package, Truck, CheckCircle, Clock, ChevronDown } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Package, Truck, CheckCircle, Clock, ChevronDown, RefreshCw } from "lucide-react";
 import AdminLayout from "./AdminLayout";
 
 function AdminOrdersContent() {
-  const [orders, setOrders] = useState([
-    {
-      id: 101,
-      customer: "John Doe",
-      email: "john@example.com",
-      total: 2500,
-      status: "Delivered",
-      date: "2025-12-24",
-      items: 3,
-      address: "123 Main St, Delhi",
-    },
-    {
-      id: 102,
-      customer: "Sarah Smith",
-      email: "sarah@example.com",
-      total: 1800,
-      status: "Processing",
-      date: "2025-12-23",
-      items: 2,
-      address: "456 Oak Ave, Mumbai",
-    },
-    {
-      id: 103,
-      customer: "Mike Johnson",
-      email: "mike@example.com",
-      total: 3200,
-      status: "Shipped",
-      date: "2025-12-22",
-      items: 4,
-      address: "789 Pine Rd, Bangalore",
-    },
-    {
-      id: 104,
-      customer: "Emma Davis",
-      email: "emma@example.com",
-      total: 1500,
-      status: "Pending",
-      date: "2025-12-22",
-      items: 1,
-      address: "321 Elm St, Hyderabad",
-    },
-    {
-      id: 105,
-      customer: "Alex Brown",
-      email: "alex@example.com",
-      total: 2100,
-      status: "Delivered",
-      date: "2025-12-21",
-      items: 2,
-      address: "654 Maple Dr, Chennai",
-    },
-    {
-      id: 106,
-      customer: "Lisa Wilson",
-      email: "lisa@example.com",
-      total: 4500,
-      status: "Processing",
-      date: "2025-12-20",
-      items: 5,
-      address: "987 Cedar Ln, Pune",
-    },
-  ]);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch orders from API
+  const fetchOrders = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await fetch('http://localhost:5000/api/orders');
+      const result = await response.json();
+
+      if (result.success) {
+        // Transform API data to match component structure
+        const transformedOrders = result.data.map(order => ({
+          id: order.id,
+          order_number: order.order_number,
+          customer: `${order.user?.first_name || 'Unknown'} ${order.user?.last_name || ''}`.trim(),
+          email: order.user?.email || 'N/A',
+          total: order.total_amount,
+          status: order.status,
+          payment_status: order.payment_status,
+          date: new Date(order.created_at).toLocaleDateString(),
+          items: order.order_items?.length || 0,
+          address: order.shipping_address,
+          items_details: order.order_items || []
+        }));
+        setOrders(transformedOrders);
+      } else {
+        setError(result.message || 'Failed to fetch orders');
+      }
+    } catch (err) {
+      setError('Error fetching orders: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
 
   const [expandedOrder, setExpandedOrder] = useState(null);
   const [filter, setFilter] = useState("All");
@@ -79,19 +58,68 @@ function AdminOrdersContent() {
   const filteredOrders =
     filter === "All" ? orders : orders.filter((o) => o.status === filter);
 
-  const updateOrderStatus = (orderId, newStatus) => {
-    setOrders((prev) =>
-      prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
-    );
+  const updateOrderStatus = async (orderId, newStatus) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/orders/${orderId}/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ status: newStatus })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setOrders((prev) =>
+          prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
+        );
+      } else {
+        alert('Failed to update order status');
+      }
+    } catch (error) {
+      alert('Error updating order status: ' + error.message);
+    }
   };
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-800">Orders</h1>
-        <p className="text-gray-500 text-sm mt-1">Manage and track customer orders</p>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800">Orders</h1>
+          <p className="text-gray-500 text-sm mt-1">Manage and track customer orders</p>
+        </div>
+        <button
+          onClick={fetchOrders}
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          disabled={loading}
+        >
+          <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
+          Refresh
+        </button>
       </div>
+
+      {/* Loading State */}
+      {loading && (
+        <div className="text-center py-8">
+          <RefreshCw size={40} className="animate-spin mx-auto text-blue-600 mb-4" />
+          <p className="text-gray-600">Loading orders...</p>
+        </div>
+      )}
+
+      {/* Error State */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <p className="text-red-800">{error}</p>
+          <button
+            onClick={fetchOrders}
+            className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+          >
+            Try Again
+          </button>
+        </div>
+      )}
 
       {/* Status Filter */}
       <div className="flex gap-2 flex-wrap">

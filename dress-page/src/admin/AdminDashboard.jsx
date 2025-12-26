@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { TrendingUp, Users, Package, ShoppingCart, Eye, DollarSign } from "lucide-react";
 
 const StatCard = ({ icon: IconComponent, title, value, color, trend }) => (
@@ -21,28 +21,78 @@ const StatCard = ({ icon: IconComponent, title, value, color, trend }) => (
 );
 
 function AdminDashboard() {
-  const stats = {
-    totalSales: 45750,
-    totalOrders: 324,
-    totalProducts: 156,
-    totalCustomers: 1240,
+  const [stats, setStats] = useState({
+    totalSales: 0,
+    totalOrders: 0,
+    totalProducts: 0,
+    totalCustomers: 0,
+  });
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [topProducts, setTopProducts] = useState([]);
+  const [salesOverview, setSalesOverview] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetchDashboardData();
+  }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const [statsRes, ordersRes, productsRes, salesRes] = await Promise.all([
+        fetch('http://localhost:5000/api/admin/dashboard/stats'),
+        fetch('http://localhost:5000/api/admin/dashboard/recent-orders'),
+        fetch('http://localhost:5000/api/admin/dashboard/top-products'),
+        fetch('http://localhost:5000/api/admin/dashboard/sales-overview')
+      ]);
+
+      const [statsData, ordersData, productsData, salesData] = await Promise.all([
+        statsRes.json(),
+        ordersRes.json(),
+        productsRes.json(),
+        salesRes.json()
+      ]);
+
+      if (statsData.success) setStats(statsData.data);
+      if (ordersData.success) setRecentOrders(ordersData.data);
+      if (productsData.success) setTopProducts(productsData.data);
+      if (salesData.success) setSalesOverview(salesData.data);
+
+    } catch (err) {
+      setError('Failed to load dashboard data');
+      console.error('Dashboard data fetch error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const recentOrders = [
-    { id: 101, customer: "John Doe", total: 2500, status: "Delivered", date: "2025-12-24" },
-    { id: 102, customer: "Sarah Smith", total: 1800, status: "Processing", date: "2025-12-23" },
-    { id: 103, customer: "Mike Johnson", total: 3200, status: "Shipped", date: "2025-12-22" },
-    { id: 104, customer: "Emma Davis", total: 1500, status: "Pending", date: "2025-12-22" },
-    { id: 105, customer: "Alex Brown", total: 2100, status: "Delivered", date: "2025-12-21" },
-  ];
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading dashboard...</p>
+        </div>
+      </div>
+    );
+  }
 
-  const topProducts = [
-    { id: 1, name: "Premium Formal Suit", sales: 245, revenue: 8750 },
-    { id: 2, name: "Cotton T-Shirt", sales: 189, revenue: 3402 },
-    { id: 3, name: "Denim Jeans", sales: 156, revenue: 4680 },
-    { id: 4, name: "Casual Dress", sales: 143, revenue: 5005 },
-    { id: 5, name: "Sports Shoes", sales: 128, revenue: 6400 },
-  ];
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+        <p className="text-red-800">{error}</p>
+        <button
+          onClick={fetchDashboardData}
+          className="mt-2 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -143,13 +193,13 @@ function AdminDashboard() {
                     <p className="text-xs text-gray-500 mt-1">{product.sales} sales</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-gray-800">₹{product.revenue.toLocaleString()}</p>
+                    <p className="font-bold text-gray-800">₹{parseFloat(product.revenue).toLocaleString()}</p>
                     <div className="w-12 h-1 bg-gray-200 rounded mt-2">
                       <div
                         className={`h-full rounded transition-all`}
                         style={{
-                          width: `${(product.sales / topProducts[0].sales) * 100}%`,
-                          backgroundColor: ["#3b82f6", "#f59e0b", "#10b981", "#ef4444", "#8b5cf6"][index],
+                          width: `${topProducts.length > 0 ? (product.sales / topProducts[0].sales) * 100 : 0}%`,
+                          backgroundColor: ["#3b82f6", "#f59e0b", "#10b981", "#ef4444", "#8b5cf6"][index] || "#6b7280",
                         }}
                       ></div>
                     </div>
@@ -165,13 +215,13 @@ function AdminDashboard() {
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-xl font-bold text-gray-800 mb-6">Sales Overview (This Month)</h2>
         <div className="h-64 flex items-end gap-2 justify-around">
-          {[12, 19, 15, 25, 22, 30, 28, 35, 32, 40, 38, 45].map((value, index) => (
+          {salesOverview.map((item, index) => (
             <div key={index} className="flex flex-col items-center gap-2">
               <div
-                className="bg-gradient-to-t from-blue-500 to-blue-400 rounded-t transition-all hover:from-blue-600"
-                style={{ height: `${(value / 45) * 100}%`, width: "30px" }}
+                className="bg-gradient-to-t from-blue-500 to-purple-400 rounded-t transition-all hover:from-blue-600"
+                style={{ height: `${(item.sales / Math.max(...salesOverview.map(d => d.sales), 1)) * 100}%`, width: "30px" }}
               ></div>
-              <span className="text-xs text-gray-500">{index + 1}</span>
+              <span className="text-xs text-gray-500">{item.month}</span>
             </div>
           ))}
         </div>

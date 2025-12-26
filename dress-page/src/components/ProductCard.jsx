@@ -31,7 +31,7 @@ function ProductCard({ product, products = [], showRating = false }) {
 
           {/* Tag */}
           {product.tag && (
-            <span className="absolute top-2 left-2 bg-pink-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+            <span className="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
               {product.tag}
             </span>
           )}
@@ -61,12 +61,12 @@ function ProductCard({ product, products = [], showRating = false }) {
         {/* Info Container */}
         <div className="p-4 space-y-2">
           {/* Category/Type */}
-          <div className="text-xs text-pink-600 font-semibold uppercase tracking-wider">
+          <div className="text-xs text-blue-600 font-semibold uppercase tracking-wider">
             {product.type || product.category || product.brand}
           </div>
 
           {/* Product Name */}
-          <h3 className="font-semibold text-sm line-clamp-2 group-hover:text-pink-600">
+          <h3 className="font-semibold text-sm line-clamp-2 group-hover:text-blue-600">
             {product.name}
           </h3>
 
@@ -83,7 +83,7 @@ function ProductCard({ product, products = [], showRating = false }) {
 
           {/* Price */}
           <div className="flex items-baseline gap-2">
-            <span className="text-lg font-bold text-pink-600">₹{product.price}</span>
+            <span className="text-lg font-bold text-blue-600">₹{product.price}</span>
             {product.mrp && (
               <>
                 <span className="line-through text-gray-400 text-sm">
@@ -99,7 +99,7 @@ function ProductCard({ product, products = [], showRating = false }) {
           {/* Quick Add Button */}
           <button
             onClick={handleQuickAdd}
-            className="w-full bg-pink-600 text-white py-2 rounded-lg hover:bg-pink-700 transition text-sm font-medium"
+            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition text-sm font-medium"
           >
             Quick Add
           </button>
