@@ -2,57 +2,70 @@ import React, { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar.jsx";
 import ProductCard from "./ProductCard.jsx";
-import AdvancedSearch from "./components/AdvancedSearch.jsx";
+import { ChevronLeft, ChevronRight, Star, Truck, Shield, HeadphonesIcon, Quote, Zap, Award, Users, ShoppingBag, TrendingUp, Play, Pause } from "lucide-react";
 
 function HomePage() {
   const categories = [
-    { name: "Electronics", image: "mobile.jpg", route: "/electro" },
-    { name: "Women Dresses", image: "dress1.webp", route: "/women" },
-    { name: "Men Dresses", image: "men2.jpg", route: "/men" },
-    { name: "Vegetables", image: "veg2.webp", route: "/vegetables" },
-    { name: "Home Appliances", image: "OIP (1).jpg", route: "/appliances" },
-    { name: "Kids Wear", image: "OIP (1).webp", route: "/kidswear" },
-    { name: "Footwear", image: "OIP (2).webp", route: "/footwear" },
-    { name: "Accessories", image: "acces.jpg", route: "/accessories" },
+    { name: "Electronics", image: "/mobile.jpg", route: "/electro", count: 245 },
+    { name: "Women Dresses", image: "/dress1.webp", route: "/women", count: 189 },
+    { name: "Men Dresses", image: "/men2.jpg", route: "/men", count: 156 },
+    { name: "Vegetables", image: "/veg2.webp", route: "/vegetables", count: 98 },
+    { name: "Home Appliances", image: "/OIP (1).jpg", route: "/appliances", count: 134 },
+    { name: "Kids Wear", image: "/OIP (1).webp", route: "/kidswear", count: 87 },
+    { name: "Footwear", image: "/OIP (2).webp", route: "/footwear", count: 203 },
+    { name: "Accessories", image: "/acces.jpg", route: "/accessories", count: 167 },
   ];
 
+  // Enhanced products with more details
   const dresses = [
     {
       id: 1,
       name: "Half Saree",
-      price: "₹1,400",
-      mrp: "₹2,500",
-      image: "saree1.webp",
+      price: 1400,
+      mrp: 2500,
+      image: "/saree1.webp",
       rating: 4.5,
       reviews: 150,
       tag: "Trending",
+      brand: "Traditional Wear",
+      discount: 44,
+      colors: ["Red", "Blue", "Green"],
+      sizeGuide: { XS: {}, S: {}, M: {}, L: {}, XL: {} }
     },
     {
       id: 2,
       name: "Traditional Dress",
-      price: "₹4,000",
-      mrp: "₹5,500",
-      image: "dress1.webp",
+      price: 4000,
+      mrp: 5500,
+      image: "/dress1.webp",
       rating: 4.6,
       reviews: 200,
       tag: "Bestseller",
+      brand: "Ethnic Collection",
+      discount: 27,
+      colors: ["Maroon", "Navy", "Black"],
+      sizeGuide: { XS: {}, S: {}, M: {}, L: {}, XL: {} }
     },
     {
       id: 3,
       name: "Pink Dress",
-      price: "₹1,200",
-      mrp: "₹2,000",
-      image: "pink.jpg",
+      price: 1200,
+      mrp: 2000,
+      image: "/pink.jpg",
       rating: 4.4,
       reviews: 180,
       tag: "New",
+      brand: "Fashion Hub",
+      discount: 40,
+      colors: ["Pink", "Rose", "Coral"],
+      sizeGuide: { XS: {}, S: {}, M: {}, L: {}, XL: {} }
     },
     {
       id: 4,
       name: "Red Dress",
       price: "₹999",
       mrp: "₹1,500",
-      image: "red.jpg",
+      image: "/red.jpg",
       rating: 4.3,
       reviews: 120,
       tag: "Sale",
@@ -62,7 +75,7 @@ function HomePage() {
       name: "Kids Dress",
       price: "₹799",
       mrp: "₹1,299",
-      image: "kid1.webp",
+      image: "/kid1.webp",
       rating: 4.4,
       reviews: 140,
       tag: "Popular",
@@ -72,7 +85,7 @@ function HomePage() {
       name: "Men Kurta",
       price: "₹1,499",
       mrp: "₹2,299",
-      image: "men.webp",
+      image: "/men.webp",
       rating: 4.5,
       reviews: 160,
       tag: "Hot",
@@ -402,6 +415,95 @@ function HomePage() {
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [stats, setStats] = useState({
+    customers: 0,
+    products: 0,
+    orders: 0,
+    satisfaction: 0
+  });
+
+  const heroSlides = [
+    {
+      title: "Discover Your Style",
+      subtitle: "Premium Collection of Fashion & Lifestyle",
+      description: "Explore our curated collection of trendy dresses, accessories, and home essentials with unbeatable prices and quality.",
+      image: "/banner.avif",
+      cta: "Shop Now",
+      gradient: "from-purple-600 via-pink-600 to-red-600"
+    },
+    {
+      title: "New Arrivals Daily",
+      subtitle: "Fresh Fashion Every Day",
+      description: "Stay ahead of trends with our daily updated collection featuring the latest in fashion and lifestyle products.",
+      image: "/homeoffer.avif",
+      cta: "Explore New",
+      gradient: "from-blue-600 via-cyan-600 to-teal-600"
+    },
+    {
+      title: "Exclusive Deals",
+      subtitle: "Up to 70% Off on Selected Items",
+      description: "Don't miss out on our limited-time offers. Premium quality products at prices you'll love.",
+      image: "/eleoffer1.avif",
+      cta: "View Deals",
+      gradient: "from-orange-600 via-red-600 to-pink-600"
+    }
+  ];
+
+  // Auto-play functionality
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, heroSlides.length]);
+
+  // Animated counters
+  useEffect(() => {
+    const targetStats = {
+      customers: 50000,
+      products: 2500,
+      orders: 15000,
+      satisfaction: 98
+    };
+
+    const animateStats = () => {
+      const duration = 2000;
+      const steps = 60;
+      const increment = duration / steps;
+
+      let step = 0;
+      const timer = setInterval(() => {
+        step++;
+        const progress = step / steps;
+
+        setStats({
+          customers: Math.floor(targetStats.customers * progress),
+          products: Math.floor(targetStats.products * progress),
+          orders: Math.floor(targetStats.orders * progress),
+          satisfaction: Math.floor(targetStats.satisfaction * progress)
+        });
+
+        if (step >= steps) clearInterval(timer);
+      }, increment);
+    };
+
+    // Start animation after component mounts
+    setTimeout(animateStats, 1000);
+  }, []);
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+  };
+
+  const toggleAutoPlay = () => {
+    setIsAutoPlaying(!isAutoPlaying);
+  };
 
   useEffect(() => {
     const el = scrollRef.current;
@@ -424,15 +526,6 @@ function HomePage() {
     };
   }, []);
 
-  // Auto-slide for hero banner
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % 2);
-    }, 5000);
-
-    return () => clearInterval(timer);
-  }, []);
-
   const scrollByAmount = (direction) => {
     const el = scrollRef.current;
     if (!el) return;
@@ -447,81 +540,274 @@ function HomePage() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
 
-      {/* Hero Section with Multiple Banners */}
-      <div className="relative overflow-hidden">
-        <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
-          <div className="w-full flex-shrink-0">
-            <div className="relative h-96 bg-gradient-to-r from-blue-600 to-purple-600">
-              <div className="absolute inset-0 bg-black bg-opacity-20"></div>
-              <div className="relative h-full flex items-center">
-                <div className="max-w-7xl mx-auto px-4 flex items-center justify-between w-full">
-                  <div className="text-white max-w-lg">
-                    <h1 className="text-5xl font-bold mb-4">Welcome to StyleNest</h1>
-                    <p className="text-xl mb-6 text-blue-100">Discover amazing products at unbeatable prices</p>
-                    <Link to="/women" className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
-                      Shop Now
-                    </Link>
-                  </div>
-                  <div className="hidden lg:block">
-                    <img src="/hero-shopping.png" alt="Shopping" className="h-80 object-contain" />
+      {/* Enhanced Hero Section */}
+      <div className="relative overflow-hidden bg-gray-900">
+        {/* Hero Slides */}
+        <div className="flex transition-transform duration-700 ease-in-out" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
+          {heroSlides.map((slide, index) => (
+            <div key={index} className="w-full flex-shrink-0 relative">
+              <div className={`relative h-[600px] bg-gradient-to-r ${slide.gradient} overflow-hidden`}>
+                {/* Background Pattern */}
+                <div className="absolute inset-0 opacity-10">
+                  <div className="absolute inset-0" style={{
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+                  }}></div>
+                </div>
+
+                {/* Content */}
+                <div className="relative h-full flex items-center">
+                  <div className="max-w-7xl mx-auto px-4 flex items-center justify-between w-full">
+                    <div className="text-white max-w-2xl animate-fade-in-up">
+                      <h2 className="text-lg font-semibold mb-2 text-white/80 uppercase tracking-wider">
+                        {slide.subtitle}
+                      </h2>
+                      <h1 className="text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+                        {slide.title}
+                      </h1>
+                      <p className="text-xl mb-8 text-white/90 leading-relaxed max-w-lg">
+                        {slide.description}
+                      </p>
+                      <div className="flex flex-col sm:flex-row gap-4">
+                        <Link
+                          to="/women"
+                          className="bg-white text-gray-900 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl text-lg"
+                        >
+                          {slide.cta}
+                        </Link>
+                        <Link
+                          to="/collection"
+                          className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-gray-900 transition-all duration-300 transform hover:scale-105 text-lg"
+                        >
+                          View Collection
+                        </Link>
+                      </div>
+                    </div>
+
+                    {/* Hero Image */}
+                    <div className="hidden lg:block animate-fade-in-right">
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-white/20 rounded-full blur-3xl scale-150"></div>
+                        <img
+                          src={slide.image}
+                          alt={slide.title}
+                          className="relative h-96 object-contain transform hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute -top-4 -right-4 bg-yellow-400 text-gray-900 px-4 py-2 rounded-full text-sm font-bold animate-bounce shadow-lg">
+                          🔥 Hot Deal
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="w-full flex-shrink-0">
-            <div className="relative h-96 bg-gradient-to-r from-purple-600 to-blue-600">
-              <div className="absolute inset-0 bg-black bg-opacity-20"></div>
-              <div className="relative h-full flex items-center">
-                <div className="max-w-7xl mx-auto px-4 text-center text-white">
-                  <h2 className="text-4xl font-bold mb-4">Flash Sale!</h2>
-                  <p className="text-xl mb-6">Up to 70% off on selected items</p>
-                  <div className="flex justify-center gap-4 text-2xl font-bold">
-                    <div className="bg-white bg-opacity-20 px-4 py-2 rounded-lg">
-                      <div>23</div>
-                      <div className="text-sm">Hours</div>
-                    </div>
-                    <div className="bg-white bg-opacity-20 px-4 py-2 rounded-lg">
-                      <div>45</div>
-                      <div className="text-sm">Minutes</div>
-                    </div>
-                    <div className="bg-white bg-opacity-20 px-4 py-2 rounded-lg">
-                      <div>12</div>
-                      <div className="text-sm">Seconds</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
 
-        {/* Navigation Dots */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-          {[0, 1].map((index) => (
+        {/* Navigation Controls */}
+        <button
+          onClick={prevSlide}
+          className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm text-white p-3 rounded-full hover:bg-white/30 transition-all duration-300 hover:scale-110 shadow-lg"
+        >
+          <ChevronLeft size={24} />
+        </button>
+        <button
+          onClick={nextSlide}
+          className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm text-white p-3 rounded-full hover:bg-white/30 transition-all duration-300 hover:scale-110 shadow-lg"
+        >
+          <ChevronRight size={24} />
+        </button>
+
+        {/* Auto-play Toggle */}
+        <button
+          onClick={toggleAutoPlay}
+          className="absolute bottom-4 right-4 bg-white/20 backdrop-blur-sm text-white p-3 rounded-full hover:bg-white/30 transition-all duration-300 hover:scale-110 shadow-lg"
+        >
+          {isAutoPlaying ? <Pause size={20} /> : <Play size={20} />}
+        </button>
+
+        {/* Slide Indicators */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
+          {heroSlides.map((_, index) => (
             <button
               key={index}
               onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full transition-colors ${
-                currentSlide === index ? 'bg-white' : 'bg-white bg-opacity-50'
+              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                index === currentSlide ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/75'
               }`}
             />
           ))}
         </div>
       </div>
 
+      {/* Statistics Section */}
+      <div className="bg-white py-16">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            <div className="text-center group">
+              <div className="bg-gradient-to-br from-blue-500 to-blue-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                <Users className="w-10 h-10 text-white" />
+              </div>
+              <div className="text-3xl font-bold text-gray-900 mb-2">
+                {stats.customers.toLocaleString()}+
+              </div>
+              <div className="text-gray-600 font-medium">Happy Customers</div>
+            </div>
+
+            <div className="text-center group">
+              <div className="bg-gradient-to-br from-green-500 to-green-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                <ShoppingBag className="w-10 h-10 text-white" />
+              </div>
+              <div className="text-3xl font-bold text-gray-900 mb-2">
+                {stats.products.toLocaleString()}+
+              </div>
+              <div className="text-gray-600 font-medium">Products Available</div>
+            </div>
+
+            <div className="text-center group">
+              <div className="bg-gradient-to-br from-purple-500 to-purple-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                <TrendingUp className="w-10 h-10 text-white" />
+              </div>
+              <div className="text-3xl font-bold text-gray-900 mb-2">
+                {stats.orders.toLocaleString()}+
+              </div>
+              <div className="text-gray-600 font-medium">Orders Delivered</div>
+            </div>
+
+            <div className="text-center group">
+              <div className="bg-gradient-to-br from-orange-500 to-orange-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
+                <Award className="w-10 h-10 text-white" />
+              </div>
+              <div className="text-3xl font-bold text-gray-900 mb-2">
+                {stats.satisfaction}%
+              </div>
+              <div className="text-gray-600 font-medium">Customer Satisfaction</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Search Bar */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 py-6">
-          <AdvancedSearch
-            onSearch={(searchData) => {
-              console.log("Search:", searchData);
-              // Implement search functionality here
-            }}
-            placeholder="Search for products, brands and more..."
-          />
+          <div className="relative max-w-2xl mx-auto">
+            <input
+              type="text"
+              placeholder="Search for products, brands and more..."
+              className="w-full px-6 py-4 text-lg border-2 border-gray-200 rounded-full focus:border-blue-500 focus:outline-none shadow-sm hover:shadow-md transition-shadow"
+            />
+            <button className="absolute right-3 top-1/2 -translate-y-1/2 bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition-colors">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Trust Badges */}
+      <section className="py-8 bg-gradient-to-r from-blue-50 to-purple-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="flex items-center justify-center gap-3 bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+              <Truck className="w-8 h-8 text-blue-600" />
+              <div>
+                <h3 className="font-semibold text-gray-800">Free Shipping</h3>
+                <p className="text-sm text-gray-600">On orders over ₹499</p>
+              </div>
+            </div>
+            <div className="flex items-center justify-center gap-3 bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+              <Shield className="w-8 h-8 text-green-600" />
+              <div>
+                <h3 className="font-semibold text-gray-800">Secure Payment</h3>
+                <p className="text-sm text-gray-600">100% secure checkout</p>
+              </div>
+            </div>
+            <div className="flex items-center justify-center gap-3 bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+              <Star className="w-8 h-8 text-yellow-500" />
+              <div>
+                <h3 className="font-semibold text-gray-800">Quality Guarantee</h3>
+                <p className="text-sm text-gray-600">Premium products only</p>
+              </div>
+            </div>
+            <div className="flex items-center justify-center gap-3 bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+              <HeadphonesIcon className="w-8 h-8 text-purple-600" />
+              <div>
+                <h3 className="font-semibold text-gray-800">24/7 Support</h3>
+                <p className="text-sm text-gray-600">Always here to help</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Statistics Section */}
+      <section className="py-16 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div className="group">
+              <div className="text-4xl font-bold mb-2 group-hover:scale-110 transition-transform duration-300">10K+</div>
+              <div className="text-blue-100">Happy Customers</div>
+            </div>
+            <div className="group">
+              <div className="text-4xl font-bold mb-2 group-hover:scale-110 transition-transform duration-300">50K+</div>
+              <div className="text-blue-100">Products Sold</div>
+            </div>
+            <div className="group">
+              <div className="text-4xl font-bold mb-2 group-hover:scale-110 transition-transform duration-300">500+</div>
+              <div className="text-blue-100">Premium Brands</div>
+            </div>
+            <div className="group">
+              <div className="text-4xl font-bold mb-2 group-hover:scale-110 transition-transform duration-300">24/7</div>
+              <div className="text-blue-100">Customer Support</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-16 bg-gradient-to-br from-gray-50 to-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Choose StyleNest?</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Experience shopping like never before with our premium features and exceptional service
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
+              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
+                <Truck className="w-8 h-8 text-blue-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Free Shipping</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Enjoy free shipping on all orders above ₹999. Fast and reliable delivery across India with real-time tracking.
+              </p>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
+              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
+                <Shield className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">Secure Payment</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Your payments are 100% secure with multiple payment options including UPI, cards, and digital wallets.
+              </p>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
+              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
+                <HeadphonesIcon className="w-8 h-8 text-purple-600" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-4">24/7 Support</h3>
+              <p className="text-gray-600 leading-relaxed">
+                Our customer support team is available round the clock to help you with any queries or concerns.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Categories Section */}
       <section className="py-12 bg-white">
@@ -532,11 +818,9 @@ function HomePage() {
             <button
               onClick={() => scrollByAmount("left")}
               disabled={!canScrollLeft}
-              className="absolute left-0 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-shadow z-10 disabled:opacity-50"
+              className="absolute left-0 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all z-10 disabled:opacity-50 hover:scale-110"
             >
-              <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
+              <ChevronLeft className="w-6 h-6 text-gray-600" />
             </button>
 
             <div
@@ -549,14 +833,22 @@ function HomePage() {
                   to={cat.route}
                   className="flex-shrink-0 group"
                 >
-                  <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-2xl hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                    <img
-                      src={cat.image}
-                      alt={cat.name}
-                      className="w-20 h-20 mx-auto rounded-full border-4 border-white shadow-md object-cover group-hover:scale-110 transition-transform"
-                    />
-                    <p className="text-center mt-3 text-gray-800 font-semibold group-hover:text-blue-600 transition-colors">
+                  <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-2xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 hover:border-blue-200">
+                    <div className="relative">
+                      <img
+                        src={cat.image}
+                        alt={cat.name}
+                        className="w-24 h-24 mx-auto rounded-full border-4 border-white shadow-lg object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                      <div className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                        {cat.count}
+                      </div>
+                    </div>
+                    <p className="text-center mt-4 text-gray-800 font-semibold group-hover:text-blue-600 transition-colors text-lg">
                       {cat.name}
+                    </p>
+                    <p className="text-center text-sm text-gray-500 mt-1">
+                      {cat.count} products
                     </p>
                   </div>
                 </Link>
@@ -566,12 +858,122 @@ function HomePage() {
             <button
               onClick={() => scrollByAmount("right")}
               disabled={!canScrollRight}
-              className="absolute right-0 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-shadow z-10 disabled:opacity-50"
+              className="absolute right-0 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all z-10 disabled:opacity-50 hover:scale-110"
             >
-              <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+              <ChevronRight className="w-6 h-6 text-gray-600" />
             </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Products */}
+      <section className="py-16 bg-gradient-to-br from-gray-50 to-blue-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-800 mb-4">Featured Products</h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Discover our handpicked selection of premium products at unbeatable prices
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {dresses.slice(0, 4).map((product) => (
+              <div key={product.id} className="transform hover:scale-105 transition-all duration-300">
+                <ProductCard product={product} showRating={true} />
+              </div>
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link
+              to="/collection"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+            >
+              View All Products
+              <ChevronRight className="w-5 h-5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Customer Testimonials */}
+      <section className="py-16 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-gray-800 mb-4">What Our Customers Say</h2>
+            <p className="text-xl text-gray-600">Real reviews from real customers</p>
+            <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mt-4 rounded-full"></div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
+              <div className="flex items-center mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                  S
+                </div>
+                <div className="ml-4">
+                  <h4 className="font-bold text-gray-800 text-lg">Sarah Johnson</h4>
+                  <div className="flex text-yellow-400 mb-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} size={18} fill="currentColor" className="animate-pulse" />
+                    ))}
+                  </div>
+                  <p className="text-sm text-gray-500">Verified Purchase</p>
+                </div>
+              </div>
+              <div className="relative">
+                <Quote className="w-8 h-8 text-blue-200 absolute -top-2 -left-2" />
+                <p className="text-gray-700 italic text-lg leading-relaxed pl-6">
+                  "Amazing quality products at unbeatable prices. The delivery was super fast and the customer service is excellent!"
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
+              <div className="flex items-center mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                  M
+                </div>
+                <div className="ml-4">
+                  <h4 className="font-bold text-gray-800 text-lg">Mike Chen</h4>
+                  <div className="flex text-yellow-400 mb-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} size={18} fill="currentColor" className="animate-pulse" />
+                    ))}
+                  </div>
+                  <p className="text-sm text-gray-500">Verified Purchase</p>
+                </div>
+              </div>
+              <div className="relative">
+                <Quote className="w-8 h-8 text-green-200 absolute -top-2 -left-2" />
+                <p className="text-gray-700 italic text-lg leading-relaxed pl-6">
+                  "Best online shopping experience ever! Wide variety of products and the website is so user-friendly."
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
+              <div className="flex items-center mb-6">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                  A
+                </div>
+                <div className="ml-4">
+                  <h4 className="font-bold text-gray-800 text-lg">Anna Rodriguez</h4>
+                  <div className="flex text-yellow-400 mb-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} size={18} fill="currentColor" className="animate-pulse" />
+                    ))}
+                  </div>
+                  <p className="text-sm text-gray-500">Verified Purchase</p>
+                </div>
+              </div>
+              <div className="relative">
+                <Quote className="w-8 h-8 text-purple-200 absolute -top-2 -left-2" />
+                <p className="text-gray-700 italic text-lg leading-relaxed pl-6">
+                  "Love the premium quality and fast shipping. StyleNest has become my go-to shopping destination!"
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -747,25 +1149,38 @@ function HomePage() {
       </section>
 
       {/* Newsletter Section */}
-      <section className="py-12 bg-gradient-to-r from-blue-600 to-purple-600">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Stay Updated</h2>
-          <p className="text-blue-100 mb-8 text-lg">
+      <section className="py-16 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 relative overflow-hidden">
+        <div className="absolute inset-0 bg-white bg-opacity-10"></div>
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-white bg-opacity-5 rounded-full"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white bg-opacity-5 rounded-full"></div>
+        <div className="relative max-w-4xl mx-auto px-4 text-center">
+          <div className="mb-6">
+            <div className="inline-block p-4 bg-white bg-opacity-20 rounded-full mb-4 backdrop-blur-sm">
+              <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+              </svg>
+            </div>
+          </div>
+          <h2 className="text-4xl font-bold text-white mb-4">Stay Updated with StyleNest</h2>
+          <p className="text-indigo-100 mb-8 text-xl leading-relaxed max-w-2xl mx-auto">
             Subscribe to our newsletter and get exclusive deals, new product launches, and style tips delivered to your inbox.
           </p>
 
-          <div className="max-w-md mx-auto flex gap-4">
-            <input
-              type="email"
-              placeholder="Enter your email address"
-              className="flex-1 px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-white focus:ring-opacity-50"
-            />
-            <button className="px-6 py-3 bg-white text-blue-600 rounded-lg hover:bg-gray-100 transition-colors font-semibold">
-              Subscribe
-            </button>
+          <div className="max-w-lg mx-auto">
+            <div className="flex flex-col sm:flex-row gap-4 bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-2">
+              <input
+                type="email"
+                placeholder="Enter your email address"
+                className="flex-1 px-6 py-4 rounded-xl border-0 focus:ring-2 focus:ring-white focus:ring-opacity-50 bg-white bg-opacity-90 text-gray-800 placeholder-gray-500 text-lg"
+              />
+              <button className="px-8 py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 rounded-xl hover:from-yellow-500 hover:to-orange-600 transition-all duration-300 font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105">
+                Subscribe Now
+              </button>
+            </div>
           </div>
 
-          <p className="text-blue-200 text-sm mt-4">
+          <p className="text-indigo-200 text-sm mt-6 flex items-center justify-center gap-2">
+            <Shield className="w-4 h-4" />
             We respect your privacy. Unsubscribe at any time.
           </p>
         </div>

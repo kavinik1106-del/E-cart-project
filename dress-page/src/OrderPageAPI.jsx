@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './OrderPage.css';
 
 export default function OrderPageAPI() {
@@ -38,7 +38,7 @@ export default function OrderPageAPI() {
   };
 
   // Fetch user orders
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       const user = getCurrentUser();
       if (!user) {
@@ -63,11 +63,11 @@ export default function OrderPageAPI() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchOrders();
-  }, []);
+  }, [fetchOrders]);
 
   // Handle adding item to cart
   const addToCart = (product) => {
@@ -129,7 +129,7 @@ export default function OrderPageAPI() {
         return;
       }
 
-      const { subtotal, tax, shipping, total } = calculateTotals();
+      const { tax, shipping, total } = calculateTotals();
 
       const response = await fetch('http://localhost:5000/api/orders', {
         method: 'POST',

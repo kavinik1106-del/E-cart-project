@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "./contexts/CartContext";
 import { Heart, ShoppingCart, User, LogOut, Menu, X } from "lucide-react";
@@ -6,16 +6,11 @@ import { Heart, ShoppingCart, User, LogOut, Menu, X } from "lucide-react";
 function Navbar() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [user, setUser] = useState(null);
-  const { getCartCount, wishlist } = useCart();
-
-  useEffect(() => {
-    // Check if user is logged in
+  const [user, setUser] = useState(() => {
     const userData = localStorage.getItem('user');
-    if (userData) {
-      setUser(JSON.parse(userData));
-    }
-  }, []);
+    return userData ? JSON.parse(userData) : null;
+  });
+  const { getCartCount, wishlist } = useCart();
 
   const handleLogout = async () => {
     try {

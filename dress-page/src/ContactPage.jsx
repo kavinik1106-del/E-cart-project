@@ -7,6 +7,10 @@ import {
   Clock,
   MessageCircle,
   HelpCircle,
+  Send,
+  CheckCircle,
+  AlertCircle,
+  Loader
 } from "lucide-react";
 
 function ContactPage() {
@@ -18,7 +22,8 @@ function ContactPage() {
     mobileNumber: "",
     orderId: "",
     issueType: "Order Related Issue",
-    message: ""
+    message: "",
+    priority: "normal"
   });
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
@@ -27,19 +32,33 @@ function ContactPage() {
   const faqs = [
     {
       q: "How can I track my order?",
-      a: "Go to Orders > Track Order to see delivery updates.",
+      a: "Go to Orders > Track Order to see delivery updates. You'll receive SMS and email notifications at every step.",
+      category: "orders"
     },
     {
       q: "How do I cancel or return an item?",
-      a: "You can cancel before shipping. Returns are available within 7 days.",
+      a: "You can cancel before shipping from Orders page. Returns are available within 7 days of delivery. Visit Returns & Refunds section.",
+      category: "returns"
     },
     {
       q: "When will my refund be processed?",
-      a: "Refunds are processed within 5–7 business days.",
+      a: "Refunds are processed within 5–7 business days after approval. You'll receive an email confirmation.",
+      category: "payments"
     },
     {
       q: "Why did my payment fail?",
-      a: "Please check your bank balance or try another payment option.",
+      a: "Please check your bank balance, card validity, or try another payment option. Contact your bank if the issue persists.",
+      category: "payments"
+    },
+    {
+      q: "How do I change my delivery address?",
+      a: "Address changes are possible before shipping. Contact us immediately or update in your order details.",
+      category: "shipping"
+    },
+    {
+      q: "Are the products authentic?",
+      a: "Yes, all our products are 100% authentic with manufacturer warranty. We partner with authorized dealers only.",
+      category: "products"
     },
   ];
 

@@ -1,6 +1,5 @@
 import React from "react";
 import Navbar from "./Navbar.jsx";
-import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import {
   Shield,
