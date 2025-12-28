@@ -1,24 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { TrendingUp, Users, Package, ShoppingCart, Eye, DollarSign } from "lucide-react";
 
-const StatCard = ({ icon: IconComponent, title, value, color, trend }) => (
-  <div className="bg-white rounded-lg shadow-md p-6 border-l-4" style={{ borderColor: color }}>
-    <div className="flex items-center justify-between">
-      <div>
-        <p className="text-gray-500 text-sm font-medium">{title}</p>
-        <p className="text-3xl font-bold text-gray-800 mt-2">{value}</p>
-        {trend && (
-          <p className="text-green-600 text-sm mt-2 flex items-center gap-1">
-            <TrendingUp size={16} /> {trend}% increase
-          </p>
-        )}
-      </div>
-      <div className="p-3 rounded-full" style={{ backgroundColor: `${color}20` }}>
-        <IconComponent size={28} style={{ color }} />
+const StatCard = ({ title, value, icon: Icon, color, trend }) => {
+  return (
+    <div className="bg-white rounded-lg shadow p-6 border-l-4" style={{ borderColor: color }}>
+      <div className="flex justify-between items-start">
+        <div>
+          <p className="text-gray-600 text-sm font-semibold">{title}</p>
+          <p className="text-3xl font-bold text-gray-900 mt-2">${value.toLocaleString()}</p>
+          {trend && (
+            <p className="text-green-600 text-xs mt-2 flex items-center gap-1">
+              <TrendingUp size={14} /> {trend}% from last month
+            </p>
+          )}
+        </div>
+        <div className="p-3 rounded-lg" style={{ backgroundColor: `${color}20` }}>
+          <Icon size={24} style={{ color }} />
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 function AdminDashboard() {
   const [stats, setStats] = useState({
@@ -96,101 +98,95 @@ function AdminDashboard() {
 
   return (
     <div className="space-y-6">
-      {/* Stats Grid */}
+      <div>
+        <h1 className="text-3xl font-bold text-gray-800">Dashboard</h1>
+        <p className="text-gray-500 text-sm mt-1">Welcome to your admin panel</p>
+      </div>
+
+      {error && (
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          {error}
+        </div>
+      )}
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
-          icon={DollarSign}
           title="Total Sales"
-          value={`₹${stats.totalSales.toLocaleString()}`}
+          value={stats.totalSales}
+          icon={ShoppingCart}
           color="#3b82f6"
-          trend="12"
+          trend={12}
         />
         <StatCard
-          icon={ShoppingCart}
           title="Total Orders"
           value={stats.totalOrders}
+          icon={Package}
           color="#f59e0b"
-          trend="8"
+          trend={8}
         />
         <StatCard
-          icon={Package}
           title="Total Products"
           value={stats.totalProducts}
+          icon={Package}
           color="#10b981"
-          trend="5"
+          trend={5}
         />
         <StatCard
-          icon={Users}
           title="Total Customers"
           value={stats.totalCustomers}
-          color="#ef4444"
-          trend="15"
+          icon={Users}
+          color="#8b5cf6"
+          trend={15}
         />
       </div>
 
-      {/* Charts & Tables */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Recent Orders */}
-        <div className="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-800">Recent Orders</h2>
-            <button className="text-blue-600 hover:text-blue-700 font-medium text-sm">View All</button>
-          </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b">
-                <tr>
-                  <th className="px-4 py-3 text-left font-semibold text-gray-700">Order ID</th>
-                  <th className="px-4 py-3 text-left font-semibold text-gray-700">Customer</th>
-                  <th className="px-4 py-3 text-left font-semibold text-gray-700">Amount</th>
-                  <th className="px-4 py-3 text-left font-semibold text-gray-700">Status</th>
-                  <th className="px-4 py-3 text-left font-semibold text-gray-700">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recentOrders.map((order) => (
-                  <tr key={order.id} className="border-b hover:bg-gray-50 transition">
-                    <td className="px-4 py-3 font-semibold text-gray-800">#{order.id}</td>
-                    <td className="px-4 py-3 text-gray-700">{order.customer}</td>
-                    <td className="px-4 py-3 font-semibold text-gray-800">₹{order.total.toLocaleString()}</td>
-                    <td className="px-4 py-3">
-                      <span
-                        className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          order.status === "Delivered"
-                            ? "bg-green-100 text-green-800"
-                            : order.status === "Processing"
-                            ? "bg-blue-100 text-blue-800"
-                            : order.status === "Shipped"
-                            ? "bg-yellow-100 text-yellow-800"
-                            : "bg-gray-100 text-gray-800"
-                        }`}
-                      >
-                        {order.status}
-                      </span>
-                    </td>
-                    <td className="px-4 py-3 text-gray-600">{order.date}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+        <div className="bg-white rounded-lg shadow-md p-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Recent Orders</h2>
+          <div className="space-y-3">
+            {stats.recentOrders.length > 0 ? (
+              stats.recentOrders.map((order) => (
+                <div
+                  key={order.id}
+                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                >
+                  <div>
+                    <p className="font-semibold text-gray-800">{order.customer}</p>
+                    <p className="text-sm text-gray-500">{order.date}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-semibold text-gray-800">${order.amount}</p>
+                    <span className={`text-xs px-2 py-1 rounded-full ${
+                      order.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                      order.status === 'shipped' ? 'bg-blue-100 text-blue-800' :
+                      order.status === 'processing' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-gray-100 text-gray-800'
+                    }`}>
+                      {order.status}
+                    </span>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500">No recent orders</p>
+            )}
           </div>
         </div>
 
         {/* Top Products */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-800">Top Products</h2>
-            <Eye size={18} className="text-gray-400" />
-          </div>
-
-          <div className="space-y-4">
-            {topProducts.map((product, index) => (
-              <div key={product.id} className="border-b pb-4 last:border-b-0">
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <p className="font-semibold text-gray-800 text-sm">{product.name}</p>
-                    <p className="text-xs text-gray-500 mt-1">{product.sales} sales</p>
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Top Products</h2>
+          <div className="space-y-3">
+            {stats.topProducts.length > 0 ? (
+              stats.topProducts.map((product) => (
+                <div
+                  key={product.id}
+                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                >
+                  <div>
+                    <p className="font-semibold text-gray-800">{product.name}</p>
+                    <p className="text-sm text-gray-500">{product.stock} units in stock</p>
                   </div>
                   <div className="text-right">
                     <p className="font-bold text-gray-800">₹{parseFloat(product.revenue).toLocaleString()}</p>
@@ -205,13 +201,15 @@ function AdminDashboard() {
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p className="text-gray-500">No products available</p>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Activity Feed */}
+      {/* Sales Chart Placeholder */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-xl font-bold text-gray-800 mb-6">Sales Overview (This Month)</h2>
         <div className="h-64 flex items-end gap-2 justify-around">
@@ -230,4 +228,4 @@ function AdminDashboard() {
   );
 }
 
-export default AdminDashboard;
+export default AdminDashboard

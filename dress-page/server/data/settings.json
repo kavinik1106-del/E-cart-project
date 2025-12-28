@@ -1,0 +1,12 @@
+{
+  "storeName": "Fashion Hub",
+  "storeEmail": "contact@fashionhub.com",
+  "storePhone": "+1-555-1000",
+  "currency": "USD",
+  "taxRate": 5,
+  "notifications": {
+    "email": true,
+    "orders": true,
+    "lowStock": true
+  }
+}
