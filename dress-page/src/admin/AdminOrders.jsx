@@ -3,7 +3,7 @@ import { Package, Truck, CheckCircle, Clock, ChevronDown, RefreshCw } from "luci
 import AdminLayout from "./AdminLayout";
 import { API_ENDPOINTS, apiCall } from "../config/apiConfig";
 
-function AdminOrders() {
+function AdminOrdersContent() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -52,22 +52,6 @@ function AdminOrders() {
   useEffect(() => {
     fetchOrders();
   }, []);
-
-  const fetchOrders = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const response = await apiCall(API_ENDPOINTS.ORDERS);
-      if (response.success) {
-        setOrders(response.data);
-      }
-    } catch (err) {
-      setError("Failed to load orders");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const statusConfig = {
     pending: { color: "text-gray-600", bg: "bg-gray-100", icon: Clock },
