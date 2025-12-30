@@ -170,15 +170,15 @@ function HomePage() {
       <Navbar />
 
       {/* Search Bar - FIRST */}
-      <div className="bg-white shadow-sm border-b">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-500 shadow-md border-b-4 border-yellow-400">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <div className="relative max-w-2xl mx-auto">
             <input
               type="text"
               placeholder="Search for products, brands and more..."
-              className="w-full px-6 py-4 text-lg border-2 border-gray-200 rounded-full focus:border-blue-500 focus:outline-none shadow-sm hover:shadow-md transition-shadow"
+              className="w-full px-6 py-4 text-lg border-2 border-yellow-400 rounded-full focus:border-yellow-300 focus:outline-none shadow-lg hover:shadow-xl transition-shadow bg-white"
             />
-            <button className="absolute right-3 top-1/2 -translate-y-1/2 bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition-colors">
+            <button className="absolute right-3 top-1/2 -translate-y-1/2 bg-yellow-400 text-gray-900 p-3 rounded-full hover:bg-yellow-500 transition-colors font-bold">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
@@ -188,9 +188,9 @@ function HomePage() {
       </div>
 
       {/* Categories Section - SECOND */}
-      <section className="py-12 bg-white">
+      <section className="py-12 bg-gradient-to-b from-white to-blue-50 border-b-4 border-yellow-400">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Shop by Category</h2>
+          <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-8 text-center">Shop by Category</h2>
 
           <div className="relative">
             <button
@@ -211,14 +211,14 @@ function HomePage() {
                   to={cat.route}
                   className="flex-shrink-0 group"
                 >
-                  <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-2xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 hover:border-blue-200">
+                  <div className="bg-white p-6 rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-blue-300 hover:border-yellow-400">
                     <div className="relative">
                       <img
                         src={cat.image}
                         alt={cat.name}
                         className="w-24 h-24 mx-auto rounded-full border-4 border-white shadow-lg object-cover group-hover:scale-110 transition-transform duration-300"
                       />
-                      <div className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                      <div className="absolute -top-2 -right-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
                         {cat.count}
                       </div>
                     </div>
@@ -345,7 +345,7 @@ function HomePage() {
       </div>
 
       {/* Featured Products - FOURTH - AMAZON STYLE GRID */}
-      <section className="py-16 bg-white">
+      <section className="py-16 bg-white border-t-4 border-yellow-400">
         <div className="max-w-7xl mx-auto px-4">
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-2">Recommended For You</h2>
@@ -366,7 +366,7 @@ function HomePage() {
           <div className="text-center mt-12">
             <Link
               to="/collection"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 via-blue-500 to-yellow-400 text-white px-8 py-4 rounded-full font-semibold hover:from-blue-700 hover:via-blue-600 hover:to-yellow-500 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105"
             >
               View All {products.length} Products
               <ChevronRight className="w-5 h-5" />
@@ -376,14 +376,14 @@ function HomePage() {
       </section>
 
       {/* Best Sellers Section */}
-      <section className="py-16 bg-gradient-to-br from-blue-50 to-purple-50">
+      <section className="py-16 bg-gradient-to-br from-yellow-50 via-blue-50 to-white border-t-4 border-yellow-400">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-2xl font-bold text-gray-800 mb-2">Best Sellers</h2>
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-2">⭐ Best Sellers</h2>
               <p className="text-gray-600">Most loved products by customers</p>
             </div>
-            <Link to="/collection" className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2">
+            <Link to="/collection" className="bg-yellow-400 text-gray-900 hover:bg-yellow-500 font-semibold flex items-center gap-2 px-4 py-2 rounded-full transition-all">
               View All
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />

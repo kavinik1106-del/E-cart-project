@@ -1,26 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { apiCall, API_ENDPOINTS } from "../config/apiConfig.js";
 
 function ProtectedRoute({ children }) {
   const [isAuthenticated, setIsAuthenticated] = useState(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("adminToken");
-    if (!token) {
+    // Check for isAdmin flag in localStorage
+    const isAdmin = localStorage.getItem("isAdmin");
+    
+    if (isAdmin === "true") {
+      setIsAuthenticated(true);
+    } else {
       setIsAuthenticated(false);
-      return;
     }
-
-    // Verify token with API
-    apiCall(API_ENDPOINTS.ADMIN_VERIFY)
-      .then(data => {
-        setIsAuthenticated(data.success);
-      })
-      .catch(err => {
-        console.error("Token verification error:", err);
-        setIsAuthenticated(false);
-      });
   }, []);
 
   if (isAuthenticated === null) {

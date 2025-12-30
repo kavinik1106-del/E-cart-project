@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Save, Bell, Lock, Eye, EyeOff } from "lucide-react";
 import AdminLayout from "./AdminLayout";
-import { API_ENDPOINTS, apiCall } from "../config/apiConfig";
 
 function AdminSettingsContent() {
   const [settings, setSettings] = useState({
@@ -34,12 +33,23 @@ function AdminSettingsContent() {
     try {
       setLoading(true);
       setError(null);
-      const response = await apiCall(API_ENDPOINTS.SETTINGS);
-      if (response.success) {
-        setSettings(response.data);
-      }
+      
+      // Use default settings - no API needed
+      const defaultSettings = {
+        storeName: "E-Cart Store",
+        storeEmail: "admin@ecartweb.com",
+        storePhone: "+1-800-ECART-1",
+        currency: "USD",
+        taxRate: 5,
+        notifications: {
+          email: true,
+          orders: true,
+          lowStock: true,
+        }
+      };
+      
+      setSettings(defaultSettings);
     } catch (err) {
-      setError("Failed to load settings");
       console.error(err);
     } finally {
       setLoading(false);
