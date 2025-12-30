@@ -37,7 +37,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-4 shadow-md md:px-8 lg:px-16">
+    <nav className="bg-gradient-to-r bg-blue-600  text-white px-4 py-4 shadow-md md:px-8 lg:px-16">
       <div className="flex items-center justify-between">
 
         {/* Logo */}

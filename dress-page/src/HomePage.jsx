@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight, Star, Truck, Shield, HeadphonesIcon, Quote, 
 import { apiCall, API_ENDPOINTS } from "./config/apiConfig.js";
 
 function HomePage() {
+  
   const categories = [
     { name: "Electronics", image: "/mobile.jpg", route: "/electro", count: 245 },
     { name: "Women Dresses", image: "/dress1.webp", route: "/women", count: 189 },
@@ -188,7 +189,82 @@ function HomePage() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
 
-      {/* Enhanced Hero Section */}
+      {/* Search Bar - FIRST */}
+      <div className="bg-white shadow-sm border-b">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="relative max-w-2xl mx-auto">
+            <input
+              type="text"
+              placeholder="Search for products, brands and more..."
+              className="w-full px-6 py-4 text-lg border-2 border-gray-200 rounded-full focus:border-blue-500 focus:outline-none shadow-sm hover:shadow-md transition-shadow"
+            />
+            <button className="absolute right-3 top-1/2 -translate-y-1/2 bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition-colors">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Categories Section - SECOND */}
+      <section className="py-12 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Shop by Category</h2>
+
+          <div className="relative">
+            <button
+              onClick={() => scrollByAmount("left")}
+              disabled={!canScrollLeft}
+              className="absolute left-0 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all z-10 disabled:opacity-50 hover:scale-110"
+            >
+              <ChevronLeft className="w-6 h-6 text-gray-600" />
+            </button>
+
+            <div
+              ref={scrollRef}
+              className="flex gap-6 overflow-x-auto px-12 py-4 scrollbar-hide"
+            >
+              {categories.map((cat, index) => (
+                <Link
+                  key={index}
+                  to={cat.route}
+                  className="flex-shrink-0 group"
+                >
+                  <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-2xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 hover:border-blue-200">
+                    <div className="relative">
+                      <img
+                        src={cat.image}
+                        alt={cat.name}
+                        className="w-24 h-24 mx-auto rounded-full border-4 border-white shadow-lg object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                      <div className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full">
+                        {cat.count}
+                      </div>
+                    </div>
+                    <p className="text-center mt-4 text-gray-800 font-semibold group-hover:text-blue-600 transition-colors text-lg">
+                      {cat.name}
+                    </p>
+                    <p className="text-center text-sm text-gray-500 mt-1">
+                      {cat.count} products
+                    </p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+
+            <button
+              onClick={() => scrollByAmount("right")}
+              disabled={!canScrollRight}
+              className="absolute right-0 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all z-10 disabled:opacity-50 hover:scale-110"
+            >
+              <ChevronRight className="w-6 h-6 text-gray-600" />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* Enhanced Hero Section - THIRD */}
       <div className="relative overflow-hidden bg-gray-900">
         {/* Hero Slides */}
         <div className="flex transition-transform duration-700 ease-in-out" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
@@ -288,233 +364,7 @@ function HomePage() {
         </div>
       </div>
 
-      {/* Statistics Section */}
-      <div className="bg-white py-16">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div className="text-center group">
-              <div className="bg-gradient-to-br from-blue-500 to-blue-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                <Users className="w-10 h-10 text-white" />
-              </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">
-                {stats.customers.toLocaleString()}+
-              </div>
-              <div className="text-gray-600 font-medium">Happy Customers</div>
-            </div>
-
-            <div className="text-center group">
-              <div className="bg-gradient-to-br from-green-500 to-green-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                <ShoppingBag className="w-10 h-10 text-white" />
-              </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">
-                {stats.products.toLocaleString()}+
-              </div>
-              <div className="text-gray-600 font-medium">Products Available</div>
-            </div>
-
-            <div className="text-center group">
-              <div className="bg-gradient-to-br from-purple-500 to-purple-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                <TrendingUp className="w-10 h-10 text-white" />
-              </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">
-                {stats.orders.toLocaleString()}+
-              </div>
-              <div className="text-gray-600 font-medium">Orders Delivered</div>
-            </div>
-
-            <div className="text-center group">
-              <div className="bg-gradient-to-br from-orange-500 to-orange-600 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg">
-                <Award className="w-10 h-10 text-white" />
-              </div>
-              <div className="text-3xl font-bold text-gray-900 mb-2">
-                {stats.satisfaction}%
-              </div>
-              <div className="text-gray-600 font-medium">Customer Satisfaction</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Search Bar */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="relative max-w-2xl mx-auto">
-            <input
-              type="text"
-              placeholder="Search for products, brands and more..."
-              className="w-full px-6 py-4 text-lg border-2 border-gray-200 rounded-full focus:border-blue-500 focus:outline-none shadow-sm hover:shadow-md transition-shadow"
-            />
-            <button className="absolute right-3 top-1/2 -translate-y-1/2 bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition-colors">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Trust Badges */}
-      <section className="py-8 bg-gradient-to-r from-blue-50 to-purple-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            <div className="flex items-center justify-center gap-3 bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-              <Truck className="w-8 h-8 text-blue-600" />
-              <div>
-                <h3 className="font-semibold text-gray-800">Free Shipping</h3>
-                <p className="text-sm text-gray-600">On orders over ₹499</p>
-              </div>
-            </div>
-            <div className="flex items-center justify-center gap-3 bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-              <Shield className="w-8 h-8 text-green-600" />
-              <div>
-                <h3 className="font-semibold text-gray-800">Secure Payment</h3>
-                <p className="text-sm text-gray-600">100% secure checkout</p>
-              </div>
-            </div>
-            <div className="flex items-center justify-center gap-3 bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-              <Star className="w-8 h-8 text-yellow-500" />
-              <div>
-                <h3 className="font-semibold text-gray-800">Quality Guarantee</h3>
-                <p className="text-sm text-gray-600">Premium products only</p>
-              </div>
-            </div>
-            <div className="flex items-center justify-center gap-3 bg-white rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-              <HeadphonesIcon className="w-8 h-8 text-purple-600" />
-              <div>
-                <h3 className="font-semibold text-gray-800">24/7 Support</h3>
-                <p className="text-sm text-gray-600">Always here to help</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Statistics Section */}
-      <section className="py-16 bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div className="group">
-              <div className="text-4xl font-bold mb-2 group-hover:scale-110 transition-transform duration-300">10K+</div>
-              <div className="text-blue-100">Happy Customers</div>
-            </div>
-            <div className="group">
-              <div className="text-4xl font-bold mb-2 group-hover:scale-110 transition-transform duration-300">50K+</div>
-              <div className="text-blue-100">Products Sold</div>
-            </div>
-            <div className="group">
-              <div className="text-4xl font-bold mb-2 group-hover:scale-110 transition-transform duration-300">500+</div>
-              <div className="text-blue-100">Premium Brands</div>
-            </div>
-            <div className="group">
-              <div className="text-4xl font-bold mb-2 group-hover:scale-110 transition-transform duration-300">24/7</div>
-              <div className="text-blue-100">Customer Support</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-16 bg-gradient-to-br from-gray-50 to-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Choose StyleNest?</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Experience shopping like never before with our premium features and exceptional service
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
-                <Truck className="w-8 h-8 text-blue-600" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Free Shipping</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Enjoy free shipping on all orders above ₹999. Fast and reliable delivery across India with real-time tracking.
-              </p>
-            </div>
-
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
-              <div className="bg-green-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
-                <Shield className="w-8 h-8 text-green-600" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">Secure Payment</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Your payments are 100% secure with multiple payment options including UPI, cards, and digital wallets.
-              </p>
-            </div>
-
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
-              <div className="bg-purple-100 w-16 h-16 rounded-full flex items-center justify-center mb-6">
-                <HeadphonesIcon className="w-8 h-8 text-purple-600" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">24/7 Support</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Our customer support team is available round the clock to help you with any queries or concerns.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Categories Section */}
-      <section className="py-12 bg-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Shop by Category</h2>
-
-          <div className="relative">
-            <button
-              onClick={() => scrollByAmount("left")}
-              disabled={!canScrollLeft}
-              className="absolute left-0 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all z-10 disabled:opacity-50 hover:scale-110"
-            >
-              <ChevronLeft className="w-6 h-6 text-gray-600" />
-            </button>
-
-            <div
-              ref={scrollRef}
-              className="flex gap-6 overflow-x-auto px-12 py-4 scrollbar-hide"
-            >
-              {categories.map((cat, index) => (
-                <Link
-                  key={index}
-                  to={cat.route}
-                  className="flex-shrink-0 group"
-                >
-                  <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-2xl hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100 hover:border-blue-200">
-                    <div className="relative">
-                      <img
-                        src={cat.image}
-                        alt={cat.name}
-                        className="w-24 h-24 mx-auto rounded-full border-4 border-white shadow-lg object-cover group-hover:scale-110 transition-transform duration-300"
-                      />
-                      <div className="absolute -top-2 -right-2 bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded-full">
-                        {cat.count}
-                      </div>
-                    </div>
-                    <p className="text-center mt-4 text-gray-800 font-semibold group-hover:text-blue-600 transition-colors text-lg">
-                      {cat.name}
-                    </p>
-                    <p className="text-center text-sm text-gray-500 mt-1">
-                      {cat.count} products
-                    </p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-
-            <button
-              onClick={() => scrollByAmount("right")}
-              disabled={!canScrollRight}
-              className="absolute right-0 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all z-10 disabled:opacity-50 hover:scale-110"
-            >
-              <ChevronRight className="w-6 h-6 text-gray-600" />
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Products */}
+      {/* Featured Products - FOURTH */}
       <section className="py-16 bg-gradient-to-br from-gray-50 to-blue-50">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
@@ -525,10 +375,57 @@ function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {products.slice(0, 4).map((product) => (
-              <div key={product.id} className="transform hover:scale-105 transition-all duration-300">
-                <ProductCard product={product} showRating={true} />
-              </div>
+            {products.slice(0, 16).map((product) => (
+              <Link
+                key={product.id}
+                to={`/product/${product.id}`}
+                state={{ product, related: products }}
+                className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
+              >
+                {/* Product Image */}
+                <div className="relative overflow-hidden bg-gray-100 h-48">
+                  <img
+                    src={product.image}
+                    alt={product.name}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                  />
+                  <div className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                    -{product.discount}%
+                  </div>
+                  <div className="absolute top-2 left-2 bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                    {product.tag}
+                  </div>
+                </div>
+
+                {/* Product Info */}
+                <div className="p-4">
+                  <h3 className="text-gray-600 text-xs mb-2 uppercase tracking-wide">{product.brand}</h3>
+                  <h2 className="text-gray-800 font-semibold text-base mb-2 line-clamp-2 group-hover:text-blue-600">
+                    {product.name}
+                  </h2>
+
+                  {/* Rating */}
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="flex text-yellow-400">
+                      {[...Array(5)].map((_, i) => (
+                        <span key={i}>★</span>
+                      ))}
+                    </div>
+                    <span className="text-gray-500 text-sm">({product.reviews})</span>
+                  </div>
+
+                  {/* Price */}
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="text-2xl font-bold text-gray-900">₹{product.price}</span>
+                    <span className="line-through text-gray-400">₹{product.mrp}</span>
+                  </div>
+
+                  {/* Add to Cart Button */}
+                  <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 group-hover:shadow-lg">
+                    Add to Cart
+                  </button>
+                </div>
+              </Link>
             ))}
           </div>
 
