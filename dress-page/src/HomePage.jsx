@@ -18,7 +18,41 @@ function HomePage() {
     { name: "Accessories", image: "/acces.jpg", route: "/accessories", count: 167 },
   ];
 
-  const [products, setProducts] = useState([]);
+  // Mock products data as fallback
+  const mockProducts = [
+    { id: 1, name: "Premium Double Door Fridge", price: 18999, mrp: 22999, image: "/doubledoorfringe.avif", rating: 4.4, reviews: 234, category: "home", brand: "Samsung", discount: 15 },
+    { id: 2, name: "Premium Cashew Nuts 500g", price: 699, mrp: 899, image: "/cashew.webp", rating: 4.2, reviews: 156, category: "food", brand: "NutriLife", discount: 22 },
+    { id: 3, name: "Luxury Blue Sofa Set", price: 14999, mrp: 18999, image: "/bluesofa.webp", rating: 4.5, reviews: 89, category: "home", brand: "Ikea", discount: 21 },
+    { id: 4, name: "Designer Red Kurta", price: 1299, mrp: 1799, image: "/dress1.webp", rating: 4.1, reviews: 67, category: "women", brand: "FabIndia", discount: 28 },
+    { id: 5, name: "Modern Sofa Chair", price: 9999, mrp: 12999, image: "/sofa.webp", rating: 4.3, reviews: 123, category: "home", brand: "Godrej", discount: 23 },
+    { id: 6, name: "iPhone 15 Pro Max", price: 12499, mrp: 13999, image: "/mobile.jpg", rating: 4.6, reviews: 445, category: "electronics", brand: "Apple", discount: 11 },
+    { id: 7, name: "Organic Dates 1kg", price: 399, mrp: 499, image: "/dates.jpg", rating: 4.0, reviews: 78, category: "food", brand: "Organic Farms", discount: 20 },
+    { id: 8, name: "Silk Wedding Saree", price: 1899, mrp: 2499, image: "/saree2.jpg", rating: 4.3, reviews: 156, category: "women", brand: "Kanchipuram", discount: 24 },
+    { id: 9, name: "Apple Watch Series 9", price: 2999, mrp: 3499, image: "/smartwatch.webp", rating: 4.7, reviews: 312, category: "electronics", brand: "Apple", discount: 14 },
+    { id: 10, name: "Cotton Kurta Set", price: 1599, mrp: 1999, image: "/dress3.webp", rating: 4.2, reviews: 98, category: "men", brand: "Raymond", discount: 20 },
+    { id: 11, name: "MacBook Pro 16\"", price: 199999, mrp: 229999, image: "/laptop.webp", rating: 4.8, reviews: 67, category: "electronics", brand: "Apple", discount: 13 },
+    { id: 12, name: "Nike Air Max Shoes", price: 8999, mrp: 11999, image: "/footk.jpg", rating: 4.5, reviews: 234, category: "men", brand: "Nike", discount: 25 },
+    { id: 13, name: "Samsung 4K TV 55\"", price: 45999, mrp: 54999, image: "/OIP (4).webp", rating: 4.6, reviews: 189, category: "electronics", brand: "Samsung", discount: 16 },
+    { id: 14, name: "Designer Kurta", price: 15999, mrp: 19999, image: "/blue.webp", rating: 4.7, reviews: 145, category: "women", brand: "Manish Malhotra", discount: 20 },
+    { id: 15, name: "Coffee Maker", price: 3499, mrp: 4499, image: "/OIP (5).webp", rating: 4.3, reviews: 87, category: "home", brand: "Philips", discount: 22 },
+    { id: 16, name: "Wireless Headphones", price: 4999, mrp: 6999, image: "/noicehead.jpg", rating: 4.4, reviews: 203, category: "electronics", brand: "Sony", discount: 28 },
+    { id: 17, name: "Wooden Dining Table", price: 12999, mrp: 16999, image: "/plates.jpg", rating: 4.6, reviews: 112, category: "home", brand: "Hometown", discount: 24 },
+    { id: 18, name: "Men's Formal Shirt", price: 899, mrp: 1299, image: "/sherwa.webp", rating: 4.2, reviews: 156, category: "men", brand: "Celio", discount: 31 },
+    { id: 19, name: "Women's Sports Shoes", price: 3499, mrp: 4999, image: "/footw.jpg", rating: 4.5, reviews: 178, category: "women", brand: "Puma", discount: 30 },
+    { id: 20, name: "Organic Spices Mix", price: 249, mrp: 399, image: "/masala.webp", rating: 4.3, reviews: 67, category: "food", brand: "NatureLeaf", discount: 38 },
+    { id: 21, name: "Kids Clothing Set", price: 699, mrp: 999, image: "/kid1.webp", rating: 4.4, reviews: 89, category: "kids", brand: "PlayKids", discount: 30 },
+    { id: 22, name: "Gold Bracelet", price: 2999, mrp: 4999, image: "/bracelet.webp", rating: 4.6, reviews: 234, category: "accessories", brand: "Tanishq", discount: 40 },
+    { id: 23, name: "Wall Clock", price: 599, mrp: 899, image: "/desklamp.jpg", rating: 4.2, reviews: 123, category: "home", brand: "Modern Decor", discount: 33 },
+    { id: 24, name: "Denim Jeans", price: 1199, mrp: 1799, image: "/denim.webp", rating: 4.3, reviews: 198, category: "men", brand: "Levi's", discount: 33 },
+    { id: 25, name: "Flower Pot Set", price: 799, mrp: 1199, image: "/flower.webp", rating: 4.5, reviews: 76, category: "home", brand: "GreenHome", discount: 33 },
+    { id: 26, name: "Keyboard & Mouse", price: 1599, mrp: 2499, image: "/keyboard.jpg", rating: 4.4, reviews: 145, category: "electronics", brand: "Logitech", discount: 36 },
+    { id: 27, name: "Red Saree", price: 2499, mrp: 3999, image: "/redsaree.jpg", rating: 4.6, reviews: 267, category: "women", brand: "Silk Saree", discount: 37 },
+    { id: 28, name: "Electric Fan", price: 1299, mrp: 1899, image: "/fan.jpg", rating: 4.3, reviews: 134, category: "home", brand: "Usha", discount: 31 },
+    { id: 29, name: "Hair Clip Set", price: 349, mrp: 599, image: "/hairclip.jpg", rating: 4.4, reviews: 87, category: "accessories", brand: "HairStyle", discount: 42 },
+    { id: 30, name: "Walnuts 250g", price: 299, mrp: 499, image: "/walnut.jpg", rating: 4.5, reviews: 156, category: "food", brand: "NutriLife", discount: 40 },
+  ];
+
+  const [products, setProducts] = useState(mockProducts);
 
   const scrollRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -58,17 +92,17 @@ function HomePage() {
     const fetchProducts = async () => {
       try {
         const response = await apiCall(API_ENDPOINTS.PRODUCTS);
-        if (response.success) {
+        if (response.success && response.data && response.data.length > 0) {
           const transformedProducts = response.data.map(product => ({
             id: product.id,
             name: product.name,
             price: product.price,
-            mrp: product.price * 1.2,
+            mrp: product.mrp || product.price * 1.2,
             image: product.image || "/placeholder.jpg",
             rating: 4.5,
             reviews: Math.floor(Math.random() * 200) + 50,
-            tag: product.stock > 10 ? "In Stock" : "Limited",
-            brand: product.type,
+            tag: product.stock_quantity > 10 ? "In Stock" : "Limited",
+            brand: product.brand || product.category || "Brand",
             discount: Math.floor(Math.random() * 30) + 10,
             colors: ["Default"],
             sizeGuide: { S: {}, M: {}, L: {}, XL: {} }
@@ -76,7 +110,8 @@ function HomePage() {
           setProducts(transformedProducts);
         }
       } catch (err) {
-        console.error("Error fetching products:", err);
+        console.error("Error fetching products from API, using mock data:", err);
+        // Keep using mock data
       }
     };
 
@@ -212,7 +247,7 @@ function HomePage() {
       {/* Enhanced Hero Section - THIRD */}
       <div className="relative overflow-hidden bg-gray-900">
         {/* Hero Slides */}
-        <div className="flex transition-transform duration-700 ease-in-out" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
+        <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
           {heroSlides.map((slide, index) => (
             <div key={index} className="w-full flex-shrink-0 relative">
               <div className={`relative h-[600px] bg-gradient-to-r ${slide.gradient} overflow-hidden`}>
@@ -309,68 +344,22 @@ function HomePage() {
         </div>
       </div>
 
-      {/* Featured Products - FOURTH */}
-      <section className="py-16 bg-gradient-to-br from-gray-50 to-blue-50">
+      {/* Featured Products - FOURTH - AMAZON STYLE GRID */}
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">Featured Products</h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Discover our handpicked selection of premium products at unbeatable prices
-            </p>
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Recommended For You</h2>
+            <p className="text-gray-600">Based on your browsing history and preferences</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {products.slice(0, 50).map((product) => (
-              <Link
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+            {products.map((product) => (
+              <ProductCard
                 key={product.id}
-                to={`/product/${product.id}`}
-                state={{ product, related: products }}
-                className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2"
-              >
-                {/* Product Image */}
-                <div className="relative overflow-hidden bg-gray-100 h-48">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
-                  <div className="absolute top-2 right-2 bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
-                    -{product.discount}%
-                  </div>
-                  <div className="absolute top-2 left-2 bg-blue-500 text-white px-3 py-1 rounded-full text-xs font-bold">
-                    {product.tag}
-                  </div>
-                </div>
-
-                {/* Product Info */}
-                <div className="p-4">
-                  <h3 className="text-gray-600 text-xs mb-2 uppercase tracking-wide">{product.brand}</h3>
-                  <h2 className="text-gray-800 font-semibold text-base mb-2 line-clamp-2 group-hover:text-blue-600">
-                    {product.name}
-                  </h2>
-
-                  {/* Rating */}
-                  <div className="flex items-center gap-2 mb-3">
-                    <div className="flex text-yellow-400">
-                      {[...Array(5)].map((_, i) => (
-                        <span key={i}>★</span>
-                      ))}
-                    </div>
-                    <span className="text-gray-500 text-sm">({product.reviews})</span>
-                  </div>
-
-                  {/* Price */}
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-2xl font-bold text-gray-900">₹{product.price}</span>
-                    <span className="line-through text-gray-400">₹{product.mrp}</span>
-                  </div>
-
-                  {/* Add to Cart Button */}
-                  <button className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-2 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 group-hover:shadow-lg">
-                    Add to Cart
-                  </button>
-                </div>
-              </Link>
+                product={product}
+                products={products}
+                showRating={true}
+              />
             ))}
           </div>
 
@@ -379,9 +368,38 @@ function HomePage() {
               to="/collection"
               className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
             >
-              View All Products
+              View All {products.length} Products
               <ChevronRight className="w-5 h-5" />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Best Sellers Section */}
+      <section className="py-16 bg-gradient-to-br from-blue-50 to-purple-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">Best Sellers</h2>
+              <p className="text-gray-600">Most loved products by customers</p>
+            </div>
+            <Link to="/collection" className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2">
+              View All
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+            {products.slice(0, 24).map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                products={products}
+                showRating={true}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -390,50 +408,32 @@ function HomePage() {
       <section className="py-12 bg-gradient-to-r from-orange-400 to-red-500">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center text-white mb-8">
-            <h2 className="text-3xl font-bold mb-2">Deal of the Day</h2>
-            <p className="text-orange-100">Limited time offers - Don't miss out!</p>
+            <h2 className="text-3xl font-bold mb-2">Lightning Deals</h2>
+            <p className="text-orange-100">Limited time offers - Stocks running out fast!</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {products.slice(0, 3).map((product) => (
-              <div key={product.id} className="bg-white rounded-2xl p-6 shadow-lg">
-                <div className="relative">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-48 object-cover rounded-lg mb-4"
-                  />
-                  <span className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-                    -50%
-                  </span>
-                </div>
-                <h3 className="font-semibold text-gray-800 mb-2">{product.name}</h3>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl font-bold text-red-600">₹{product.price}</span>
-                  <span className="line-through text-gray-400">₹{product.mrp}</span>
-                </div>
-                <Link
-                  to={`/product/${product.id}`}
-                  state={{ product, related: products }}
-                  className="w-full bg-gradient-to-r from-red-500 to-orange-500 text-white py-2 rounded-lg font-semibold hover:from-red-600 hover:to-orange-600 transition-all text-center block"
-                >
-                  Grab Deal
-                </Link>
-              </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+            {products.slice(0, 18).map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                products={products}
+                showRating={true}
+              />
             ))}
           </div>
         </div>
       </section>
 
       {/* Trending Products */}
-      <section className="py-12 bg-white">
+      <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-3xl font-bold text-gray-800 mb-2">Trending Now</h2>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">Trending Now</h2>
               <p className="text-gray-600">Most popular products this week</p>
             </div>
-            <Link to="/women" className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2">
+            <Link to="/collection" className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2">
               View All
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -441,8 +441,95 @@ function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            {products.slice(0, 10).map((product) => (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+            {products.slice(5, 29).map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                products={products}
+                showRating={true}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Recently Viewed Products */}
+      <section className="py-16 bg-gradient-to-br from-purple-50 to-pink-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">Recently Viewed</h2>
+              <p className="text-gray-600">Items you've looked at</p>
+            </div>
+            <Link to="/collection" className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2">
+              View All
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+            {products.slice(10, 34).map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                products={products}
+                showRating={true}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Top Rated Products */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">Top Rated Products</h2>
+              <p className="text-gray-600">Highest rated by customers</p>
+            </div>
+            <Link to="/collection" className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2">
+              View All
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+            {products.slice(15, 39).map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                products={products}
+                showRating={true}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* New Arrivals */}
+      <section className="py-16 bg-gradient-to-br from-green-50 to-blue-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">New Arrivals</h2>
+              <p className="text-gray-600">Just added to our store</p>
+            </div>
+            <Link to="/collection" className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2">
+              View All
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+            {products.slice(20, 44).map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}
@@ -568,8 +655,8 @@ function HomePage() {
               </svg>
             </div>
           </div>
-          <h2 className="text-4xl font-bold text-white mb-4">Stay Updated with StyleNest</h2>
-          <p className="text-indigo-100 mb-8 text-xl leading-relaxed max-w-2xl mx-auto">
+          <h2 className="text-4xl font-bold text-black mb-4">Stay Updated with StyleNest</h2>
+          <p className="text-back-100 mb-8 text-xl leading-relaxed max-w-2xl mx-auto">
             Subscribe to our newsletter and get exclusive deals, new product launches, and style tips delivered to your inbox.
           </p>
 
@@ -586,7 +673,7 @@ function HomePage() {
             </div>
           </div>
 
-          <p className="text-indigo-200 text-sm mt-6 flex items-center justify-center gap-2">
+          <p className="text-indigo-1000 text-sm mt-6 flex items-center justify-center gap-2">
             <Shield className="w-4 h-4" />
             We respect your privacy. Unsubscribe at any time.
           </p>
