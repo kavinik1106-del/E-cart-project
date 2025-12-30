@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import Counter from "./components/Counter.jsx";
 
+
 export default function AboutPage() {
   const navigate = useNavigate();
 
@@ -78,6 +79,7 @@ export default function AboutPage() {
   ];
 
   return (
+    
     <div className="min-h-screen bg-white">
       <Navbar />
 

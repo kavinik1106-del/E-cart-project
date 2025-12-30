@@ -1,34 +1,29 @@
-import React, { useState, useEffect } from "react";
-import { useInView } from "react-intersection-observer";
+import React, { useEffect, useState } from "react";
 
-const Counter = ({ end, duration = 2000, suffix = "" }) => {
+const Counter = ({ end = 0, duration = 2000, suffix = "" }) => {
   const [count, setCount] = useState(0);
-  const { ref, inView } = useInView({
-    threshold: 0.3,
-    triggerOnce: true,
-  });
 
   useEffect(() => {
-    if (inView) {
-      let startTime = null;
-      const animate = (currentTime) => {
-        if (!startTime) startTime = currentTime;
-        const progress = Math.min((currentTime - startTime) / duration, 1);
+    let start = 0;
+    const increment = end / (duration / 16);
 
-        setCount(Math.floor(progress * end));
+    const timer = setInterval(() => {
+      start += increment;
+      if (start >= end) {
+        setCount(end);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
+    }, 16);
 
-        if (progress < 1) {
-          requestAnimationFrame(animate);
-        }
-      };
-
-      requestAnimationFrame(animate);
-    }
-  }, [inView, end, duration]);
+    return () => clearInterval(timer);
+  }, [end, duration]);
 
   return (
-    <span ref={ref} className="text-3xl font-bold text-gray-900">
-      {count.toLocaleString()}{suffix}
+    <span className="text-3xl font-bold text-gray-900">
+      {count.toLocaleString()}
+      {suffix}
     </span>
   );
 };

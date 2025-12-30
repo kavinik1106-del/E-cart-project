@@ -55,6 +55,14 @@ export default function LoginPage() {
   // Login handler
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    // Quick client-side validation for clearer feedback
+    if (!loginData.email || !loginData.password) {
+      setMessageType('error');
+      setMessage('Please enter both email and password');
+      return;
+    }
+
     setLoading(true);
     setMessage('');
 
@@ -67,24 +75,31 @@ export default function LoginPage() {
         })
       });
 
-      if (response.success) {
+      const data = await response.json();
+
+      if (data.success) {
         setMessageType('success');
         setMessage('Login successful! Redirecting...');
 
         // Store user data in localStorage
-        localStorage.setItem('user', JSON.stringify(response.data.user));
-        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('user', JSON.stringify(data.data.user));
+        localStorage.setItem('token', data.data.token);
 
         setTimeout(() => {
           navigate('/');
-        }, 2000);
+        }, 1000);
       } else {
         setMessageType('error');
-        setMessage(response.message || 'Login failed');
+        setMessage(data.message || 'Login failed');
       }
     } catch (error) {
       setMessageType('error');
-      setMessage('Error: ' + error.message);
+      // Network / parsing errors
+      const friendly = error.message && error.message.includes('Failed to fetch')
+        ? 'Network error: cannot reach the server. Is the backend running?'
+        : 'Unexpected error: ' + (error.message || 'Please try again');
+      setMessage(friendly);
+      console.error('Login error:', error);
     } finally {
       setLoading(false);
     }

@@ -19,21 +19,12 @@ function HomePage() {
   ];
 
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
-  // Products will be fetched from API and stored in products state
   const scrollRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-  const [stats, setStats] = useState({
-    customers: 0,
-    products: 0,
-    orders: 0,
-    satisfaction: 0
-  });
 
   const heroSlides = [
     {
@@ -66,120 +57,74 @@ function HomePage() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        setLoading(true);
         const response = await apiCall(API_ENDPOINTS.PRODUCTS);
         if (response.success) {
-          // Transform API data to match component expectations
           const transformedProducts = response.data.map(product => ({
             id: product.id,
             name: product.name,
             price: product.price,
-            mrp: product.price * 1.2, // Assuming MRP is 20% higher
+            mrp: product.price * 1.2,
             image: product.image || "/placeholder.jpg",
-            rating: 4.5, // Default rating
-            reviews: Math.floor(Math.random() * 200) + 50, // Random reviews
+            rating: 4.5,
+            reviews: Math.floor(Math.random() * 200) + 50,
             tag: product.stock > 10 ? "In Stock" : "Limited",
             brand: product.type,
-            discount: Math.floor(Math.random() * 30) + 10, // Random discount
+            discount: Math.floor(Math.random() * 30) + 10,
             colors: ["Default"],
             sizeGuide: { S: {}, M: {}, L: {}, XL: {} }
           }));
           setProducts(transformedProducts);
-        } else {
-          setError("Failed to load products");
         }
       } catch (err) {
-        setError("Error loading products");
         console.error("Error fetching products:", err);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchProducts();
   }, []);
 
-  // Auto-play functionality
+  // Auto-play slides
   useEffect(() => {
     if (!isAutoPlaying) return;
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 5000);
+    }, 4000);
     return () => clearInterval(interval);
   }, [isAutoPlaying, heroSlides.length]);
 
-  // Animated counters
+  // Check scroll position for category buttons
   useEffect(() => {
-    const targetStats = {
-      customers: 50000,
-      products: 2500,
-      orders: 15000,
-      satisfaction: 98
+    const el = scrollRef.current;
+    const checkScroll = () => {
+      if (!el) return;
+      setCanScrollLeft(el.scrollLeft > 0);
+      setCanScrollRight(
+        el.scrollLeft < el.scrollWidth - el.clientWidth
+      );
     };
-
-    const animateStats = () => {
-      const duration = 2000;
-      const steps = 60;
-      const increment = duration / steps;
-
-      let step = 0;
-      const timer = setInterval(() => {
-        step++;
-        const progress = step / steps;
-
-        setStats({
-          customers: Math.floor(targetStats.customers * progress),
-          products: Math.floor(targetStats.products * progress),
-          orders: Math.floor(targetStats.orders * progress),
-          satisfaction: Math.floor(targetStats.satisfaction * progress)
-        });
-
-        if (step >= steps) clearInterval(timer);
-      }, increment);
-    };
-
-    // Start animation after component mounts
-    setTimeout(animateStats, 1000);
+    checkScroll();
+    el?.addEventListener("scroll", checkScroll);
+    return () => el?.removeEventListener("scroll", checkScroll);
   }, []);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    setIsAutoPlaying(false);
   };
 
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+    setIsAutoPlaying(false);
   };
 
   const toggleAutoPlay = () => {
     setIsAutoPlaying(!isAutoPlaying);
   };
 
-  useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-
-    const onScroll = () => {
-      setCanScrollLeft(el.scrollLeft > 0);
-      setCanScrollRight(
-        el.scrollLeft + el.clientWidth < el.scrollWidth - 1
-      );
-    };
-
-    onScroll();
-    el.addEventListener("scroll", onScroll);
-    window.addEventListener("resize", onScroll);
-
-    return () => {
-      el.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
-  }, []);
-
   const scrollByAmount = (direction) => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const amount = el.clientWidth * 0.7;
-    el.scrollBy({
+    if (!scrollRef.current) return;
+    const amount = scrollRef.current.clientWidth * 0.7;
+    scrollRef.current.scrollBy({
       left: direction === "right" ? amount : -amount,
       behavior: "smooth",
     });
@@ -441,8 +386,6 @@ function HomePage() {
         </div>
       </section>
 
-      
-
       {/* Deal of the Day */}
       <section className="py-12 bg-gradient-to-r from-orange-400 to-red-500">
         <div className="max-w-7xl mx-auto px-4">
@@ -466,8 +409,8 @@ function HomePage() {
                 </div>
                 <h3 className="font-semibold text-gray-800 mb-2">{product.name}</h3>
                 <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl font-bold text-red-600">{product.price}</span>
-                  <span className="line-through text-gray-400">{product.mrp}</span>
+                  <span className="text-2xl font-bold text-red-600">₹{product.price}</span>
+                  <span className="line-through text-gray-400">₹{product.mrp}</span>
                 </div>
                 <Link
                   to={`/product/${product.id}`}
@@ -549,68 +492,68 @@ function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-<section className="py-12 bg-gradient-to-r from-gray-50 to-blue-50">
-  <div className="max-w-7xl mx-auto px-4">
-    <div className="text-center mb-12">
-      <h2 className="text-3xl font-bold text-gray-800 mb-4">
-        What Our Customers Say
-      </h2>
-      <p className="text-gray-600 max-w-2xl mx-auto">
-        Don't just take our word for it - hear from our satisfied customers
-      </p>
-    </div>
-
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div className="bg-white p-6 rounded-2xl shadow-lg">
-        <div className="flex items-center mb-4">
-          <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-            <span className="text-blue-600 font-bold text-lg">P</span>
+      <section className="py-12 bg-gradient-to-r from-gray-50 to-blue-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+              What Our Customers Say
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto">
+              Don't just take our word for it - hear from our satisfied customers
+            </p>
           </div>
-          <div className="ml-4">
-            <h4 className="font-semibold text-gray-800">Priya Sharma</h4>
-            <div className="flex text-yellow-400">{"★".repeat(5)}</div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="bg-white p-6 rounded-2xl shadow-lg">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                  <span className="text-blue-600 font-bold text-lg">P</span>
+                </div>
+                <div className="ml-4">
+                  <h4 className="font-semibold text-gray-800">Priya Sharma</h4>
+                  <div className="flex text-yellow-400">{"★".repeat(5)}</div>
+                </div>
+              </div>
+              <p className="text-gray-600 italic">
+                "Amazing quality products at great prices. The delivery was super fast
+                and the customer service is excellent!"
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl shadow-lg">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                  <span className="text-green-600 font-bold text-lg">R</span>
+                </div>
+                <div className="ml-4">
+                  <h4 className="font-semibold text-gray-800">Rahul Kumar</h4>
+                  <div className="flex text-yellow-400">{"★".repeat(5)}</div>
+                </div>
+              </div>
+              <p className="text-gray-600 italic">
+                "StyleNest has become my go-to shopping destination. The variety is
+                amazing and prices are unbeatable!"
+              </p>
+            </div>
+
+            <div className="bg-white p-6 rounded-2xl shadow-lg">
+              <div className="flex items-center mb-4">
+                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                  <span className="text-purple-600 font-bold text-lg">A</span>
+                </div>
+                <div className="ml-4">
+                  <h4 className="font-semibold text-gray-800">Anjali Patel</h4>
+                  <div className="flex text-yellow-400">{"★".repeat(5)}</div>
+                </div>
+              </div>
+              <p className="text-gray-600 italic">
+                "Love the user-friendly interface and the quality of products. Highly
+                recommend StyleNest to everyone!"
+              </p>
+            </div>
           </div>
         </div>
-        <p className="text-gray-600 italic">
-          "Amazing quality products at great prices. The delivery was super fast
-          and the customer service is excellent!"
-        </p>
-      </div>
-
-      <div className="bg-white p-6 rounded-2xl shadow-lg">
-        <div className="flex items-center mb-4">
-          <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-            <span className="text-green-600 font-bold text-lg">R</span>
-          </div>
-          <div className="ml-4">
-            <h4 className="font-semibold text-gray-800">Rahul Kumar</h4>
-            <div className="flex text-yellow-400">{"★".repeat(5)}</div>
-          </div>
-        </div>
-        <p className="text-gray-600 italic">
-          "StyleNest has become my go-to shopping destination. The variety is
-          amazing and prices are unbeatable!"
-        </p>
-      </div>
-
-      <div className="bg-white p-6 rounded-2xl shadow-lg">
-        <div className="flex items-center mb-4">
-          <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-            <span className="text-purple-600 font-bold text-lg">A</span>
-          </div>
-          <div className="ml-4">
-            <h4 className="font-semibold text-gray-800">Anjali Patel</h4>
-            <div className="flex text-yellow-400">{"★".repeat(5)}</div>
-          </div>
-        </div>
-        <p className="text-gray-600 italic">
-          "Love the user-friendly interface and the quality of products. Highly
-          recommend StyleNest to everyone!"
-        </p>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
       {/* Newsletter Section */}
       <section className="py-16 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 relative overflow-hidden">

@@ -15,7 +15,7 @@ const pool = mysql.createPool({
   host: 'localhost',
   user: 'ecommerce',
   password: '',
-  database: 'ecart_db',
+  database:'ecommerce',
   waitForConnections: true,
   connectionLimit: 5,
   queueLimit: 0
