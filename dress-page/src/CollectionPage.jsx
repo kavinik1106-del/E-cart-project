@@ -5,13 +5,13 @@ import { useCart } from "./contexts/CartContext.jsx";
 
 function CollectionPage() {
   /* ---------- CATEGORIES ---------- */
-  const categories = [
-    { name: "Electronics", image: "/mobile.jpg" },
-    { name: "Women Dresses", image: "/dress1.webp" },
-    { name: "Men Dresses", image: "/men2.jpg" },
-    { name: "Dry Fruits", image: "/cashew.webp" },
-    { name: "Home Appliances", image: "/fridge.webp" },
-  ];
+  // const categories = [
+  //   { name: "Electronics", image: "/mobile.jpg" },
+  //   { name: "Women Dresses", image: "/dress1.webp" },
+  //   { name: "Men Dresses", image: "/men2.jpg" },
+  //   { name: "Dry Fruits", image: "/cashew.webp" },
+  //   { name: "Home Appliances", image: "/fridge.webp" },
+  // ];
 
   /* ---------- PRODUCTS ---------- */
   const products = [
@@ -67,7 +67,7 @@ function CollectionPage() {
         </p>
       </div>
 
-      {/* Categories */}
+      {/* Categories
       <section className="bg-white mt-2 p-4">
         <h2 className="font-bold text-lg mb-3">Categories</h2>
         <div className="flex gap-4 overflow-x-auto">
@@ -82,7 +82,7 @@ function CollectionPage() {
             </div>
           ))}
         </div>
-      </section>
+      </section> */}
 
       {/* Banner */}
       <img

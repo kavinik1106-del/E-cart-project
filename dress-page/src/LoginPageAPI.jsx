@@ -46,6 +46,14 @@ export default function LoginPage() {
   // Login handler
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    // Quick client-side validation for clearer feedback
+    if (!loginData.email || !loginData.password) {
+      setMessageType('error');
+      setMessage('Please enter both email and password');
+      return;
+    }
+
     setLoading(true);
     setMessage('');
 
@@ -61,26 +69,62 @@ export default function LoginPage() {
         })
       });
 
-      const data = await response.json();
+      const contentType = response.headers.get('content-type') || '';
+      let data = null;
 
-      if (data.success) {
+      // Parse JSON only when returned
+      if (contentType.includes('application/json')) {
+        data = await response.json();
+      }
+
+      // Handle non-OK responses (401, 400, 500 etc.) with clearer messages
+      if (!response.ok) {
+        setMessageType('error');
+        // Prefer server-sent message when available
+        const serverMsg = data && data.message ? data.message : response.statusText || 'Server error';
+
+        // Map common status codes to friendly messages
+        if (response.status === 401) {
+          setMessage('Invalid credentials. Please check your email and password.');
+        } else if (response.status === 400) {
+          setMessage(serverMsg || 'Invalid request. Please check your input.');
+        } else if (response.status >= 500) {
+          setMessage('Server error. Please try again later.');
+        } else {
+          setMessage(serverMsg || `Login failed (${response.status})`);
+        }
+
+        console.error('Login failed:', response.status, serverMsg);
+        return;
+      }
+
+      // Success path
+      if (data && data.success) {
         setMessageType('success');
         setMessage('Login successful! Redirecting...');
 
         // Store user data in localStorage
-        localStorage.setItem('user', JSON.stringify(data.data.user));
-        localStorage.setItem('token', data.data.token);
+        if (data.data) {
+          localStorage.setItem('user', JSON.stringify(data.data.user));
+          localStorage.setItem('token', data.data.token);
+        }
 
         setTimeout(() => {
           navigate('/');
-        }, 2000);
+        }, 1000);
       } else {
         setMessageType('error');
-        setMessage(data.message || 'Login failed');
+        setMessage((data && data.message) || 'Login failed. Please try again.');
+        console.error('Login response:', data);
       }
     } catch (error) {
       setMessageType('error');
-      setMessage('Error: ' + error.message);
+      // Network / parsing errors
+      const friendly = error.message && error.message.includes('Failed to fetch')
+        ? 'Network error: cannot reach the server. Is the backend running?'
+        : 'Unexpected error: ' + (error.message || 'Please try again');
+      setMessage(friendly);
+      console.error('Login error:', error);
     } finally {
       setLoading(false);
     }

@@ -463,7 +463,7 @@ function HomePage() {
                     </Link>
                   </div>
                   <div className="hidden lg:block">
-                    <img src="/hero-shopping.png" alt="Shopping" className="h-80 object-contain" />
+                    <img src="/hero-shopping.png" alt="Shopping" className="h-80 object-contain opacity-40" />
                   </div>
                 </div>
               </div>
@@ -478,16 +478,16 @@ function HomePage() {
                   <p className="text-xl mb-6">Up to 70% off on selected items</p>
                   <div className="flex justify-center gap-4 text-2xl font-bold">
                     <div className="bg-white bg-opacity-20 px-4 py-2 rounded-lg">
-                      <div>23</div>
-                      <div className="text-sm">Hours</div>
+                      <div className="text-black">23</div>
+                      <div className="text-sm text-black">Hours</div>
                     </div>
                     <div className="bg-white bg-opacity-20 px-4 py-2 rounded-lg">
-                      <div>45</div>
-                      <div className="text-sm">Minutes</div>
+                      <div className="text-black">45</div>
+                      <div className="text-sm text-black">Minutes</div>
                     </div>
                     <div className="bg-white bg-opacity-20 px-4 py-2 rounded-lg">
-                      <div>12</div>
-                      <div className="text-sm">Seconds</div>
+                      <div className="text-black">12</div>
+                      <div className="text-sm text-black">Seconds</div>
                     </div>
                   </div>
                 </div>
@@ -511,8 +511,8 @@ function HomePage() {
       </div>
 
       {/* Search Bar */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="bg-white shadow-sm border-b ">
+        <div className="max-w-7xl mx-auto px-4  py-4  ">
           <AdvancedSearch
             onSearch={(searchData) => {
               console.log("Search:", searchData);
@@ -754,7 +754,7 @@ function HomePage() {
             Subscribe to our newsletter and get exclusive deals, new product launches, and style tips delivered to your inbox.
           </p>
 
-          <div className="max-w-md mx-auto flex gap-4">
+          <div className="border border-white rounded-lg max-w-md mx-auto flex gap-4">
             <input
               type="email"
               placeholder="Enter your email address"
