@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { TrendingUp, Users, Package, ShoppingCart, Eye, DollarSign } from "lucide-react";
+import { apiCall, API_ENDPOINTS } from "../config/apiConfig.js";
 
 const StatCard = ({ title, value, icon: Icon, color, trend }) => {
   return (
@@ -44,24 +45,39 @@ function AdminDashboard() {
       setLoading(true);
       setError(null);
 
-      const [statsRes, ordersRes, productsRes, salesRes] = await Promise.all([
-        fetch('http://localhost:5000/api/admin/dashboard/stats'),
-        fetch('http://localhost:5000/api/admin/dashboard/recent-orders'),
-        fetch('http://localhost:5000/api/admin/dashboard/top-products'),
-        fetch('http://localhost:5000/api/admin/dashboard/sales-overview')
+      // Fetch available data
+      const [statsRes, ordersRes, productsRes] = await Promise.all([
+        apiCall(API_ENDPOINTS.DASHBOARD_STATS),
+        apiCall(API_ENDPOINTS.ORDERS + '?limit=5&sort=-createdAt'), // Recent orders
+        apiCall(API_ENDPOINTS.PRODUCTS + '?limit=5&sort=-sales') // Top products
       ]);
 
-      const [statsData, ordersData, productsData, salesData] = await Promise.all([
-        statsRes.json(),
-        ordersRes.json(),
-        productsRes.json(),
-        salesRes.json()
-      ]);
+      if (statsRes.success) {
+        setStats({
+          totalSales: statsRes.data.totalSales || 0,
+          totalOrders: statsRes.data.totalOrders || 0,
+          totalProducts: statsRes.data.totalProducts || 0,
+          totalCustomers: statsRes.data.totalCustomers || 0,
+        });
+      }
 
-      if (statsData.success) setStats(statsData.data);
-      if (ordersData.success) setRecentOrders(ordersData.data);
-      if (productsData.success) setTopProducts(productsData.data);
-      if (salesData.success) setSalesOverview(salesData.data);
+      if (ordersRes.success) {
+        setRecentOrders(ordersRes.data || []);
+      }
+
+      if (productsRes.success) {
+        setTopProducts(productsRes.data || []);
+      }
+
+      // Mock sales overview data for now
+      setSalesOverview([
+        { month: 'Jan', sales: 12000 },
+        { month: 'Feb', sales: 15000 },
+        { month: 'Mar', sales: 18000 },
+        { month: 'Apr', sales: 22000 },
+        { month: 'May', sales: 25000 },
+        { month: 'Jun', sales: 28000 }
+      ]);
 
     } catch (err) {
       setError('Failed to load dashboard data');
@@ -145,8 +161,8 @@ function AdminDashboard() {
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Recent Orders</h2>
           <div className="space-y-3">
-            {stats.recentOrders.length > 0 ? (
-              stats.recentOrders.map((order) => (
+            {stats?.recentOrders?.length > 0 ? (
+              stats?.recentOrders?.map((order) => (
                 <div
                   key={order.id}
                   className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
@@ -177,7 +193,7 @@ function AdminDashboard() {
         {/* Top Products */}
         <div className="bg-white rounded-lg shadow-md p-6">
           <h2 className="text-xl font-bold text-gray-800 mb-4">Top Products</h2>
-          <div className="space-y-3">
+          {/* <div className="space-y-3">
             {stats.topProducts.length > 0 ? (
               stats.topProducts.map((product) => (
                 <div
@@ -205,7 +221,7 @@ function AdminDashboard() {
             ) : (
               <p className="text-gray-500">No products available</p>
             )}
-          </div>
+          </div> */}
         </div>
       </div>
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LoginPage.css';
+import { apiCall, API_ENDPOINTS } from './config/apiConfig.js';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -34,13 +35,21 @@ export default function LoginPage() {
     }));
   };
 
-  // Handle register input change
-  const handleRegisterChange = (e) => {
-    const { name, value } = e.target;
-    setRegisterData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+  // Password strength checker
+  const getPasswordStrength = (password) => {
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[a-z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[^A-Za-z0-9]/.test(password)) strength++;
+    return strength;
+  };
+
+  const getPasswordStrengthText = (strength) => {
+    if (strength <= 1) return { text: 'Weak', color: 'text-red-500' };
+    if (strength <= 3) return { text: 'Medium', color: 'text-yellow-500' };
+    return { text: 'Strong', color: 'text-green-500' };
   };
 
   // Login handler
@@ -50,33 +59,28 @@ export default function LoginPage() {
     setMessage('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await apiCall(API_ENDPOINTS.LOGIN, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify({
           email: loginData.email,
           password: loginData.password
         })
       });
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (response.success) {
         setMessageType('success');
         setMessage('Login successful! Redirecting...');
 
         // Store user data in localStorage
-        localStorage.setItem('user', JSON.stringify(data.data.user));
-        localStorage.setItem('token', data.data.token);
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        localStorage.setItem('token', response.data.token);
 
         setTimeout(() => {
           navigate('/');
         }, 2000);
       } else {
         setMessageType('error');
-        setMessage(data.message || 'Login failed');
+        setMessage(response.message || 'Login failed');
       }
     } catch (error) {
       setMessageType('error');
@@ -334,6 +338,19 @@ export default function LoginPage() {
                   required
                   className="form-input"
                 />
+                {registerData.password && (
+                  <div className="password-strength">
+                    <div className="strength-bar">
+                      <div 
+                        className={`strength-fill strength-${getPasswordStrength(registerData.password)}`}
+                        style={{ width: `${(getPasswordStrength(registerData.password) / 5) * 100}%` }}
+                      ></div>
+                    </div>
+                    <span className={`strength-text ${getPasswordStrengthText(getPasswordStrength(registerData.password)).color}`}>
+                      {getPasswordStrengthText(getPasswordStrength(registerData.password)).text}
+                    </span>
+                  </div>
+                )}
                 <div className="password-hint">
                   Passwords must be at least 6 characters.
                 </div>

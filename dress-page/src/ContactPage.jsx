@@ -12,6 +12,7 @@ import {
   AlertCircle,
   Loader
 } from "lucide-react";
+import { apiCall, API_ENDPOINTS } from "./config/apiConfig.js";
 
 function ContactPage() {
   const [activeBox, setActiveBox] = useState(null);
@@ -28,6 +29,14 @@ function ContactPage() {
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
   const faqs = [
     {
@@ -62,14 +71,6 @@ function ContactPage() {
     },
   ];
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -77,17 +78,12 @@ function ContactPage() {
     setSuccessMessage("");
 
     try {
-      const response = await fetch("http://localhost:5000/api/contact", {
+      const response = await apiCall(API_ENDPOINTS.CONTACT, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
         body: JSON.stringify(formData)
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (response.success) {
         setSuccessMessage("Thank you! Your message has been submitted successfully. We'll respond within 24 hours.");
         setFormData({
           fullName: "",
@@ -95,11 +91,12 @@ function ContactPage() {
           mobileNumber: "",
           orderId: "",
           issueType: "Order Related Issue",
-          message: ""
+          message: "",
+          priority: "normal"
         });
         setTimeout(() => setSuccessMessage(""), 5000);
       } else {
-        setErrorMessage(data.error || "Failed to submit the form. Please try again.");
+        setErrorMessage(response.message || "Failed to submit the form. Please try again.");
       }
     } catch (error) {
       setErrorMessage("Error submitting form. Please check your connection and try again.");

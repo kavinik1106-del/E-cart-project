@@ -135,71 +135,39 @@ function ProductCard({ product, products = [], showRating = false }) {
         </div>
 
         {/* Info Container */}
-        <div className="p-5 space-y-3 bg-gradient-to-b from-white to-gray-50">
+        <div className="p-3 sm:p-5 space-y-2 sm:space-y-3 bg-gradient-to-b from-white to-gray-50">
           {/* Category/Type */}
           <div className="text-xs text-blue-600 font-bold uppercase tracking-wider bg-blue-50 px-2 py-1 rounded-full inline-block">
             {product.type || product.category || product.brand}
           </div>
 
           {/* Product Name */}
-          <h3 className="font-bold text-base line-clamp-2 group-hover:text-blue-700 transition-colors duration-300 leading-tight">
+          <h3 className="font-bold text-sm sm:text-base line-clamp-2 group-hover:text-blue-700 transition-colors duration-300 leading-tight">
             {product.name}
           </h3>
 
           {/* Rating */}
           {(showRating || product.rating) && (
-            <div className="flex items-center gap-2 text-sm">
+            <div className="flex items-center gap-2 text-xs sm:text-sm">
               <div className="flex items-center gap-1">
                 <Star size={14} className="text-yellow-400 fill-yellow-400" />
                 <span className="font-semibold text-gray-800">{product.rating || 4.5}</span>
               </div>
               {product.reviews && (
-                <span className="text-gray-500 text-xs">({product.reviews} reviews)</span>
+                <span className="text-gray-500 text-xs">({product.reviews})</span>
               )}
             </div>
           )}
 
-          {/* Color Options */}
-          {product.colors && product.colors.length > 0 && (
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-600 font-medium">Colors:</span>
-              <div className="flex gap-1">
-                {product.availableColors.slice(0, 4).map((color, index) => (
-                  <div
-                    key={index}
-                    className="w-4 h-4 rounded-full border-2 border-white shadow-sm hover:scale-110 transition-transform"
-                    style={{ backgroundColor: color }}
-                    title={product.colors[index]}
-                  ></div>
-                ))}
-                {product.colors.length > 4 && (
-                  <span className="text-xs text-gray-500 font-medium bg-gray-100 px-2 py-1 rounded-full">
-                    +{product.colors.length - 4}
-                  </span>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Size Range for Dresses/Clothing */}
-          {product.sizeGuide && Object.keys(product.sizeGuide).length > 0 && (
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-600 font-medium">Sizes:</span>
-              <span className="text-xs text-gray-800 font-bold bg-gray-100 px-2 py-1 rounded-full">
-                {Object.keys(product.sizeGuide)[0]} - {Object.keys(product.sizeGuide)[Object.keys(product.sizeGuide).length - 1]}
-              </span>
-            </div>
-          )}
-
           {/* Price */}
-          <div className="flex items-baseline gap-3 pt-2">
-            <span className="text-xl font-bold text-blue-700">₹{product.price.toLocaleString()}</span>
+          <div className="flex items-baseline gap-2 sm:gap-3 pt-2 flex-wrap">
+            <span className="text-lg sm:text-xl font-bold text-blue-700">₹{product.price.toLocaleString()}</span>
             {product.mrp && (
               <>
-                <span className="line-through text-gray-400 text-base">
+                <span className="line-through text-gray-400 text-sm sm:text-base">
                   ₹{product.mrp.toLocaleString()}
                 </span>
-                <span className="text-sm text-green-600 font-bold bg-green-50 px-2 py-1 rounded-full">
+                <span className="text-xs sm:text-sm text-green-600 font-bold bg-green-50 px-2 py-1 rounded-full">
                   {Math.round(((product.mrp - product.price) / product.mrp) * 100)}% OFF
                 </span>
               </>

@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import './OrderPage.css';
+import { apiCall, API_ENDPOINTS } from './config/apiConfig.js';
+import { apiCall, API_ENDPOINTS } from './config/apiConfig.js';
 
 export default function OrderPageAPI() {
   const [orders, setOrders] = useState([]);
@@ -48,11 +50,10 @@ export default function OrderPageAPI() {
         return;
       }
 
-      const response = await fetch(`http://localhost:5000/api/orders/user/${user.id}`);
-      const data = await response.json();
-
-      if (data.success) {
-        setOrders(data.data);
+      const response = await apiCall(`${API_ENDPOINTS.USER_ORDERS}/user/${user.id}`);
+      
+      if (response.success) {
+        setOrders(response.data);
       } else {
         setMessage('Failed to load orders');
         setMessageType('error');
@@ -93,11 +94,6 @@ export default function OrderPageAPI() {
   const removeFromCart = (productId) => {
     setCartItems(cartItems.filter(item => item.product_id !== productId));
   };
-
-  // Calculate totals
-  const calculateTotals = () => {
-    const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-    const tax = Math.round(subtotal * 0.18); // 18% tax
     const shipping = subtotal > 500 ? 0 : 99; // Free shipping for orders > 500
     const discount = orderForm.discount_amount;
     const total = subtotal + tax + shipping - discount;

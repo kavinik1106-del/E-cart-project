@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Navbar from "./Navbar.jsx";
 import ProductCard from "./ProductCard.jsx";
 import { ChevronLeft, ChevronRight, Star, Truck, Shield, HeadphonesIcon, Quote, Zap, Award, Users, ShoppingBag, TrendingUp, Play, Pause } from "lucide-react";
+import { apiCall, API_ENDPOINTS } from "./config/apiConfig.js";
 
 function HomePage() {
   const categories = [
@@ -16,401 +17,11 @@ function HomePage() {
     { name: "Accessories", image: "/acces.jpg", route: "/accessories", count: 167 },
   ];
 
-  // Enhanced products with more details
-  const dresses = [
-    {
-      id: 1,
-      name: "Half Saree",
-      price: 1400,
-      mrp: 2500,
-      image: "/saree1.webp",
-      rating: 4.5,
-      reviews: 150,
-      tag: "Trending",
-      brand: "Traditional Wear",
-      discount: 44,
-      colors: ["Red", "Blue", "Green"],
-      sizeGuide: { XS: {}, S: {}, M: {}, L: {}, XL: {} }
-    },
-    {
-      id: 2,
-      name: "Traditional Dress",
-      price: 4000,
-      mrp: 5500,
-      image: "/dress1.webp",
-      rating: 4.6,
-      reviews: 200,
-      tag: "Bestseller",
-      brand: "Ethnic Collection",
-      discount: 27,
-      colors: ["Maroon", "Navy", "Black"],
-      sizeGuide: { XS: {}, S: {}, M: {}, L: {}, XL: {} }
-    },
-    {
-      id: 3,
-      name: "Pink Dress",
-      price: 1200,
-      mrp: 2000,
-      image: "/pink.jpg",
-      rating: 4.4,
-      reviews: 180,
-      tag: "New",
-      brand: "Fashion Hub",
-      discount: 40,
-      colors: ["Pink", "Rose", "Coral"],
-      sizeGuide: { XS: {}, S: {}, M: {}, L: {}, XL: {} }
-    },
-    {
-      id: 4,
-      name: "Red Dress",
-      price: "₹999",
-      mrp: "₹1,500",
-      image: "/red.jpg",
-      rating: 4.3,
-      reviews: 120,
-      tag: "Sale",
-    },
-    {
-      id: 5,
-      name: "Kids Dress",
-      price: "₹799",
-      mrp: "₹1,299",
-      image: "/kid1.webp",
-      rating: 4.4,
-      reviews: 140,
-      tag: "Popular",
-    },
-    {
-      id: 6,
-      name: "Men Kurta",
-      price: "₹1,499",
-      mrp: "₹2,299",
-      image: "/men.webp",
-      rating: 4.5,
-      reviews: 160,
-      tag: "Hot",
-    },
-    {
-      id: 6,
-      brand: "Nilkamal",
-      category: "Chair",
-      name: "Nilkamal Plastic Chair",
-      price: "₹1,299",
-      rating: 4.3,
-      image: "/ring1.jpg",
-    },
-    {
-      id: 6,
-      brand: "Nilkamal",
-      category: "Chair",
-      name: "Nilkamal Plastic Chair",
-      price: "₹1,299",
-      rating: 4.3,
-      image: "/hairclip4.webp",
-    },
-    {
-      id: 6,
-      brand: "Nilkamal",
-      category: "Chair",
-      name: "Nilkamal Plastic Chair",
-      price: "₹1,299",
-      rating: 4.3,
-      image: "/hairclip5.jpg",
-      tag:"best seller"
-    },
-    {
-      id: 6,
-      brand: "Nilkamal",
-      category: "Chair",
-      name: "Nilkamal Plastic Chair",
-      price: "₹1,299",
-      rating: 4.3,
-      image: "/powder.jpg",
-    },
-    {
-      id: 6,
-      brand: "Hero",
-      category: "Mountain Bicycle",
-      name: "Hero Ranger",
-      price: "₹10,999",
-      rating: 4.5,
-      image: "/bicyclem3.jpg",
-    },
-    {
-      id: 6,
-      brand: "Hero",
-      category: "Mountain Bicycle",
-      name: "Hero Ranger",
-      price: "₹10,999",
-      rating: 4.5,
-      image: "/bicyclew3.jpg",
-    },
-    {
-      id: 6,
-      brand: "Hero",
-      category: "Mountain Bicycle",
-      name: "Hero Ranger",
-      price: "₹10,999",
-      rating: 4.5,
-      image: "/bicyclem.jpg",
-       tag: "Premium",
-    },
-    {
-      id: 6,
-      brand: "Hero",
-      category: "Mountain Bicycle",
-      name: "Hero Ranger",
-      price: "₹10,999",
-      rating: 4.5,
-      image: "/bicyclew1.jpg",
-    },
-     { id: 1, category: "Phone", name: "Galaxy X Pro", price: "₹29,999", image: "/mobile.jpg" },
-    { id: 2, category: "Laptop", name: "SwiftBook 14", price: "₹49,999", image: "/laptop.webp" },
-    { id: 3, category: "Watch", name: "Pulse Watch 3", price: "₹7,999", image: "/smartwatch.webp" },
-    { id: 4, category: "Tablet", name: "TabOne 10", price: "₹19,499", image: "/OIP (3).webp" },
-    { id: 5, category: "Phone", name: "Nova S", price: "₹18,999", image: "/mobile.jpg" },
-    { id: 6, category: "Laptop", name: "Workmate Pro", price: "₹62,999", image: "/OIP (9).webp" },
-    { id: 7, category: "Watch", name: "Chrono Watch", price: "₹12,999", image: "/th (1).jpg" },
-    { id: 8, category: "Tablet", name: "TabMax 12", price: "₹24,999", image: "/th (2).jpg" },
-    {
-      id: 1,
-      brand: "Nike",
-      category: "Sports Shoes",
-      name: "Nike Air Zoom",
-      price: "₹5,999",
-      rating: 4.6,
-      image: "/footk.jpg",
-    },
-    {
-      id: 2,
-      brand: "Adidas",
-      category: "Running Shoes",
-      name: "Adidas Ultraboost",
-      price: "₹6,499",
-      rating: 4.7,
-      image: "/footm.jpg",
-    },
-    {
-      id: 3,
-      brand: "Puma",
-      category: "Casual Shoes",
-      name: "Puma Smash V2",
-      price: "₹3,299",
-      rating: 4.4,
-      image: "/footw.jpg",
-    },
-    {
-      id: 4,
-      brand: "Bata",
-      category: "Formal Shoes",
-      name: "Bata Office Wear",
-      price: "₹2,199",
-      rating: 4.2,
-      image: "/footk1.jpg",
-    },
-    {
-      id: 5,
-      brand: "Nike",
-      category: "Sneakers",
-      name: "Nike Revolution",
-      price: "₹4,899",
-      rating: 4.5,
-      image: "/footm1.jpg",
-       tag: "Premium",
-    },
-    {
-      id: 6,
-      brand: "Adidas",
-      category: "Sports Shoes",
-      name: "Adidas Duramo",
-      price: "₹3,999",
-      rating: 4.3,
-      image: "/footw1.jpg",
-    },
-    {
-      id: 6,
-      brand: "Adidas",
-      category: "Sports Shoes",
-      name: "Adidas Duramo",
-      price: "₹3,999",
-      rating: 4.3,
-      image: "/footk2.jpg",
-    },
-    {
-      id: 1,
-      category: "Dress",
-      name: "Kids Party Dress",
-      price: "₹1,299",
-      image: "/kid1.webp",
-      tag: "Premium",
-    },
-    {
-      id: 2,
-      category: "Shoes",
-      name: "Kids Sports Shoes",
-      price: "₹999",
-      image: "/kid.jpg",
-    },
-    {
-      id: 3,
-      category: "Innerwear",
-      name: "Kids Inner Set",
-      price: "₹399",
-      image: "/kid2.jpg",
-    },
-    {
-      id: 4,
-      category: "Glasses",
-      name: "Kids Sunglasses",
-      price: "₹499",
-      image: "/kid3.jpg",
-    },
-    {
-      id: 5,
-      category: "Dress",
-      name: "Kids Casual Wear",
-      price: "₹899",
-      image: "/kid4.jpg",
-       tag: "Premium"
-    },
-    {
-      id: 6,
-      category: "Shoes",
-      name: "Kids Sandals",
-      price: "₹699",
-      image: "/kid5.jpg",
-    },
-    {
-      id: 6,
-      category: "Shoes",
-      name: "Kids Sandals",
-      price: "₹699",
-      image: "/kid6.jpg",
-    },
-    {
-      id: 6,
-      category: "Shoes",
-      name: "Kids Sandals",
-      price: "₹699",
-      image: "/kid7.jpg",
-    },
-    {
-      id: 6,
-      category: "Shoes",
-      name: "Kids Sandals",
-      price: "₹699",
-      image: "/kid8.jpg",
-    },
-    {
-      id: 6,
-      category: "Shoes",
-      name: "Kids Sandals",
-      price: "₹699",
-      image: "/kid9.jpg",
-    },
-    {
-      id: 6,
-      category: "Shoes",
-      name: "Kids Sandals",
-      price: "₹699",
-      image: "/kid10.jpg",
-    },
-    {
-      id: 6,
-      category: "Shoes",
-      name: "Kids Sandals",
-      price: "₹699",
-      image: "/kid11.jpg",
-    },
-    {
-      id: 101,
-      type: "Pant",
-      name: "Classic Chino",
-      price: 999,
-      mrp: 1999,
-      image: "/chino.avif",
-      category: "Men Dresses",
-      rating: 4.5,
-      reviews: 234,
-      tag: "Bestseller",
-    },
-    {
-      id: 102,
-      type: "Shirt",
-      name: "Oxford Shirt",
-      price: 799,
-      mrp: 1499,
-      image: "/OIP.jpg",
-      category: "Men Dresses",
-      rating: 4.4,
-      reviews: 187,
-      tag: "Popular",
-    },
-    {
-      id: 103,
-      type: "T-Shirt",
-      name: "Comfort Tee",
-      price: 399,
-      mrp: 699,
-      image: "/OIP (7).webp",
-      category: "Men Dresses",
-      rating: 4.3,
-      reviews: 290,
-      tag: "Sale",
-    },
-    {
-      id: 104,
-      type: "Jacket",
-      name: "Denim Jacket",
-      price: 1999,
-      mrp: 3299,
-      image: "/denim.webp",
-      category: "Men Dresses",
-      rating: 4.6,
-      reviews: 156,
-      tag: "Trending",
-    },
-    {
-      id: 105,
-      type: "Shorts",
-      name: "Casual Shorts",
-      price: 449,
-      mrp: 899,
-      image: "/shorts.avif",
-      category: "Men Dresses",
-      rating: 4.2,
-      reviews: 145,
-      tag: "New",
-    },
-    {
-      id: 106,
-      type: "Sweater",
-      name: "Wool Sweater",
-      price: 1299,
-      mrp: 2199,
-      image: "/wool.webp",
-      category: "Men Dresses",
-      rating: 4.5,
-      reviews: 203,
-      tag: "Premium",
-    },
-    {
-      id: 107,
-      type: "Kurta",
-      name: "Men Kurta",
-      price: 1099,
-      mrp: 1899,
-      image: "/kurta.jpg",
-      category: "Men Dresses",
-      rating: 4.4,
-      reviews: 167,
-      tag: "Popular",
-    },
-    
-    
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  ];
-
+  // Products will be fetched from API and stored in products state
   const scrollRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -449,6 +60,43 @@ function HomePage() {
       gradient: "from-orange-600 via-red-600 to-pink-600"
     }
   ];
+
+  // Fetch products from API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await apiCall(API_ENDPOINTS.PRODUCTS);
+        if (response.success) {
+          // Transform API data to match component expectations
+          const transformedProducts = response.data.map(product => ({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            mrp: product.price * 1.2, // Assuming MRP is 20% higher
+            image: product.image || "/placeholder.jpg",
+            rating: 4.5, // Default rating
+            reviews: Math.floor(Math.random() * 200) + 50, // Random reviews
+            tag: product.stock > 10 ? "In Stock" : "Limited",
+            brand: product.type,
+            discount: Math.floor(Math.random() * 30) + 10, // Random discount
+            colors: ["Default"],
+            sizeGuide: { S: {}, M: {}, L: {}, XL: {} }
+          }));
+          setProducts(transformedProducts);
+        } else {
+          setError("Failed to load products");
+        }
+      } catch (err) {
+        setError("Error loading products");
+        console.error("Error fetching products:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   // Auto-play functionality
   useEffect(() => {
@@ -877,7 +525,7 @@ function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {dresses.slice(0, 4).map((product) => (
+            {products.slice(0, 4).map((product) => (
               <div key={product.id} className="transform hover:scale-105 transition-all duration-300">
                 <ProductCard product={product} showRating={true} />
               </div>
@@ -896,87 +544,7 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Customer Testimonials */}
-      <section className="py-16 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-800 mb-4">What Our Customers Say</h2>
-            <p className="text-xl text-gray-600">Real reviews from real customers</p>
-            <div className="w-24 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mt-4 rounded-full"></div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
-              <div className="flex items-center mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
-                  S
-                </div>
-                <div className="ml-4">
-                  <h4 className="font-bold text-gray-800 text-lg">Sarah Johnson</h4>
-                  <div className="flex text-yellow-400 mb-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={18} fill="currentColor" className="animate-pulse" />
-                    ))}
-                  </div>
-                  <p className="text-sm text-gray-500">Verified Purchase</p>
-                </div>
-              </div>
-              <div className="relative">
-                <Quote className="w-8 h-8 text-blue-200 absolute -top-2 -left-2" />
-                <p className="text-gray-700 italic text-lg leading-relaxed pl-6">
-                  "Amazing quality products at unbeatable prices. The delivery was super fast and the customer service is excellent!"
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
-              <div className="flex items-center mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
-                  M
-                </div>
-                <div className="ml-4">
-                  <h4 className="font-bold text-gray-800 text-lg">Mike Chen</h4>
-                  <div className="flex text-yellow-400 mb-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={18} fill="currentColor" className="animate-pulse" />
-                    ))}
-                  </div>
-                  <p className="text-sm text-gray-500">Verified Purchase</p>
-                </div>
-              </div>
-              <div className="relative">
-                <Quote className="w-8 h-8 text-green-200 absolute -top-2 -left-2" />
-                <p className="text-gray-700 italic text-lg leading-relaxed pl-6">
-                  "Best online shopping experience ever! Wide variety of products and the website is so user-friendly."
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100">
-              <div className="flex items-center mb-6">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
-                  A
-                </div>
-                <div className="ml-4">
-                  <h4 className="font-bold text-gray-800 text-lg">Anna Rodriguez</h4>
-                  <div className="flex text-yellow-400 mb-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={18} fill="currentColor" className="animate-pulse" />
-                    ))}
-                  </div>
-                  <p className="text-sm text-gray-500">Verified Purchase</p>
-                </div>
-              </div>
-              <div className="relative">
-                <Quote className="w-8 h-8 text-purple-200 absolute -top-2 -left-2" />
-                <p className="text-gray-700 italic text-lg leading-relaxed pl-6">
-                  "Love the premium quality and fast shipping. StyleNest has become my go-to shopping destination!"
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      
 
       {/* Deal of the Day */}
       <section className="py-12 bg-gradient-to-r from-orange-400 to-red-500">
@@ -987,7 +555,7 @@ function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {dresses.slice(0, 3).map((product) => (
+            {products.slice(0, 3).map((product) => (
               <div key={product.id} className="bg-white rounded-2xl p-6 shadow-lg">
                 <div className="relative">
                   <img
@@ -1006,7 +574,7 @@ function HomePage() {
                 </div>
                 <Link
                   to={`/product/${product.id}`}
-                  state={{ product, related: dresses }}
+                  state={{ product, related: products }}
                   className="w-full bg-gradient-to-r from-red-500 to-orange-500 text-white py-2 rounded-lg font-semibold hover:from-red-600 hover:to-orange-600 transition-all text-center block"
                 >
                   Grab Deal
@@ -1034,11 +602,11 @@ function HomePage() {
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            {dresses.slice(0, 10).map((product) => (
+            {products.slice(0, 10).map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}
-                products={dresses}
+                products={products}
                 showRating={true}
               />
             ))}
@@ -1084,69 +652,68 @@ function HomePage() {
       </section>
 
       {/* Testimonials Section */}
-      <section className="py-12 bg-gradient-to-r from-gray-50 to-blue-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">What Our Customers Say</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Don't just take our word for it - hear from our satisfied customers
-            </p>
+<section className="py-12 bg-gradient-to-r from-gray-50 to-blue-50">
+  <div className="max-w-7xl mx-auto px-4">
+    <div className="text-center mb-12">
+      <h2 className="text-3xl font-bold text-gray-800 mb-4">
+        What Our Customers Say
+      </h2>
+      <p className="text-gray-600 max-w-2xl mx-auto">
+        Don't just take our word for it - hear from our satisfied customers
+      </p>
+    </div>
+
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="bg-white p-6 rounded-2xl shadow-lg">
+        <div className="flex items-center mb-4">
+          <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+            <span className="text-blue-600 font-bold text-lg">P</span>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-2xl shadow-lg">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <span className="text-blue-600 font-bold text-lg">P</span>
-                </div>
-                <div className="ml-4">
-                  <h4 className="font-semibold text-gray-800">Priya Sharma</h4>
-                  <div className="flex text-yellow-400">
-                    {"★".repeat(5)}
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-600 italic">
-                "Amazing quality products at great prices. The delivery was super fast and the customer service is excellent!"
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl shadow-lg">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                  <span className="text-green-600 font-bold text-lg">R</span>
-                </div>
-                <div className="ml-4">
-                  <h4 className="font-semibold text-gray-800">Rahul Kumar</h4>
-                  <div className="flex text-yellow-400">
-                    {"★".repeat(5)}
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-600 italic">
-                "StyleNest has become my go-to shopping destination. The variety is amazing and prices are unbeatable!"
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl shadow-lg">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                  <span className="text-purple-600 font-bold text-lg">A</span>
-                </div>
-                <div className="ml-4">
-                  <h4 className="font-semibold text-gray-800">Anjali Patel</h4>
-                  <div className="flex text-yellow-400">
-                    {"★".repeat(5)}
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-600 italic">
-                "Love the user-friendly interface and the quality of products. Highly recommend StyleNest to everyone!"
-              </p>
-            </div>
+          <div className="ml-4">
+            <h4 className="font-semibold text-gray-800">Priya Sharma</h4>
+            <div className="flex text-yellow-400">{"★".repeat(5)}</div>
           </div>
         </div>
-      </section>
+        <p className="text-gray-600 italic">
+          "Amazing quality products at great prices. The delivery was super fast
+          and the customer service is excellent!"
+        </p>
+      </div>
+
+      <div className="bg-white p-6 rounded-2xl shadow-lg">
+        <div className="flex items-center mb-4">
+          <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+            <span className="text-green-600 font-bold text-lg">R</span>
+          </div>
+          <div className="ml-4">
+            <h4 className="font-semibold text-gray-800">Rahul Kumar</h4>
+            <div className="flex text-yellow-400">{"★".repeat(5)}</div>
+          </div>
+        </div>
+        <p className="text-gray-600 italic">
+          "StyleNest has become my go-to shopping destination. The variety is
+          amazing and prices are unbeatable!"
+        </p>
+      </div>
+
+      <div className="bg-white p-6 rounded-2xl shadow-lg">
+        <div className="flex items-center mb-4">
+          <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+            <span className="text-purple-600 font-bold text-lg">A</span>
+          </div>
+          <div className="ml-4">
+            <h4 className="font-semibold text-gray-800">Anjali Patel</h4>
+            <div className="flex text-yellow-400">{"★".repeat(5)}</div>
+          </div>
+        </div>
+        <p className="text-gray-600 italic">
+          "Love the user-friendly interface and the quality of products. Highly
+          recommend StyleNest to everyone!"
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
 
       {/* Newsletter Section */}
       <section className="py-16 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 relative overflow-hidden">

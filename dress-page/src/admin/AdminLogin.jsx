@@ -15,16 +15,31 @@ function AdminLogin() {
     setLoading(true);
     setError("");
 
-    // Demo credentials
-    setTimeout(() => {
-      if (username === "admin" && password === "admin123") {
-        localStorage.setItem("isAdmin", "true");
-        navigate("/admin");
-      } else {
-        setError("Invalid credentials — try admin / admin123");
-      }
-      setLoading(false);
-    }, 1000);
+    // Call API
+    fetch("http://localhost:5001/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ username, password })
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          localStorage.setItem("adminToken", data.data.token);
+          localStorage.setItem("adminUser", JSON.stringify(data.data.user));
+          navigate("/admin");
+        } else {
+          setError(data.error || "Invalid credentials");
+        }
+      })
+      .catch(err => {
+        setError("Network error. Please try again.");
+        console.error("Login error:", err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }
 
   return (

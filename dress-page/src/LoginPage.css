@@ -349,6 +349,39 @@
   }
 }
 
+/* Password Strength Indicator */
+.password-strength {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.strength-bar {
+  flex: 1;
+  height: 4px;
+  background-color: #e0e0e0;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.strength-fill {
+  height: 100%;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.strength-1 { background-color: #ff4d4d; }
+.strength-2 { background-color: #ff944d; }
+.strength-3 { background-color: #ffd24d; }
+.strength-4 { background-color: #94ff4d; }
+.strength-5 { background-color: #4dff4d; }
+
+.strength-text {
+  font-size: 12px;
+  font-weight: 500;
+  min-width: 50px;
+}
+
 @media (max-width: 480px) {
   .auth-title {
     font-size: 24px;

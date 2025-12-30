@@ -26,8 +26,8 @@ function CollectionPage() {
   const [sortBy, setSortBy] = useState("relevance");
   const [viewMode, setViewMode] = useState("grid");
   const [showFilters, setShowFilters] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
+  const [currentPage, setCurrentPage] = useState(1);
 
   /* ---------- ENHANCED CATEGORIES ---------- */
   const categories = [
@@ -54,7 +54,7 @@ function CollectionPage() {
     { id: 11, name: "MacBook Pro 16\"", price: 199999, mrp: 229999, image: "/laptop.webp", rating: 4.8, reviews: 67, category: "electronics", brand: "Apple", discount: 13 },
     { id: 12, name: "Nike Air Max Shoes", price: 8999, mrp: 11999, image: "/footk.jpg", rating: 4.5, reviews: 234, category: "men", brand: "Nike", discount: 25 },
     { id: 13, name: "Samsung 4K TV 55\"", price: 45999, mrp: 54999, image: "/tv.jpg", rating: 4.6, reviews: 189, category: "electronics", brand: "Samsung", discount: 16 },
-    { id: 14, name: "Designer Lehenga", price: 15999, mrp: 19999, image: "/lehenga.jpg", rating: 4.7, reviews: 145, category: "women", brand: "Manish Malhotra", discount: 20 },
+    { id: 14, name: "Designer kurta", price: 15999, mrp: 19999, image: "/blue.webp", rating: 4.7, reviews: 145, category: "women", brand: "Manish Malhotra", discount: 20 },
     { id: 15, name: "Coffee Maker", price: 3499, mrp: 4499, image: "/coffeemaker.jpg", rating: 4.3, reviews: 87, category: "home", brand: "Philips", discount: 22 },
   ];
 
@@ -90,11 +90,6 @@ function CollectionPage() {
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-
-  // Reset to page 1 when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, selectedCategory, priceRange, sortBy]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">

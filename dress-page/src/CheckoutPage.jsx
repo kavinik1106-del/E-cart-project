@@ -3,6 +3,7 @@ import Navbar from "./Navbar";
 import { useCart } from "./contexts/CartContext";
 import { useNavigate } from "react-router-dom";
 import { CreditCard, Truck, Shield, CheckCircle, AlertCircle, Loader, MapPin, User, Phone, Mail, Lock } from "lucide-react";
+import { apiCall, API_ENDPOINTS } from "./config/apiConfig.js";
 
 function CheckoutPage() {
   const { cart, getCartTotal, clearCart } = useCart();
@@ -121,24 +122,19 @@ function CheckoutPage() {
       };
 
       // Place order
-      const response = await fetch('http://localhost:5000/api/orders', {
+      const response = await apiCall(API_ENDPOINTS.USER_ORDERS, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify(orderData)
       });
 
-      const result = await response.json();
-
-      if (result.success) {
+      if (response.success) {
         setOrderPlaced(true);
-        setOrderNumber(result.data?.order_number || `ORD-${Date.now()}`);
+        setOrderNumber(response.data?.order_number || `ORD-${Date.now()}`);
         clearCart();
         setMessage("Order placed successfully! 🎉");
         setMessageType("success");
       } else {
-        setMessage(result.message || "Failed to place order");
+        setMessage(response.message || "Failed to place order");
         setMessageType("error");
       }
     } catch {

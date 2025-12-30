@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
+import { apiCall, API_ENDPOINTS } from "../config/apiConfig.js";
 
 const CartContext = createContext();
 
@@ -102,6 +103,85 @@ export const CartProvider = ({ children }) => {
     return cart.reduce((sum, item) => sum + item.quantity, 0);
   };
 
+  // API Sync Functions
+  const syncCartWithServer = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return; // Only sync if user is logged in
+
+    try {
+      await apiCall(API_ENDPOINTS.CART, {
+        method: 'POST',
+        body: JSON.stringify({ items: cart })
+      });
+    } catch (error) {
+      console.error('Failed to sync cart with server:', error);
+    }
+  };
+
+  const syncWishlistWithServer = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return; // Only sync if user is logged in
+
+    try {
+      await apiCall(API_ENDPOINTS.WISHLIST, {
+        method: 'POST',
+        body: JSON.stringify({ items: wishlist })
+      });
+    } catch (error) {
+      console.error('Failed to sync wishlist with server:', error);
+    }
+  };
+
+  const loadCartFromServer = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+      const response = await apiCall(API_ENDPOINTS.CART);
+      if (response.success && response.data) {
+        setCart(response.data.items || []);
+      }
+    } catch (error) {
+      console.error('Failed to load cart from server:', error);
+    }
+  };
+
+  const loadWishlistFromServer = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    try {
+      const response = await apiCall(API_ENDPOINTS.WISHLIST);
+      if (response.success && response.data) {
+        setWishlist(response.data.items || []);
+      }
+    } catch (error) {
+      console.error('Failed to load wishlist from server:', error);
+    }
+  };
+
+  // Sync with server when cart/wishlist changes
+  useEffect(() => {
+    if (cart.length > 0) {
+      syncCartWithServer();
+    }
+  }, [cart]);
+
+  useEffect(() => {
+    if (wishlist.length > 0) {
+      syncWishlistWithServer();
+    }
+  }, [wishlist]);
+
+  // Load data from server on mount if user is logged in
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      loadCartFromServer();
+      loadWishlistFromServer();
+    }
+  }, []);
+
   return (
     <CartContext.Provider value={{ 
       cart, 
@@ -117,7 +197,11 @@ export const CartProvider = ({ children }) => {
       clearWishlist,
       getCartTotal, 
       getCartCount,
-      showToast
+      showToast,
+      syncCartWithServer,
+      syncWishlistWithServer,
+      loadCartFromServer,
+      loadWishlistFromServer
     }}>
       {children}
     </CartContext.Provider>

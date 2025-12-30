@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import jwt from 'jsonwebtoken';
 import sequelize from './config/database.js';
 import { initializeModels } from './models/index.js';
 import initializeDatabase from './utils/initializeDatabase.js';
@@ -12,6 +13,27 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// JWT Secret
+const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
+
+// Auth middleware
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  const token = authHeader && authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ success: false, error: 'Access token required' });
+  }
+
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ success: false, error: 'Invalid or expired token' });
+    }
+    req.user = user;
+    next();
+  });
+};
 
 // Initialize models
 const { Product, Order, Customer, Setting } = initializeModels(sequelize);
@@ -26,9 +48,51 @@ const startServer = async () => {
     // Initialize database (sync, seed data)
     await initializeDatabase();
 
+// ========== AUTH ENDPOINTS ==========
+
+    // Admin login
+    app.post('/api/auth/login', async (req, res) => {
+      try {
+        const { username, password } = req.body;
+
+        // Simple admin credentials (in production, use proper user management)
+        if (username === 'admin' && password === 'admin123') {
+          const token = jwt.sign(
+            { username: 'admin', role: 'admin' },
+            JWT_SECRET,
+            { expiresIn: '24h' }
+          );
+
+          res.json({
+            success: true,
+            message: 'Login successful',
+            data: {
+              token,
+              user: { username: 'admin', role: 'admin' }
+            }
+          });
+        } else {
+          res.status(401).json({
+            success: false,
+            error: 'Invalid credentials'
+          });
+        }
+      } catch (error) {
+        res.status(500).json({ success: false, error: error.message });
+      }
+    });
+
+    // Verify token
+    app.get('/api/auth/verify', authenticateToken, (req, res) => {
+      res.json({
+        success: true,
+        data: { user: req.user }
+      });
+    });
+
 // ========== PRODUCTS ENDPOINTS ==========
 
-    // GET all products
+    // GET all products (public for frontend)
     app.get('/api/products', async (req, res) => {
       try {
         const products = await Product.findAll();
@@ -43,7 +107,7 @@ const startServer = async () => {
     });
 
     // GET single product
-    app.get('/api/products/:id', async (req, res) => {
+    app.get('/api/products/:id', authenticateToken, async (req, res) => {
       try {
         const product = await Product.findByPk(req.params.id);
         if (!product) {
@@ -56,7 +120,7 @@ const startServer = async () => {
     });
 
     // CREATE product
-    app.post('/api/products', async (req, res) => {
+    app.post('/api/products', authenticateToken, async (req, res) => {
       try {
         const product = await Product.create({
           name: req.body.name,
@@ -73,7 +137,7 @@ const startServer = async () => {
     });
 
     // UPDATE product
-    app.put('/api/products/:id', async (req, res) => {
+    app.put('/api/products/:id', authenticateToken, async (req, res) => {
       try {
         const product = await Product.findByPk(req.params.id);
         if (!product) {
@@ -94,7 +158,7 @@ const startServer = async () => {
     });
 
     // DELETE product
-    app.delete('/api/products/:id', async (req, res) => {
+    app.delete('/api/products/:id', authenticateToken, async (req, res) => {
       try {
         const product = await Product.findByPk(req.params.id);
         if (!product) {
@@ -110,7 +174,7 @@ const startServer = async () => {
     // ========== ORDERS ENDPOINTS ==========
 
     // GET all orders
-    app.get('/api/orders', async (req, res) => {
+    app.get('/api/orders', authenticateToken, async (req, res) => {
       try {
         const orders = await Order.findAll();
         res.json({
@@ -124,7 +188,7 @@ const startServer = async () => {
     });
 
     // GET single order
-    app.get('/api/orders/:id', async (req, res) => {
+    app.get('/api/orders/:id', authenticateToken, async (req, res) => {
       try {
         const order = await Order.findByPk(req.params.id);
         if (!order) {
@@ -137,7 +201,7 @@ const startServer = async () => {
     });
 
     // CREATE order
-    app.post('/api/orders', async (req, res) => {
+    app.post('/api/orders', authenticateToken, async (req, res) => {
       try {
         // Generate order ID
         const lastOrder = await Order.findOne({
@@ -163,7 +227,7 @@ const startServer = async () => {
     });
 
     // UPDATE order
-    app.put('/api/orders/:id', async (req, res) => {
+    app.put('/api/orders/:id', authenticateToken, async (req, res) => {
       try {
         const order = await Order.findByPk(req.params.id);
         if (!order) {
@@ -186,7 +250,7 @@ const startServer = async () => {
     // ========== CUSTOMERS ENDPOINTS ==========
 
     // GET all customers
-    app.get('/api/customers', async (req, res) => {
+    app.get('/api/customers', authenticateToken, async (req, res) => {
       try {
         const customers = await Customer.findAll();
         res.json({
@@ -200,7 +264,7 @@ const startServer = async () => {
     });
 
     // GET single customer
-    app.get('/api/customers/:id', async (req, res) => {
+    app.get('/api/customers/:id', authenticateToken, async (req, res) => {
       try {
         const customer = await Customer.findByPk(req.params.id);
         if (!customer) {
