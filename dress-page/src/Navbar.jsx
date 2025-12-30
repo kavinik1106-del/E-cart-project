@@ -30,6 +30,7 @@ function Navbar() {
           <button onClick={() => navigate("/collection")}>Collection</button>
           <button onClick={() => navigate("/contact")}>Contact</button>
           <button onClick={() => navigate("/order")}>Order</button>
+          <button onClick={() => navigate("/register")}>Register</button>
           <button onClick={() => navigate(localStorage.getItem("isAdmin") === "true" ? "/admin" : "/admin/login")}>Admin</button>
           
           

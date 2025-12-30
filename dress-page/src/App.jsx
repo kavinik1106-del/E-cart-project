@@ -21,6 +21,10 @@ import Footwear from "./footwear.jsx";
 import HomeAppliances from "./HomeAppliances.jsx";
 import ShoesCategory from "./ShoesCategory.jsx";
 import LoginPage from "./LoginPage.jsx";
+import { CustomerProvider } from "./contexts/CustomerContext";
+
+
+import PrivateRoute from "./components/PrivateRoute.jsx";
 
 
 /* 🔥 NEW IMPORTS */
@@ -39,6 +43,7 @@ import ProtectedRoute from "./admin/ProtectedRoute.jsx";
 function App() {
   return (
     <CartProvider>
+      <CustomerProvider>
       <Routes>
         {/* EXISTING ROUTES */}
         <Route path="/" element={<HomePage />} />
@@ -56,7 +61,11 @@ function App() {
         <Route path="/appliances" element={<HomeAppliances />} />
         <Route path="/bicycles" element={<Bicycles />} />
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/admin/customers" element={<AdminCustomers />} />
+        <Route path="/admin/customers" element={<AdminCustomers />} />
+        
         <Route path="/product/:id" element={<ProductDetailPage />} />
+        
 
         {/* 🆕 NEW ROUTES */}
         <Route path="/cart" element={<CartPage />} />
@@ -68,8 +77,10 @@ function App() {
         <Route path="/admin/orders" element={<ProtectedRoute><AdminOrders /></ProtectedRoute>} />
         <Route path="/admin/customers" element={<ProtectedRoute><AdminCustomers /></ProtectedRoute>} />
         <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
+        
 
     </Routes>
+    </CustomerProvider>
     </CartProvider>
     
   );
