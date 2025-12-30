@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Navbar from "./Navbar";
 import { useCart } from "./contexts/CartContext";
 import { useNavigate } from "react-router-dom";
-import { CreditCard, Truck, Shield, CheckCircle, AlertCircle, Loader } from "lucide-react";
+import { CreditCard, Truck, Shield, CheckCircle, AlertCircle, Loader, MapPin, User, Phone, Mail, Lock } from "lucide-react";
+import { apiCall, API_ENDPOINTS } from "./config/apiConfig.js";
 
 function CheckoutPage() {
   const { cart, getCartTotal, clearCart } = useCart();
@@ -85,18 +86,6 @@ function CheckoutPage() {
     return Object.keys(errors).length === 0;
   };
 
-  // Handle next step
-  const handleNextStep = () => {
-    if (validateForm()) {
-      setCurrentStep(prev => prev + 1);
-    }
-  };
-
-  // Handle previous step
-  const handlePrevStep = () => {
-    setCurrentStep(prev => prev - 1);
-  };
-
   // Handle place order
   const handlePlaceOrder = async (e) => {
     e.preventDefault();
@@ -133,27 +122,22 @@ function CheckoutPage() {
       };
 
       // Place order
-      const response = await fetch('http://localhost:5000/api/orders', {
+      const response = await apiCall(API_ENDPOINTS.USER_ORDERS, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify(orderData)
       });
 
-      const result = await response.json();
-
-      if (result.success) {
+      if (response.success) {
         setOrderPlaced(true);
-        setOrderNumber(result.data?.order_number || `ORD-${Date.now()}`);
+        setOrderNumber(response.data?.order_number || `ORD-${Date.now()}`);
         clearCart();
         setMessage("Order placed successfully! 🎉");
         setMessageType("success");
       } else {
-        setMessage(result.message || "Failed to place order");
+        setMessage(response.message || "Failed to place order");
         setMessageType("error");
       }
-    } catch (error) {
+    } catch {
       setMessage("Error placing order. Please try again.");
       setMessageType("error");
     } finally {
@@ -221,7 +205,37 @@ function CheckoutPage() {
       <Navbar />
 
       <div className="max-w-6xl mx-auto p-6">
-        <h1 className="text-3xl font-bold mb-8 text-center">Checkout</h1>
+        <h1 className="text-3xl font-bold mb-8 text-center">Secure Checkout</h1>
+
+        {/* Progress Indicator */}
+        <div className="mb-8">
+          <div className="flex items-center justify-center">
+            <div className="flex items-center space-x-4">
+              <div className={`flex items-center justify-center w-10 h-10 rounded-full ${
+                currentStep >= 1 ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-600'
+              }`}>
+                <User className="w-5 h-5" />
+              </div>
+              <div className={`h-1 w-16 ${currentStep >= 2 ? 'bg-blue-600' : 'bg-gray-300'}`}></div>
+              <div className={`flex items-center justify-center w-10 h-10 rounded-full ${
+                currentStep >= 2 ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-600'
+              }`}>
+                <CreditCard className="w-5 h-5" />
+              </div>
+              <div className={`h-1 w-16 ${currentStep >= 3 ? 'bg-blue-600' : 'bg-gray-300'}`}></div>
+              <div className={`flex items-center justify-center w-10 h-10 rounded-full ${
+                currentStep >= 3 ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-600'
+              }`}>
+                <CheckCircle className="w-5 h-5" />
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-center mt-4 space-x-16 text-sm">
+            <span className={`font-medium ${currentStep >= 1 ? 'text-blue-600' : 'text-gray-500'}`}>Information</span>
+            <span className={`font-medium ${currentStep >= 2 ? 'text-blue-600' : 'text-gray-500'}`}>Payment</span>
+            <span className={`font-medium ${currentStep >= 3 ? 'text-blue-600' : 'text-gray-500'}`}>Confirmation</span>
+          </div>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Order Form */}

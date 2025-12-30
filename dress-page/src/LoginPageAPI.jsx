@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LoginPage.css';
+import { apiCall, API_ENDPOINTS } from './config/apiConfig.js';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -34,13 +35,21 @@ export default function LoginPage() {
     }));
   };
 
-  // Handle register input change
-  const handleRegisterChange = (e) => {
-    const { name, value } = e.target;
-    setRegisterData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+  // Password strength checker
+  const getPasswordStrength = (password) => {
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[a-z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[^A-Za-z0-9]/.test(password)) strength++;
+    return strength;
+  };
+
+  const getPasswordStrengthText = (strength) => {
+    if (strength <= 1) return { text: 'Weak', color: 'text-red-500' };
+    if (strength <= 3) return { text: 'Medium', color: 'text-yellow-500' };
+    return { text: 'Strong', color: 'text-green-500' };
   };
 
   // Login handler
@@ -58,64 +67,30 @@ export default function LoginPage() {
     setMessage('');
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await apiCall(API_ENDPOINTS.LOGIN, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify({
           email: loginData.email,
           password: loginData.password
         })
       });
 
-      const contentType = response.headers.get('content-type') || '';
-      let data = null;
+      const data = await response.json();
 
-      // Parse JSON only when returned
-      if (contentType.includes('application/json')) {
-        data = await response.json();
-      }
-
-      // Handle non-OK responses (401, 400, 500 etc.) with clearer messages
-      if (!response.ok) {
-        setMessageType('error');
-        // Prefer server-sent message when available
-        const serverMsg = data && data.message ? data.message : response.statusText || 'Server error';
-
-        // Map common status codes to friendly messages
-        if (response.status === 401) {
-          setMessage('Invalid credentials. Please check your email and password.');
-        } else if (response.status === 400) {
-          setMessage(serverMsg || 'Invalid request. Please check your input.');
-        } else if (response.status >= 500) {
-          setMessage('Server error. Please try again later.');
-        } else {
-          setMessage(serverMsg || `Login failed (${response.status})`);
-        }
-
-        console.error('Login failed:', response.status, serverMsg);
-        return;
-      }
-
-      // Success path
-      if (data && data.success) {
+      if (data.success) {
         setMessageType('success');
         setMessage('Login successful! Redirecting...');
 
         // Store user data in localStorage
-        if (data.data) {
-          localStorage.setItem('user', JSON.stringify(data.data.user));
-          localStorage.setItem('token', data.data.token);
-        }
+        localStorage.setItem('user', JSON.stringify(data.data.user));
+        localStorage.setItem('token', data.data.token);
 
         setTimeout(() => {
           navigate('/');
         }, 1000);
       } else {
         setMessageType('error');
-        setMessage((data && data.message) || 'Login failed. Please try again.');
-        console.error('Login response:', data);
+        setMessage(data.message || 'Login failed');
       }
     } catch (error) {
       setMessageType('error');
@@ -378,6 +353,19 @@ export default function LoginPage() {
                   required
                   className="form-input"
                 />
+                {registerData.password && (
+                  <div className="password-strength">
+                    <div className="strength-bar">
+                      <div 
+                        className={`strength-fill strength-${getPasswordStrength(registerData.password)}`}
+                        style={{ width: `${(getPasswordStrength(registerData.password) / 5) * 100}%` }}
+                      ></div>
+                    </div>
+                    <span className={`strength-text ${getPasswordStrengthText(getPasswordStrength(registerData.password)).color}`}>
+                      {getPasswordStrengthText(getPasswordStrength(registerData.password)).text}
+                    </span>
+                  </div>
+                )}
                 <div className="password-hint">
                   Passwords must be at least 6 characters.
                 </div>

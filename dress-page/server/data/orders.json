@@ -1,0 +1,22 @@
+[
+  {
+    "id": "ORD001",
+    "customer": "John Doe",
+    "email": "john@example.com",
+    "amount": 12500,
+    "status": "delivered",
+    "date": "2025-12-20",
+    "items": 3,
+    "address": "123 Main St, City"
+  },
+  {
+    "id": "ORD002",
+    "customer": "Jane Smith",
+    "email": "jane@example.com",
+    "amount": 8500,
+    "status": "processing",
+    "date": "2025-12-22",
+    "items": 2,
+    "address": "456 Oak Ave, Town"
+  }
+]

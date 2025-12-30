@@ -41,7 +41,7 @@ function LoginPage() {
   };
 
   /* ---------- SUBMIT ---------- */
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let newErrors = {};
 
@@ -57,10 +57,38 @@ function LoginPage() {
     if (Object.values(newErrors).some(Boolean)) return;
 
     setLoading(true);
-    setTimeout(() => {
+    try {
+      if (method === "email") {
+        const response = await fetch("http://localhost:5000/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          // Store user data and token
+          localStorage.setItem("user", JSON.stringify(data.data.user));
+          localStorage.setItem("token", data.data.token);
+          alert("Login successful! Welcome back.");
+          // Redirect to home or dashboard
+          window.location.href = "/";
+        } else {
+          setErrors({ general: data.message || "Login failed" });
+        }
+      } else {
+        // Handle OTP login - for now, show demo
+        alert("OTP login not implemented yet. Use email login.");
+      }
+    } catch (error) {
+      setErrors({ general: "Network error. Please try again." });
+      console.error("Login error:", error);
+    } finally {
       setLoading(false);
-      alert("Login successful ✅ (Demo)");
-    }, 1500);
+    }
   };
 
   return (
@@ -99,7 +127,7 @@ function LoginPage() {
         {/* ERROR SUMMARY */}
         {Object.values(errors).some(Boolean) && (
           <div className="bg-red-50 border border-red-200 text-red-600 text-sm p-3 rounded mb-5">
-            Please fix the errors below to continue.
+            {errors.general || "Please fix the errors below to continue."}
           </div>
         )}
 

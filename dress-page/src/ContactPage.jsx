@@ -7,7 +7,12 @@ import {
   Clock,
   MessageCircle,
   HelpCircle,
+  Send,
+  CheckCircle,
+  AlertCircle,
+  Loader
 } from "lucide-react";
+import { apiCall, API_ENDPOINTS } from "./config/apiConfig.js";
 
 function ContactPage() {
   const [activeBox, setActiveBox] = useState(null);
@@ -18,30 +23,12 @@ function ContactPage() {
     mobileNumber: "",
     orderId: "",
     issueType: "Order Related Issue",
-    message: ""
+    message: "",
+    priority: "normal"
   });
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
-  const faqs = [
-    {
-      q: "How can I track my order?",
-      a: "Go to Orders > Track Order to see delivery updates.",
-    },
-    {
-      q: "How do I cancel or return an item?",
-      a: "You can cancel before shipping. Returns are available within 7 days.",
-    },
-    {
-      q: "When will my refund be processed?",
-      a: "Refunds are processed within 5–7 business days.",
-    },
-    {
-      q: "Why did my payment fail?",
-      a: "Please check your bank balance or try another payment option.",
-    },
-  ];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -51,6 +38,39 @@ function ContactPage() {
     }));
   };
 
+  const faqs = [
+    {
+      q: "How can I track my order?",
+      a: "Go to Orders > Track Order to see delivery updates. You'll receive SMS and email notifications at every step.",
+      category: "orders"
+    },
+    {
+      q: "How do I cancel or return an item?",
+      a: "You can cancel before shipping from Orders page. Returns are available within 7 days of delivery. Visit Returns & Refunds section.",
+      category: "returns"
+    },
+    {
+      q: "When will my refund be processed?",
+      a: "Refunds are processed within 5–7 business days after approval. You'll receive an email confirmation.",
+      category: "payments"
+    },
+    {
+      q: "Why did my payment fail?",
+      a: "Please check your bank balance, card validity, or try another payment option. Contact your bank if the issue persists.",
+      category: "payments"
+    },
+    {
+      q: "How do I change my delivery address?",
+      a: "Address changes are possible before shipping. Contact us immediately or update in your order details.",
+      category: "shipping"
+    },
+    {
+      q: "Are the products authentic?",
+      a: "Yes, all our products are 100% authentic with manufacturer warranty. We partner with authorized dealers only.",
+      category: "products"
+    },
+  ];
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -58,17 +78,12 @@ function ContactPage() {
     setSuccessMessage("");
 
     try {
-      const response = await fetch("http://localhost:5000/api/contact", {
+      const response = await apiCall(API_ENDPOINTS.CONTACT, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
         body: JSON.stringify(formData)
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (response.success) {
         setSuccessMessage("Thank you! Your message has been submitted successfully. We'll respond within 24 hours.");
         setFormData({
           fullName: "",
@@ -76,11 +91,12 @@ function ContactPage() {
           mobileNumber: "",
           orderId: "",
           issueType: "Order Related Issue",
-          message: ""
+          message: "",
+          priority: "normal"
         });
         setTimeout(() => setSuccessMessage(""), 5000);
       } else {
-        setErrorMessage(data.error || "Failed to submit the form. Please try again.");
+        setErrorMessage(response.message || "Failed to submit the form. Please try again.");
       }
     } catch (error) {
       setErrorMessage("Error submitting form. Please check your connection and try again.");

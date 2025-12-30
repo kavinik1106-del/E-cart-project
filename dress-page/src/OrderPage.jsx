@@ -2,11 +2,15 @@ import React, { useState } from "react";
 import Navbar from "./Navbar.jsx";
 import { Heart, Star, Trash2, Plus, Minus, ShoppingCart, Shield, Truck, RefreshCw } from "lucide-react";
 import { useCart } from "./contexts/CartContext.jsx";
+import { useNavigate } from "react-router-dom";
 
 function OrderPage() {
   const { cart, addToCart, removeFromCart, updateQuantity } = useCart();
+  const navigate = useNavigate();
   const [sortBy, setSortBy] = useState("relevance");
   const [viewMode, setViewMode] = useState("grid");
+  const [loadingStates, setLoadingStates] = useState({});
+  const [addedToCart, setAddedToCart] = useState({});
 
   const products = [
     {
@@ -64,6 +68,26 @@ function OrderPage() {
 
   const savings = totalMRP - total;
   const discountPercent = Math.round((savings / totalMRP) * 100);
+
+  const handleAddToCart = async (product) => {
+    setLoadingStates(prev => ({ ...prev, [product.id]: true }));
+    
+    try {
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      addToCart(product);
+      
+      setAddedToCart(prev => ({ ...prev, [product.id]: true }));
+      setTimeout(() => {
+        setAddedToCart(prev => ({ ...prev, [product.id]: false }));
+      }, 2000);
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    } finally {
+      setLoadingStates(prev => ({ ...prev, [product.id]: false }));
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -205,11 +229,30 @@ function OrderPage() {
 
                     {/* Add to Cart */}
                     <button
-                      onClick={() => addToCart(product)}
-                      className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+                      onClick={() => handleAddToCart(product)}
+                      disabled={loadingStates[product.id]}
+                      className={`w-full py-2 px-4 rounded-lg font-medium transition-all duration-300 flex items-center justify-center gap-2 ${
+                        addedToCart[product.id]
+                          ? "bg-green-600 hover:bg-green-700 text-white"
+                          : "bg-blue-600 hover:bg-blue-700 text-white"
+                      } disabled:opacity-50 disabled:cursor-not-allowed`}
                     >
-                      <ShoppingCart className="w-4 h-4" />
-                      Add to Cart
+                      {loadingStates[product.id] ? (
+                        <>
+                          <Loader className="w-4 h-4 animate-spin" />
+                          Adding...
+                        </>
+                      ) : addedToCart[product.id] ? (
+                        <>
+                          <CheckCircle className="w-4 h-4" />
+                          Added!
+                        </>
+                      ) : (
+                        <>
+                          <ShoppingCart className="w-4 h-4" />
+                          Add to Cart
+                        </>
+                      )}
                     </button>
                   </div>
                 </div>
@@ -334,7 +377,10 @@ function OrderPage() {
                     </div>
 
                     {/* Checkout Button */}
-                    <button className="w-full bg-orange-500 text-white py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors mt-4">
+                    <button 
+                      onClick={() => navigate('/checkout')}
+                      className="w-full bg-orange-500 text-white py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors mt-4"
+                    >
                       Proceed to Checkout
                     </button>
 

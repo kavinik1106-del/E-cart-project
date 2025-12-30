@@ -16,14 +16,13 @@ function AdminLogin() {
     setError("");
     setLoading(true);
 
-    // DEMO AUTH (no backend)
+    // Demo credentials
     setTimeout(() => {
-      if (username.trim() && password.trim()) {
+      if (username === "admin" && password === "admin123") {
         localStorage.setItem("isAdmin", "true");
-        localStorage.setItem("adminUser", username);
         navigate("/admin");
       } else {
-        setError("Please enter username and password");
+        setError("Invalid credentials — try admin / admin123");
       }
       setLoading(false);
     }, 1000);

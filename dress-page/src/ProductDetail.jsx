@@ -424,7 +424,6 @@ function ProductDetail() {
                           </thead>
                           <tbody>
                             {Object.entries(product.quantityGuide).map(([qtyKey, qtyData], idx) => {
-                              const baseWeight = product.quantityGuide[Object.keys(product.quantityGuide)[0]].weight;
                               
                               return (
                                 <tr 

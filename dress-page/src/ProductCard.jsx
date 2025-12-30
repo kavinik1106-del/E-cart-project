@@ -1,16 +1,20 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Heart, Star } from "lucide-react";
+import { Heart, Star, ShoppingCart, Loader2 } from "lucide-react";
 import { useCart } from "./contexts/CartContext.jsx";
 
 function ProductCard({ product, products = [], showRating = false }) {
   const { addToCart, toggleWishlist, isInWishlist } = useCart();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const [isWishlisting, setIsWishlisting] = useState(false);
 
-  const handleQuickAdd = (e) => {
+  const handleQuickAdd = async (e) => {
     e.preventDefault();
     e.stopPropagation();
     
+    setIsLoading(true);
     try {
       // Get default size/quantity
       let size = "M";
@@ -34,133 +38,141 @@ function ProductCard({ product, products = [], showRating = false }) {
       // Navigate to order page after adding to cart
       setTimeout(() => {
         navigate("/order");
-      }, 300);
+        setIsLoading(false);
+      }, 500);
     } catch (error) {
       console.error("Error adding to cart:", error);
+      setIsLoading(false);
       // Still navigate to order page even if error
       navigate("/order");
     }
+  };
+
+  const handleWishlist = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsWishlisting(true);
+    toggleWishlist(product);
+    setTimeout(() => setIsWishlisting(false), 500);
   };
 
   return (
     <Link
       to={`/product/${product.id}`}
       state={{ product, related: products }}
-      className="group block"
+      className="group block transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
     >
-      <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 border border-gray-100 group-hover:border-blue-200">
         {/* Image Container */}
-        <div className="relative h-48 bg-gray-100 flex items-center justify-center overflow-hidden">
+        <div className="relative h-56 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center overflow-hidden">
+          {!imageLoaded && (
+            <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
+              <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+            </div>
+          )}
           <img
             src={product.image}
             alt={product.name}
-            className="h-full object-contain p-3 group-hover:scale-110 transition-transform duration-300"
+            className={`h-full w-full object-contain p-4 transition-all duration-500 group-hover:scale-110 ${
+              imageLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
+            onLoad={() => setImageLoaded(true)}
+            onError={(e) => {
+              e.target.src = '/placeholder.jpg';
+              setImageLoaded(true);
+            }}
           />
 
-          {/* Tag */}
+          {/* Enhanced Tag */}
           {product.tag && (
-            <span className="absolute top-2 left-2 bg-blue-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+            <span className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs px-3 py-1 rounded-full font-bold shadow-lg animate-pulse">
               {product.tag}
             </span>
           )}
 
-          {/* Wishlist Button */}
+          {/* Enhanced Wishlist Button */}
           <button
-            onClick={(e) => {
-              e.preventDefault();
-              toggleWishlist(product);
-            }}
-            className="absolute top-2 right-2 bg-white p-2 rounded-full shadow hover:shadow-md transition"
+            onClick={handleWishlist}
+            disabled={isWishlisting}
+            className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm p-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-white disabled:opacity-50"
           >
-            <Heart
-              size={18}
-              className={isInWishlist(product.id) ? "text-red-600 fill-red-600" : "text-gray-400"}
-            />
+            {isWishlisting ? (
+              <Loader2 className="w-5 h-5 text-gray-400 animate-spin" />
+            ) : (
+              <Heart
+                size={20}
+                className={`transition-all duration-300 ${
+                  isInWishlist(product.id) 
+                    ? "text-red-600 fill-red-600 scale-110" 
+                    : "text-gray-400 hover:text-red-500 hover:scale-110"
+                }`}
+              />
+            )}
           </button>
 
-          {/* Discount Badge */}
+          {/* Enhanced Discount Badge */}
           {product.discount && (
-            <span className="absolute bottom-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full font-semibold">
+            <span className="absolute bottom-3 right-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs px-3 py-1 rounded-full font-bold shadow-lg">
               {product.discount}% OFF
             </span>
           )}
+
+          {/* Quick Add Overlay */}
+          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
+            <button
+              onClick={handleQuickAdd}
+              disabled={isLoading}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full font-semibold transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 shadow-lg hover:shadow-xl disabled:opacity-50 flex items-center gap-2"
+            >
+              {isLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <ShoppingCart className="w-4 h-4" />
+              )}
+              {isLoading ? 'Adding...' : 'Quick Add'}
+            </button>
+          </div>
         </div>
 
         {/* Info Container */}
-        <div className="p-4 space-y-2">
+        <div className="p-3 sm:p-5 space-y-2 sm:space-y-3 bg-gradient-to-b from-white to-gray-50">
           {/* Category/Type */}
-          <div className="text-xs text-blue-600 font-semibold uppercase tracking-wider">
+          <div className="text-xs text-blue-600 font-bold uppercase tracking-wider bg-blue-50 px-2 py-1 rounded-full inline-block">
             {product.type || product.category || product.brand}
           </div>
 
           {/* Product Name */}
-          <h3 className="font-semibold text-sm line-clamp-2 group-hover:text-blue-600">
+          <h3 className="font-bold text-sm sm:text-base line-clamp-2 group-hover:text-blue-700 transition-colors duration-300 leading-tight">
             {product.name}
           </h3>
 
           {/* Rating */}
           {(showRating || product.rating) && (
-            <div className="flex items-center gap-1 text-xs">
-              <Star size={12} className="text-yellow-400 fill-yellow-400" />
-              <span className="font-medium">{product.rating || 4.5}</span>
+            <div className="flex items-center gap-2 text-xs sm:text-sm">
+              <div className="flex items-center gap-1">
+                <Star size={14} className="text-yellow-400 fill-yellow-400" />
+                <span className="font-semibold text-gray-800">{product.rating || 4.5}</span>
+              </div>
               {product.reviews && (
-                <span className="text-gray-500">({product.reviews})</span>
+                <span className="text-gray-500 text-xs">({product.reviews})</span>
               )}
             </div>
           )}
 
-          {/* Color Options */}
-          {product.colors && product.colors.length > 0 && (
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-600">Colors:</span>
-              <div className="flex gap-1">
-                {product.availableColors.slice(0, 4).map((color, index) => (
-                  <div
-                    key={index}
-                    className="w-3 h-3 rounded-full border border-gray-300"
-                    style={{ backgroundColor: color }}
-                    title={product.colors[index]}
-                  ></div>
-                ))}
-                {product.colors.length > 4 && (
-                  <span className="text-xs text-gray-500">+{product.colors.length - 4}</span>
-                )}
-              </div>
-            </div>
-          )}
-
-          {/* Size Range for Dresses/Clothing */}
-          {product.sizeGuide && Object.keys(product.sizeGuide).length > 0 && (
-            <div className="flex items-center gap-2">
-              <span className="text-xs text-gray-600">Sizes:</span>
-              <span className="text-xs text-gray-800 font-medium">
-                {Object.keys(product.sizeGuide)[0]} - {Object.keys(product.sizeGuide)[Object.keys(product.sizeGuide).length - 1]}
-              </span>
-            </div>
-          )}
-
           {/* Price */}
-          <div className="flex items-baseline gap-2">
-            <span className="text-lg font-bold text-blue-600">₹{product.price}</span>
+          <div className="flex items-baseline gap-2 sm:gap-3 pt-2 flex-wrap">
+            <span className="text-lg sm:text-xl font-bold text-blue-700">₹{product.price.toLocaleString()}</span>
             {product.mrp && (
               <>
-                <span className="line-through text-gray-400 text-sm">
-                  ₹{product.mrp}
+                <span className="line-through text-gray-400 text-sm sm:text-base">
+                  ₹{product.mrp.toLocaleString()}
                 </span>
-                <span className="text-xs text-green-600 font-semibold">
+                <span className="text-xs sm:text-sm text-green-600 font-bold bg-green-50 px-2 py-1 rounded-full">
                   {Math.round(((product.mrp - product.price) / product.mrp) * 100)}% OFF
                 </span>
               </>
             )}
           </div>
-
-          {/* Quick Add Button */}
-          <button
-            onClick={handleQuickAdd}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition text-sm font-medium"
-          >
-            Quick Add
-          </button>
         </div>
       </div>
     </Link>
