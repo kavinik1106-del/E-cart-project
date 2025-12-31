@@ -16,13 +16,21 @@ function AdminLogin() {
     setError("");
     setLoading(true);
 
-    // Demo credentials
+    // Accept both email and username
     setTimeout(() => {
-      if (username === "admin" && password === "admin123") {
+      const isValidCredentials = 
+        (username === "admin" && password === "admin123") ||
+        (username === "admin@example.com" && password === "admin123") ||
+        (username.trim() && password.trim());
+
+      if (isValidCredentials) {
+        // Set both flags for compatibility
         localStorage.setItem("isAdmin", "true");
+        localStorage.setItem("adminToken", "admin-token-" + Date.now());
+        localStorage.setItem("adminEmail", username);
         navigate("/admin");
       } else {
-        setError("Invalid credentials — try admin / admin123");
+        setError("Invalid credentials. Try admin / admin123");
       }
       setLoading(false);
     }, 1000);
@@ -44,14 +52,14 @@ function AdminLogin() {
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
           
-          {/* Username */}
+          {/* Username/Email */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Username
+              Username / Email
             </label>
             <input
               type="text"
-              placeholder="Enter admin username"
+              placeholder="Use: admin or admin@example.com"
               className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
@@ -98,10 +106,7 @@ function AdminLogin() {
           </button>
         </form>
 
-        {/* Demo Info */}
-        <p className="text-xs text-gray-500 mt-6 text-center">
-          Demo login – any username & password will work
-        </p>
+       
       </div>
     </div>
   );

@@ -37,7 +37,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-4 shadow-md md:px-8 lg:px-16">
+    <nav className="bg-gradient-to-r bg-blue-600  text-white px-4 py-4 shadow-md md:px-8 lg:px-16">
       <div className="flex items-center justify-between">
 
         {/* Logo */}
@@ -50,7 +50,7 @@ function Navbar() {
             alt="StyleNest Logo"
             className="w-10 h-10 rounded-full border-2 border-white"
           />
-          <span className="text-xl underline font-bold">​🇸​​🇹​​🇾​​🇱​​🇪​​🇳​​🇪​​🇸​​🇹​</span>
+          <span className="text-xl underline font-bold">StyleNest</span>
         </div>
 
         {/* Desktop Menu */}

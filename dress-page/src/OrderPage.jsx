@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "./Navbar.jsx";
-import { Heart, Star, Trash2, Plus, Minus, ShoppingCart, Shield, Truck, RefreshCw } from "lucide-react";
+import { Heart, Star, Trash2, Plus, Minus, ShoppingCart, Shield, Truck, RefreshCw, Loader, CheckCircle } from "lucide-react";
 import { useCart } from "./contexts/CartContext.jsx";
 import { useNavigate } from "react-router-dom";
 
