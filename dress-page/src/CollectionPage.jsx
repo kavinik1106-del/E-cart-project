@@ -102,12 +102,6 @@ function CollectionPage() {
     { id: 60, name: "Portable Speaker Bluetooth", price: 3999, mrp: 5999, image: "/noicehead.jpg", rating: 4.6, reviews: 278, category: "electronics", brand: "Sony", discount: 33 },
   ];
 
-<<<<<<< HEAD
-  /* ---------- STATE ---------- */
-  const Navigate = useNavigate();
-  const { addToCart, removeFromCart, cart } = useCart();
-  const [wishlist, setWishlist] = useState([]);
-=======
   /* ---------- FILTER & SORT ---------- */
   const filteredProducts = allProducts.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -116,7 +110,6 @@ function CollectionPage() {
     const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1];
     return matchesSearch && matchesCategory && matchesPrice;
   });
->>>>>>> ac8a25616de1518c8cff0a7f4052b48a54055f3f
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     if (sortBy === "price-low") return a.price - b.price;
