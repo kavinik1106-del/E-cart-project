@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { TrendingUp, Users, Package, ShoppingCart, Eye, DollarSign } from "lucide-react";
+import { Navigate } from "react-router-dom";
+import { TrendingUp, Users, Package, ShoppingCart, Eye, DollarSign } from "lucide-react"; 
 
 const StatCard = ({ icon: IconComponent, title, value, color, trend }) => (
   <div className="bg-white rounded-lg shadow-md p-6 border-l-4" style={{ borderColor: color }}>
