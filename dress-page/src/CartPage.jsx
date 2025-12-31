@@ -60,7 +60,7 @@ function CartPage() {
 
                     <div className="flex-1">
                       <h4 className="font-semibold text-lg">{item.name}</h4>
-                      <p className="text-blue-600 font-bold text-xl">{item.price}</p>
+                      <p className="text-blue-600 font-bold text-xl">₹{item.price.toLocaleString('en-IN')}</p>
                       
                       {/* Size and Color if available */}
                       {(item.size || item.color) && (
@@ -121,7 +121,7 @@ function CartPage() {
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between">
                     <span>Items ({getCartCount()}):</span>
-                    <span>₹{getCartTotal().toFixed(2)}</span>
+                    <span>₹{getCartTotal().toLocaleString('en-IN')}</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Shipping:</span>
@@ -129,12 +129,12 @@ function CartPage() {
                   </div>
                   <div className="flex justify-between">
                     <span>Tax:</span>
-                    <span>₹{(getCartTotal() * 0.18).toFixed(2)}</span>
+                    <span>₹{(getCartTotal() * 0.18).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                   </div>
                   <hr className="my-2" />
                   <div className="flex justify-between font-bold text-lg">
                     <span>Total:</span>
-                    <span>₹{(getCartTotal() * 1.18).toFixed(2)}</span>
+                    <span>₹{(getCartTotal() * 1.18).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                   </div>
                 </div>
 

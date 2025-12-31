@@ -38,6 +38,9 @@ export const CartProvider = ({ children }) => {
   }, [wishlist]);
 
   const addToCart = (product, quantity = 1, size = "M", color = "Default") => {
+    const numericPrice = isNaN(parseFloat(product.price)) ? 0 : parseFloat(product.price);
+    const numericMRP = isNaN(parseFloat(product.mrp)) ? numericPrice : parseFloat(product.mrp);
+    const productWithNumericPrice = { ...product, price: numericPrice, mrp: numericMRP };
     setCart((prev) => {
       const existing = prev.find(
         (item) => item.id === product.id && item.size === size && item.color === color
@@ -49,7 +52,7 @@ export const CartProvider = ({ children }) => {
             : item
         );
       }
-      return [...prev, { ...product, quantity, size, color }];
+      return [...prev, { ...productWithNumericPrice, quantity, size, color }];
     });
   };
 
@@ -96,7 +99,7 @@ export const CartProvider = ({ children }) => {
   };
 
   const getCartTotal = () => {
-    return cart.reduce((sum, item) => sum + (item.price || 0) * item.quantity, 0);
+    return cart.reduce((sum, item) => sum + (parseFloat(item.price) || 0) * item.quantity, 0);
   };
 
   const getCartCount = () => {
