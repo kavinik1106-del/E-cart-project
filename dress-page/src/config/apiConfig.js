@@ -62,3 +62,19 @@ export const apiCall = async (url, options = {}) => {
     throw error;
   }
 };
+
+
+// export const USER_API_BASE_URL =
+//   "http://localhost:5000/api";
+
+// export const ADMIN_API_BASE_URL =
+//   "http://localhost:5001/api";
+
+// export const API_ENDPOINTS = {
+//   // USER
+//   PRODUCTS: `${USER_API_BASE_URL}/products`,
+//   PRODUCT: (id) => `${USER_API_BASE_URL}/products/${id}`,
+
+//   // ADMIN (use later)
+//   ADMIN_PRODUCTS: `${ADMIN_API_BASE_URL}/products`,
+// };
