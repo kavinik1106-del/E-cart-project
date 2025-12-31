@@ -420,7 +420,7 @@ function CheckoutPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-all duration-200"
+                className="w-full bg-yellow-500 text-white py-4 rounded-lg font-semibold hover:bg-yellow-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-all duration-200"
               >
                 {loading ? (
                   <>
@@ -428,7 +428,7 @@ function CheckoutPage() {
                     Placing Order...
                   </>
                 ) : (
-                  `Place Order - ₹${total.toFixed(2)}`
+                  `Place Order - ₹${total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
                 )}
               </button>
 
@@ -476,22 +476,22 @@ function CheckoutPage() {
             <div className="border-t pt-4 space-y-2">
               <div className="flex justify-between">
                 <span>Subtotal:</span>
-                <span>₹{subtotal.toFixed(2)}</span>
+                <span>₹{subtotal.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
               </div>
               <div className="flex justify-between">
                 <span>Tax (18%):</span>
-                <span>₹{tax.toFixed(2)}</span>
+                <span>₹{tax.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
               </div>
               <div className="flex justify-between">
                 <span>Shipping:</span>
                 <span className={shipping === 0 ? "text-green-600" : ""}>
-                  {shipping === 0 ? "FREE" : `₹${shipping}`}
+                  {shipping === 0 ? "FREE" : `₹${shipping.toLocaleString('en-IN')}`}
                 </span>
               </div>
               <hr className="my-2" />
               <div className="flex justify-between font-bold text-lg">
                 <span>Total:</span>
-                <span>₹{total.toFixed(2)}</span>
+                <span>₹{total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
               </div>
             </div>
           </div>
