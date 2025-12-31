@@ -1,48 +1,158 @@
-import React from "react";
+import React, { useState, useMemo } from "react";
 import Navbar from "./Navbar.jsx";
-import ProductCard from "./components/ProductCard.jsx";
-import { vegetableProducts } from "./data/vegetableProducts.js";
+import ProductCard from "./ProductCard.jsx";
+import PRODUCTS from "./data/products.js";
+import { Filter, Grid, List } from "lucide-react";
 
 function Vegetables() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("popularity");
+  const [priceRange, setPriceRange] = useState([0, 500]);
+  const [viewMode, setViewMode] = useState("grid");
+
+  const products = PRODUCTS.vegetables;
+
+  const filteredProducts = useMemo(() => {
+    let filtered = products.filter((product) => {
+      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1];
+      return matchesSearch && matchesPrice;
+    });
+
+    if (sortBy === "price-low") {
+      filtered.sort((a, b) => a.price - b.price);
+    } else if (sortBy === "price-high") {
+      filtered.sort((a, b) => b.price - a.price);
+    } else if (sortBy === "rating") {
+      filtered.sort((a, b) => b.rating - a.rating);
+    }
+
+    return filtered;
+  }, [searchTerm, sortBy, priceRange]);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50">
+    <div className="bg-gray-100 min-h-screen pt-48">
       <Navbar />
 
-      {/* Header Banner */}
-      <div className="max-w-6xl mx-auto mt-6 px-4">
-        <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-2xl p-8 text-center shadow-lg">
-          <h1 className="text-4xl font-bold mb-2">Fresh & Organic</h1>
-          <p className="text-green-100">Farm fresh vegetables and authentic Indian spices delivered daily</p>
+      <div className="bg-white shadow-sm mb-6">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <h1 className="text-3xl font-bold text-gray-800 mb-2">Fresh Vegetables</h1>
+          <p className="text-gray-600">Farm Fresh Vegetables Delivered to Your Door</p>
         </div>
       </div>
 
-      {/* Filter & Sort Bar */}
-      <div className="max-w-6xl mx-auto px-4 py-6 flex gap-4 justify-between items-center">
-        <div className="text-sm text-gray-600">
-          Showing <span className="font-semibold">{vegetableProducts.length}</span> products
-        </div>
-        <select className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-green-500 focus:border-transparent">
-          <option>Sort by: Recommended</option>
-          <option>Price: Low to High</option>
-          <option>Price: High to Low</option>
-          <option>Best Ratings</option>
-          <option>Freshest</option>
-        </select>
-      </div>
+      <div className="max-w-7xl mx-auto px-4 pb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-lg shadow-md p-6 sticky top-48">
+              <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <Filter size={20} /> Filters
+              </h3>
 
-      {/* Products Grid */}
-      <main className="max-w-6xl mx-auto px-4 pb-12">
-        <section className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
-          {vegetableProducts.map((product) => (
-            <ProductCard 
-              key={product.id} 
-              product={product} 
-              products={vegetableProducts}
-              showRating={true}
-            />
-          ))}
-        </section>
-      </main>
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Search</label>
+                <input
+                  type="text"
+                  placeholder="Search vegetables..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+
+              <div className="mb-6 pb-6 border-b">
+                <label className="block text-sm font-semibold text-gray-700 mb-3">Price Range</label>
+                <div className="flex gap-2 mb-2">
+                  <input
+                    type="number"
+                    placeholder="Min"
+                    value={priceRange[0]}
+                    onChange={(e) => setPriceRange([parseInt(e.target.value) || 0, priceRange[1]])}
+                    className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                  />
+                  <input
+                    type="number"
+                    placeholder="Max"
+                    value={priceRange[1]}
+                    onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value) || 500])}
+                    className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                  />
+                </div>
+                <p className="text-xs text-gray-600">₹{priceRange[0]} - ₹{priceRange[1]}</p>
+              </div>
+
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-gray-700 mb-3">Freshness</label>
+                <div className="space-y-2">
+                  {["Very Fresh (Today)", "Fresh (1-2 days)", "Slightly Old (3-4 days)"].map((freshness) => (
+                    <label key={freshness} className="flex items-center gap-2 cursor-pointer">
+                      <input type="checkbox" className="rounded" />
+                      <span className="text-sm text-gray-700">{freshness}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-sm font-semibold text-gray-700 mb-3">Type</label>
+                <div className="space-y-2">
+                  {["Leafy Greens", "Root Vegetables", "Cruciferous", "Nightshade"].map((type) => (
+                    <label key={type} className="flex items-center gap-2 cursor-pointer text-sm">
+                      <input type="checkbox" className="rounded" />
+                      <span className="text-gray-700">{type}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-3">
+            <div className="bg-white rounded-lg shadow-md p-4 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="text-sm text-gray-600">Showing {filteredProducts.length} products</div>
+              <div className="flex items-center gap-4">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                >
+                  <option value="popularity">Popularity</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="rating">Highest Rating</option>
+                </select>
+                <div className="flex border border-gray-300 rounded-lg">
+                  <button
+                    onClick={() => setViewMode("grid")}
+                    className={`p-2 ${viewMode === "grid" ? "bg-blue-100 text-blue-600" : "text-gray-600"}`}
+                  >
+                    <Grid size={20} />
+                  </button>
+                  <button
+                    onClick={() => setViewMode("list")}
+                    className={`p-2 ${viewMode === "list" ? "bg-blue-100 text-blue-600" : "text-gray-600"}`}
+                  >
+                    <List size={20} />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {filteredProducts.length > 0 ? (
+              <div className={viewMode === "grid" ? "grid grid-cols-2 sm:grid-cols-3 gap-4" : "space-y-4"}>
+                {filteredProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} showRating={true} />
+                ))}
+              </div>
+            ) : (
+              <div className="bg-white rounded-lg shadow-md p-12 text-center">
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">No vegetables found</h3>
+                <p className="text-gray-600">Try adjusting your filters</p>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

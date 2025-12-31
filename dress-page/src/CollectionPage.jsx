@@ -1,1184 +1,202 @@
-
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import Navbar from "./Navbar.jsx";
 import ProductCard from "./ProductCard.jsx";
-import {
-  SlidersHorizontal,
-  ChevronDown,
-  ChevronUp,
-  ChevronLeft,
-  ChevronRight,
-  Star,
-  Truck,
-  X,
-  Search,
-  Filter,
-  Grid3X3,
-  List,
-  Sparkles,
-  Award,
-  Zap,
-  TrendingUp,
-} from "lucide-react";
+import PRODUCTS from "./data/products.js";
+import { Filter, Grid, List, ChevronDown } from "lucide-react";
 
 function CollectionPage() {
-  /* ---------- STATE ---------- */
-  const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("popularity");
+  const [selectedCategory, setSelectedCategory] = useState("all");
   const [priceRange, setPriceRange] = useState([0, 200000]);
-  const [sortBy, setSortBy] = useState("newest");
-  const [showFilters, setShowFilters] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [viewMode, setViewMode] = useState("grid"); // grid or list
-  const [isLoading, setIsLoading] = useState(false);
-  const itemsPerPage = 12;
-  const scrollRef = useRef(null);
-  const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [viewMode, setViewMode] = useState("grid");
 
-  /* ---------- CATEGORIES ---------- */
-  const categories = [
-    {
-      id: "electronics",
-      name: "Electronics",
-      image: "/mobile.jpg",
-      count: 245,
-    },
-    { id: "women", name: "Women Dresses", image: "/dress1.webp", count: 189 },
-    { id: "men", name: "Men Dresses", image: "/men2.jpg", count: 156 },
-    { id: "vegetables", name: "Vegetables", image: "/veg2.webp", count: 98 },
-    { id: "home", name: "Home Appliances", image: "/OIP (1).jpg", count: 134 },
-    { id: "kids", name: "Kids Wear", image: "/OIP (1).webp", count: 87 },
-    { id: "footwear", name: "Footwear", image: "/OIP (2).webp", count: 203 },
-    { id: "accessories", name: "Accessories", image: "/acces.jpg", count: 167 },
-  ];
-
-  /* ---------- PRODUCTS ---------- */
+  // Get all products from all categories
   const allProducts = [
-    {
-      id: 1,
-      name: "Premium Double Door Fridge",
-      price: 18999,
-      mrp: 22999,
-      image: "/doubledoorfringe.avif",
-      rating: 4.4,
-      reviews: 234,
-      category: "home",
-      brand: "Samsung",
-      discount: 15,
-    },
-    {
-      id: 2,
-      name: "Premium Cashew Nuts 500g",
-      price: 699,
-      mrp: 899,
-      image: "/cashew.webp",
-      rating: 4.2,
-      reviews: 156,
-      category: "vegetables",
-      brand: "NutriLife",
-      discount: 22,
-    },
-    {
-      id: 3,
-      name: "Luxury Blue Sofa Set",
-      price: 14999,
-      mrp: 18999,
-      image: "/bluesofa.webp",
-      rating: 4.5,
-      reviews: 89,
-      category: "home",
-      brand: "Ikea",
-      discount: 21,
-    },
-    {
-      id: 4,
-      name: "Designer Red Kurta",
-      price: 1299,
-      mrp: 1799,
-      image: "/dress1.webp",
-      rating: 4.1,
-      reviews: 67,
-      category: "women",
-      brand: "FabIndia",
-      discount: 28,
-    },
-    {
-      id: 5,
-      name: "Modern Sofa Chair",
-      price: 9999,
-      mrp: 12999,
-      image: "/sofa.webp",
-      rating: 4.3,
-      reviews: 123,
-      category: "home",
-      brand: "Godrej",
-      discount: 23,
-    },
-    {
-      id: 6,
-      name: "iPhone 15 Pro Max",
-      price: 12499,
-      mrp: 13999,
-      image: "/mobile.jpg",
-      rating: 4.6,
-      reviews: 445,
-      category: "electronics",
-      brand: "Apple",
-      discount: 11,
-    },
-    {
-      id: 7,
-      name: "Organic Dates 1kg",
-      price: 399,
-      mrp: 499,
-      image: "/dates.jpg",
-      rating: 4.0,
-      reviews: 78,
-      category: "vegetables",
-      brand: "Organic Farms",
-      discount: 20,
-    },
-    {
-      id: 8,
-      name: "Silk Wedding Saree",
-      price: 1899,
-      mrp: 2499,
-      image: "/saree2.jpg",
-      rating: 4.3,
-      reviews: 156,
-      category: "women",
-      brand: "Kanchipuram",
-      discount: 24,
-    },
-    {
-      id: 9,
-      name: "Apple Watch Series 9",
-      price: 2999,
-      mrp: 3499,
-      image: "/smartwatch.webp",
-      rating: 4.7,
-      reviews: 312,
-      category: "electronics",
-      brand: "Apple",
-      discount: 14,
-    },
-    {
-      id: 10,
-      name: "Cotton Kurta Set",
-      price: 1599,
-      mrp: 1999,
-      image: "/dress3.webp",
-      rating: 4.2,
-      reviews: 98,
-      category: "men",
-      brand: "Raymond",
-      discount: 20,
-    },
-    {
-      id: 11,
-      name: 'MacBook Pro 16"',
-      price: 199999,
-      mrp: 229999,
-      image: "/laptop.webp",
-      rating: 4.8,
-      reviews: 67,
-      category: "electronics",
-      brand: "Apple",
-      discount: 13,
-    },
-    {
-      id: 12,
-      name: "Nike Air Max Shoes",
-      price: 8999,
-      mrp: 11999,
-      image: "/footk.jpg",
-      rating: 4.5,
-      reviews: 234,
-      category: "footwear",
-      brand: "Nike",
-      discount: 25,
-    },
-    {
-      id: 13,
-      name: 'Samsung 4K TV 55"',
-      price: 45999,
-      mrp: 54999,
-      image: "/OIP (4).webp",
-      rating: 4.6,
-      reviews: 189,
-      category: "electronics",
-      brand: "Samsung",
-      discount: 16,
-    },
-    {
-      id: 14,
-      name: "Designer Kurta",
-      price: 15999,
-      mrp: 19999,
-      image: "/blue.webp",
-      rating: 4.7,
-      reviews: 145,
-      category: "women",
-      brand: "Manish Malhotra",
-      discount: 20,
-    },
-    {
-      id: 15,
-      name: "Coffee Maker",
-      price: 3499,
-      mrp: 4499,
-      image: "/OIP (5).webp",
-      rating: 4.3,
-      reviews: 87,
-      category: "home",
-      brand: "Philips",
-      discount: 22,
-    },
-    {
-      id: 16,
-      name: "Wireless Headphones",
-      price: 4999,
-      mrp: 6999,
-      image: "/noicehead.jpg",
-      rating: 4.4,
-      reviews: 203,
-      category: "electronics",
-      brand: "Sony",
-      discount: 28,
-    },
-    {
-      id: 17,
-      name: "Wooden Dining Table",
-      price: 12999,
-      mrp: 16999,
-      image: "/plates.jpg",
-      rating: 4.6,
-      reviews: 112,
-      category: "home",
-      brand: "Hometown",
-      discount: 24,
-    },
-    {
-      id: 18,
-      name: "Men's Formal Shirt",
-      price: 899,
-      mrp: 1299,
-      image: "/sherwa.webp",
-      rating: 4.2,
-      reviews: 156,
-      category: "men",
-      brand: "Celio",
-      discount: 31,
-    },
-    {
-      id: 19,
-      name: "Women's Sports Shoes",
-      price: 3499,
-      mrp: 4999,
-      image: "/footw.jpg",
-      rating: 4.5,
-      reviews: 178,
-      category: "footwear",
-      brand: "Puma",
-      discount: 30,
-    },
-    {
-      id: 20,
-      name: "Organic Spices Mix",
-      price: 249,
-      mrp: 399,
-      image: "/masala.webp",
-      rating: 4.3,
-      reviews: 67,
-      category: "vegetables",
-      brand: "NatureLeaf",
-      discount: 38,
-    },
-    {
-      id: 21,
-      name: "Kids Clothing Set",
-      price: 699,
-      mrp: 999,
-      image: "/kid1.webp",
-      rating: 4.4,
-      reviews: 89,
-      category: "kids",
-      brand: "PlayKids",
-      discount: 30,
-    },
-    {
-      id: 22,
-      name: "Gold Bracelet",
-      price: 2999,
-      mrp: 4999,
-      image: "/bracelet.webp",
-      rating: 4.6,
-      reviews: 234,
-      category: "accessories",
-      brand: "Tanishq",
-      discount: 40,
-    },
-    {
-      id: 23,
-      name: "Wall Clock",
-      price: 599,
-      mrp: 899,
-      image: "/desklamp.jpg",
-      rating: 4.2,
-      reviews: 123,
-      category: "home",
-      brand: "Modern Decor",
-      discount: 33,
-    },
-    {
-      id: 24,
-      name: "Denim Jeans",
-      price: 1199,
-      mrp: 1799,
-      image: "/denim.webp",
-      rating: 4.3,
-      reviews: 198,
-      category: "men",
-      brand: "Levi's",
-      discount: 33,
-    },
-    {
-      id: 25,
-      name: "Flower Pot Set",
-      price: 799,
-      mrp: 1199,
-      image: "/flower.webp",
-      rating: 4.5,
-      reviews: 76,
-      category: "home",
-      brand: "GreenHome",
-      discount: 33,
-    },
-    {
-      id: 26,
-      name: "Keyboard & Mouse",
-      price: 1599,
-      mrp: 2499,
-      image: "/keyboard.jpg",
-      rating: 4.4,
-      reviews: 145,
-      category: "electronics",
-      brand: "Logitech",
-      discount: 36,
-    },
-    {
-      id: 27,
-      name: "Red Saree",
-      price: 2499,
-      mrp: 3999,
-      image: "/redsaree.jpg",
-      rating: 4.6,
-      reviews: 267,
-      category: "women",
-      brand: "Silk Saree",
-      discount: 37,
-    },
-    {
-      id: 28,
-      name: "Electric Fan",
-      price: 1299,
-      mrp: 1899,
-      image: "/fan.jpg",
-      rating: 4.3,
-      reviews: 134,
-      category: "home",
-      brand: "Usha",
-      discount: 31,
-    },
-    {
-      id: 29,
-      name: "Hair Clip Set",
-      price: 349,
-      mrp: 599,
-      image: "/hairclip.jpg",
-      rating: 4.4,
-      reviews: 87,
-      category: "accessories",
-      brand: "HairStyle",
-      discount: 42,
-    },
-    {
-      id: 30,
-      name: "Walnuts 250g",
-      price: 299,
-      mrp: 499,
-      image: "/walnut.jpg",
-      rating: 4.5,
-      reviews: 156,
-      category: "vegetables",
-      brand: "NutriLife",
-      discount: 40,
-    },
-    {
-      id: 31,
-      name: "Black Formal Saree",
-      price: 3499,
-      mrp: 4999,
-      image: "/redsaree.jpg",
-      rating: 4.5,
-      reviews: 178,
-      category: "women",
-      brand: "Silk Saree",
-      discount: 30,
-    },
-    {
-      id: 32,
-      name: "Studio Headphones Pro",
-      price: 7999,
-      mrp: 11999,
-      image: "/noicehead.jpg",
-      rating: 4.7,
-      reviews: 298,
-      category: "electronics",
-      brand: "Sony",
-      discount: 33,
-    },
-    {
-      id: 33,
-      name: "Smart Watch Ultra",
-      price: 19999,
-      mrp: 29999,
-      image: "/smartwatch.webp",
-      rating: 4.6,
-      reviews: 267,
-      category: "electronics",
-      brand: "Samsung",
-      discount: 33,
-    },
-    {
-      id: 34,
-      name: "Premium Almond Oil",
-      price: 599,
-      mrp: 899,
-      image: "/cashew.webp",
-      rating: 4.4,
-      reviews: 145,
-      category: "vegetables",
-      brand: "NutriLife",
-      discount: 33,
-    },
-    {
-      id: 35,
-      name: "Casual T-Shirt Men",
-      price: 599,
-      mrp: 999,
-      image: "/sherwa.webp",
-      rating: 4.3,
-      reviews: 124,
-      category: "men",
-      brand: "Celio",
-      discount: 40,
-    },
-    {
-      id: 36,
-      name: "Running Shoes Women",
-      price: 4999,
-      mrp: 7499,
-      image: "/footw.jpg",
-      rating: 4.6,
-      reviews: 203,
-      category: "footwear",
-      brand: "Puma",
-      discount: 33,
-    },
-    {
-      id: 37,
-      name: "LED Table Lamp",
-      price: 1299,
-      mrp: 1999,
-      image: "/desklamp.jpg",
-      rating: 4.4,
-      reviews: 98,
-      category: "home",
-      brand: "Modern Decor",
-      discount: 35,
-    },
-    {
-      id: 38,
-      name: "Silk Scarf Set",
-      price: 799,
-      mrp: 1299,
-      image: "/bracelet.webp",
-      rating: 4.5,
-      reviews: 87,
-      category: "accessories",
-      brand: "Tanishq",
-      discount: 38,
-    },
-    {
-      id: 39,
-      name: "Kids Winter Jacket",
-      price: 1499,
-      mrp: 2299,
-      image: "/kid1.webp",
-      rating: 4.3,
-      reviews: 76,
-      category: "kids",
-      brand: "PlayKids",
-      discount: 35,
-    },
-    {
-      id: 40,
-      name: "Organic Honey 500ml",
-      price: 449,
-      mrp: 699,
-      image: "/masala.webp",
-      rating: 4.5,
-      reviews: 156,
-      category: "vegetables",
-      brand: "NatureLeaf",
-      discount: 36,
-    },
-    {
-      id: 41,
-      name: "Premium Bed Sheet Set",
-      price: 2499,
-      mrp: 3999,
-      image: "/flower.webp",
-      rating: 4.4,
-      reviews: 134,
-      category: "home",
-      brand: "Hometown",
-      discount: 37,
-    },
-    {
-      id: 42,
-      name: "Camera HD 4K",
-      price: 35999,
-      mrp: 49999,
-      image: "/OIP (4).webp",
-      rating: 4.7,
-      reviews: 289,
-      category: "electronics",
-      brand: "Samsung",
-      discount: 28,
-    },
-    {
-      id: 43,
-      name: "Women's Lehenga",
-      price: 4999,
-      mrp: 7499,
-      image: "/dress1.webp",
-      rating: 4.5,
-      reviews: 201,
-      category: "women",
-      brand: "FabIndia",
-      discount: 33,
-    },
-    {
-      id: 44,
-      name: "Men's Blazer",
-      price: 5499,
-      mrp: 8999,
-      image: "/sherwa.webp",
-      rating: 4.4,
-      reviews: 167,
-      category: "men",
-      brand: "Celio",
-      discount: 39,
-    },
-    {
-      id: 45,
-      name: "Casual Canvas Shoes",
-      price: 1999,
-      mrp: 3499,
-      image: "/footk.jpg",
-      rating: 4.6,
-      reviews: 245,
-      category: "footwear",
-      brand: "Nike",
-      discount: 43,
-    },
-    {
-      id: 46,
-      name: "Decorative Mirror",
-      price: 1999,
-      mrp: 2999,
-      image: "/desklamp.jpg",
-      rating: 4.3,
-      reviews: 112,
-      category: "home",
-      brand: "Modern Decor",
-      discount: 33,
-    },
-    {
-      id: 47,
-      name: "Pearl Necklace Set",
-      price: 3999,
-      mrp: 5999,
-      image: "/bracelet.webp",
-      rating: 4.6,
-      reviews: 198,
-      category: "accessories",
-      brand: "Tanishq",
-      discount: 33,
-    },
-    {
-      id: 48,
-      name: "Kids Books Collection",
-      price: 599,
-      mrp: 999,
-      image: "/kid1.webp",
-      rating: 4.4,
-      reviews: 89,
-      category: "kids",
-      brand: "PlayKids",
-      discount: 40,
-    },
-    {
-      id: 49,
-      name: "Organic Tea Mix",
-      price: 399,
-      mrp: 599,
-      image: "/masala.webp",
-      rating: 4.5,
-      reviews: 134,
-      category: "vegetables",
-      brand: "NatureLeaf",
-      discount: 33,
-    },
-    {
-      id: 50,
-      name: "Cushion Set 4 Pcs",
-      price: 2299,
-      mrp: 3499,
-      image: "/flower.webp",
-      rating: 4.3,
-      reviews: 101,
-      category: "home",
-      brand: "GreenHome",
-      discount: 34,
-    },
-    {
-      id: 51,
-      name: "iPhone 15 Pro",
-      price: 11499,
-      mrp: 12999,
-      image: "/mobile.jpg",
-      rating: 4.7,
-      reviews: 512,
-      category: "electronics",
-      brand: "Apple",
-      discount: 12,
-    },
-    {
-      id: 52,
-      name: "Salwar Kameez Set",
-      price: 1999,
-      mrp: 2999,
-      image: "/dress1.webp",
-      rating: 4.4,
-      reviews: 143,
-      category: "women",
-      brand: "FabIndia",
-      discount: 33,
-    },
-    {
-      id: 53,
-      name: "Cotton Shirt Bundle",
-      price: 2999,
-      mrp: 4499,
-      image: "/sherwa.webp",
-      rating: 4.3,
-      reviews: 178,
-      category: "men",
-      brand: "Celio",
-      discount: 33,
-    },
-    {
-      id: 54,
-      name: "Sports Sneakers",
-      price: 2999,
-      mrp: 4999,
-      image: "/footw.jpg",
-      rating: 4.5,
-      reviews: 212,
-      category: "footwear",
-      brand: "Puma",
-      discount: 40,
-    },
-    {
-      id: 55,
-      name: "Night Lamp Ambient",
-      price: 1899,
-      mrp: 2999,
-      image: "/desklamp.jpg",
-      rating: 4.4,
-      reviews: 156,
-      category: "home",
-      brand: "Modern Decor",
-      discount: 37,
-    },
-    {
-      id: 56,
-      name: "Handbag Sling",
-      price: 1299,
-      mrp: 1999,
-      image: "/bracelet.webp",
-      rating: 4.3,
-      reviews: 98,
-      category: "accessories",
-      brand: "HairStyle",
-      discount: 35,
-    },
-    {
-      id: 57,
-      name: "Kids Shoes Casual",
-      price: 999,
-      mrp: 1599,
-      image: "/kid1.webp",
-      rating: 4.4,
-      reviews: 112,
-      category: "kids",
-      brand: "PlayKids",
-      discount: 38,
-    },
-    {
-      id: 58,
-      name: "Dry Fruits Mix 1kg",
-      price: 1099,
-      mrp: 1699,
-      image: "/walnut.jpg",
-      rating: 4.5,
-      reviews: 189,
-      category: "vegetables",
-      brand: "NutriLife",
-      discount: 35,
-    },
-    {
-      id: 59,
-      name: "Outdoor Picnic Set",
-      price: 3499,
-      mrp: 5499,
-      image: "/plates.jpg",
-      rating: 4.4,
-      reviews: 134,
-      category: "home",
-      brand: "Hometown",
-      discount: 36,
-    },
-    {
-      id: 60,
-      name: "Portable Speaker Bluetooth",
-      price: 3999,
-      mrp: 5999,
-      image: "/noicehead.jpg",
-      rating: 4.6,
-      reviews: 278,
-      category: "electronics",
-      brand: "Sony",
-      discount: 33,
-    },
+    ...PRODUCTS.electronics,
+    ...PRODUCTS.fashion,
+    ...PRODUCTS.mensWear,
+    ...PRODUCTS.footwear,
+    ...PRODUCTS.accessories,
+    ...PRODUCTS.home,
+    ...PRODUCTS.bicycles,
+    ...PRODUCTS.kidsWear,
+    ...PRODUCTS.vegetables,
   ];
 
-  /* ---------- FILTER & SORT ---------- */
-  const filteredProducts = allProducts.filter((product) => {
-    const matchesSearch =
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.brand.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory =
-      selectedCategory === "all" || product.category === selectedCategory;
-    const matchesPrice =
-      product.price >= priceRange[0] && product.price <= priceRange[1];
-    return matchesSearch && matchesCategory && matchesPrice;
-  });
+  const categories = [
+    { id: "all", name: "All Products", count: allProducts.length },
+    { id: "electronics", name: "Electronics", count: PRODUCTS.electronics.length },
+    { id: "fashion", name: "Women Fashion", count: PRODUCTS.fashion.length },
+    { id: "mensWear", name: "Men Fashion", count: PRODUCTS.mensWear.length },
+    { id: "footwear", name: "Footwear", count: PRODUCTS.footwear.length },
+    { id: "accessories", name: "Accessories", count: PRODUCTS.accessories.length },
+    { id: "home", name: "Home & Furniture", count: PRODUCTS.home.length },
+    { id: "bicycles", name: "Bicycles & Sports", count: PRODUCTS.bicycles.length },
+    { id: "kidsWear", name: "Kids Fashion", count: PRODUCTS.kidsWear.length },
+    { id: "vegetables", name: "Vegetables", count: PRODUCTS.vegetables.length },
+  ];
 
-  const sortedProducts = [...filteredProducts].sort((a, b) => {
-    if (sortBy === "price-low") return a.price - b.price;
-    if (sortBy === "price-high") return b.price - a.price;
-    if (sortBy === "rating") return b.rating - a.rating;
-    return b.id - a.id;
-  });
+  const filteredProducts = useMemo(() => {
+    let filtered = allProducts.filter((product) => {
+      const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
+      const matchesCategory = selectedCategory === "all" || product.category === selectedCategory;
+      const matchesPrice = product.price >= priceRange[0] && product.price <= priceRange[1];
+      return matchesSearch && matchesCategory && matchesPrice;
+    });
 
-
-  const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
-  const paginatedProducts = sortedProducts.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage,
-  );
-
-  // Check scroll position for category buttons
-  useEffect(() => {
-    const el = scrollRef.current;
-    const checkScroll = () => {
-      if (!el) return;
-      setCanScrollLeft(el.scrollLeft > 0);
-      setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth);
-    };
-    checkScroll();
-    el?.addEventListener("scroll", checkScroll);
-    return () => el?.removeEventListener("scroll", checkScroll);
-  }, []);
-
-  const scroll = (direction) => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const scrollAmount = 300;
-    if (direction === "left") {
-      el.scrollLeft -= scrollAmount;
-    } else {
-      el.scrollLeft += scrollAmount;
+    if (sortBy === "price-low") {
+      filtered.sort((a, b) => a.price - b.price);
+    } else if (sortBy === "price-high") {
+      filtered.sort((a, b) => b.price - a.price);
+    } else if (sortBy === "rating") {
+      filtered.sort((a, b) => b.rating - a.rating);
+    } else if (sortBy === "discount") {
+      filtered.sort((a, b) => (b.discount || 0) - (a.discount || 0));
     }
-  };
+
+    return filtered;
+  }, [searchTerm, sortBy, selectedCategory, priceRange]);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="bg-gray-100 min-h-screen pt-48">
       <Navbar />
 
-
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-500 text-white">
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <h1 className="text-4xl font-bold mb-2">Explore All Products</h1>
-          <p className="text-lg text-blue-100 max-w-2xl">
-            Discover our complete collection of premium products across all categories
-          </p>
+      <div className="bg-white shadow-sm mb-6">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <h1 className="text-4xl font-bold text-gray-800 mb-2">Complete Collection</h1>
+          <p className="text-gray-600">Browse all products from our entire catalog</p>
         </div>
       </div>
 
-      {/* Enhanced Categories Section */}
-      <section className="bg-white mt-2 p-6 shadow-lg border-b border-gray-100">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-              <Award className="w-6 h-6 text-blue-600" />
-              Shop by Category
-            </h2>
-            <div className="text-sm text-gray-600">
-              {categories.length} categories • {allProducts.length} products
-            </div>
-          </div>
+      <div className="max-w-7xl mx-auto px-4 pb-12">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Sidebar Filters */}
+          <div className="lg:col-span-1">
+            <div className="bg-white rounded-lg shadow-md p-6 sticky top-48">
+              <h3 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <Filter size={20} /> Filters
+              </h3>
 
-          <div className="relative">
-            {canScrollLeft && (
-              <button
-                onClick={() => scroll("left")}
-                className="absolute left-0 z-10 bg-white rounded-full p-3 shadow-lg hover:bg-gray-50 border border-gray-200 transition-all duration-200 hover:scale-105"
-              >
-                <ChevronLeft className="w-5 h-5 text-gray-700" />
-              </button>
-            )}
-            <div
-              ref={scrollRef}
-              className="flex gap-6 overflow-x-auto scroll-smooth px-12 py-2"
-            >
-              <button
-                onClick={() => {
-                  setSelectedCategory("all");
-                  setCurrentPage(1);
-                }}
-                className={`flex-shrink-0 text-center transition-all duration-300 ${
-                  selectedCategory === "all"
-                    ? "transform scale-105"
-                    : "hover:scale-102"
-                }`}
-              >
-                <div
-                  className={`w-24 h-24 mx-auto rounded-2xl border-4 flex items-center justify-center text-3xl mb-3 transition-all duration-300 ${
-                    selectedCategory === "all"
-                      ? "border-blue-500 bg-blue-50 shadow-lg shadow-blue-200"
-                      : "border-gray-200 bg-gray-50 hover:border-blue-300 hover:shadow-md"
-                  }`}
-                >
-                  🏪
-                </div>
-                <p className="text-sm font-semibold text-gray-900">All</p>
-                <p className="text-xs text-gray-500">
-                  {allProducts.length} items
-                </p>
-              </button>
-              {categories.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => {
-                    setSelectedCategory(cat.id);
-                    setCurrentPage(1);
-                  }}
-                  className={`flex-shrink-0 text-center transition-all duration-300 ${
-                    selectedCategory === cat.id
-                      ? "transform scale-105"
-                      : "hover:scale-102"
-                  }`}
-                >
-                  <div
-                    className={`w-24 h-24 mx-auto rounded-2xl border-4 overflow-hidden flex items-center justify-center bg-gray-100 mb-3 transition-all duration-300 ${
-                      selectedCategory === cat.id
-                        ? "border-blue-500 shadow-lg shadow-blue-200 ring-2 ring-blue-100"
-                        : "border-gray-200 hover:border-blue-300 hover:shadow-md"
-                    }`}
-                  >
-                    <img
-                      src={cat.image}
-                      alt={cat.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <p className="text-sm font-semibold text-gray-900 line-clamp-2">
-                    {cat.name}
-                  </p>
-                  <p className="text-xs text-gray-500">{cat.count} items</p>
-                </button>
-              ))}
-            </div>
-            {canScrollRight && (
-              <button
-                onClick={() => scroll("right")}
-                className="absolute right-0 z-10 bg-white rounded-full p-3 shadow-lg hover:bg-gray-50 border border-gray-200 transition-all duration-200 hover:scale-105"
-              >
-                <ChevronRight className="w-5 h-5 text-gray-700" />
-              </button>
-            )}
-          </div>
-        </div>
-      </section>
+              {/* Search */}
+              <div className="mb-6">
+                <label className="block text-sm font-semibold text-gray-700 mb-2">Search</label>
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="flex gap-8">
-          {/* Enhanced Sidebar */}
-          <div className="hidden lg:block w-80 flex-shrink-0">
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 sticky top-24">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Filters</h3>
-              <p>Filters content here</p>
-            </div>
-          </div>
-
-          {/* Main Content */}
-          <div className="flex-1">
-            {/* Enhanced Mobile Filter Toggle */}
-            <div className="lg:hidden mb-6">
-              <button
-                onClick={() => setShowFilters(!showFilters)}
-                className="flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl hover:from-blue-600 hover:to-blue-700 w-full shadow-lg transition-all duration-300 font-medium"
-              >
-                <Filter className="w-5 h-5" />
-                Filters & Sort
-                {showFilters ? (
-                  <ChevronUp className="w-5 h-5" />
-                ) : (
-                  <ChevronDown className="w-5 h-5" />
-                )}
-              </button>
-
-              {showFilters && (
-                <div className="mt-6 p-6 bg-white rounded-2xl border border-gray-200 space-y-6 shadow-lg">
-                  {/* Mobile Search */}
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-3">
-                      Search
-                    </label>
-                    <input
-                      type="text"
-                      placeholder="Search products..."
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-
-                  {/* Mobile Price Range */}
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-3">
-                      Price: ₹{priceRange[0].toLocaleString()} - ₹
-                      {priceRange[1].toLocaleString()}
-                    </label>
-                    <input
-                      type="range"
-                      min="0"
-                      max="50000"
-                      step="1000"
-                      value={priceRange[1]}
-                      onChange={(e) =>
-                        setPriceRange([priceRange[0], parseInt(e.target.value)])
-                      }
-                      className="w-full"
-                    />
-                  </div>
-
-                  {/* Mobile Sort */}
-                  <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-3">
-                      Sort By
-                    </label>
-                    <select
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value)}
-                      className="w-full p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="newest">Newest First</option>
-                      <option value="price-low">Price: Low to High</option>
-                      <option value="price-high">Price: High to Low</option>
-                      <option value="rating">Top Rated</option>
-                    </select>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Enhanced Results Header */}
-            <div className="bg-white rounded-2xl p-6 mb-8 shadow-lg border border-gray-100">
-              <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-                <div>
-                  <h2 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-3">
-                    {selectedCategory === "all" ? (
-                      <>
-                        <Sparkles className="w-7 h-7 text-blue-600" />
-                        All Products
-                      </>
-                    ) : (
-                      <>
-                        <Award className="w-7 h-7 text-blue-600" />
-                        {
-                          categories.find((c) => c.id === selectedCategory)
-                            ?.name
-                        }
-                      </>
-                    )}
-                  </h2>
-                  <p className="text-gray-600 text-lg">
-                    {filteredProducts.length}{" "}
-                    {filteredProducts.length === 1 ? "product" : "products"}{" "}
-                    found
-                    {searchTerm && ` for "${searchTerm}"`}
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-4">
-                  {/* View Mode Toggle */}
-                  <div className="hidden md:flex items-center bg-gray-100 rounded-xl p-1">
+              {/* Category Filter */}
+              <div className="mb-6 pb-6 border-b">
+                <label className="block text-sm font-semibold text-gray-700 mb-3">Category</label>
+                <div className="space-y-2 max-h-64 overflow-y-auto">
+                  {categories.map((cat) => (
                     <button
-                      onClick={() => setViewMode("grid")}
-                      className={`p-2 rounded-lg transition-all duration-200 ${
-                        viewMode === "grid"
-                          ? "bg-white shadow-md text-blue-600"
-                          : "text-gray-600 hover:text-gray-900"
+                      key={cat.id}
+                      onClick={() => setSelectedCategory(cat.id)}
+                      className={`w-full text-left px-3 py-2 rounded-lg text-sm ${
+                        selectedCategory === cat.id
+                          ? "bg-blue-100 text-blue-700 font-semibold"
+                          : "text-gray-700 hover:bg-gray-100"
                       }`}
                     >
-                      <Grid3X3 className="w-5 h-5" />
+                      <div className="flex justify-between items-center">
+                        <span>{cat.name}</span>
+                        <span className="text-xs bg-gray-200 rounded-full px-2 py-1">{cat.count}</span>
+                      </div>
                     </button>
-                    <button
-                      onClick={() => setViewMode("list")}
-                      className={`p-2 rounded-lg transition-all duration-200 ${
-                        viewMode === "list"
-                          ? "bg-white shadow-md text-blue-600"
-                          : "text-gray-600 hover:text-gray-900"
-                      }`}
-                    >
-                      <List className="w-5 h-5" />
-                    </button>
-                  </div>
+                  ))}
+                </div>
+              </div>
 
-                  {/* Sort Dropdown */}
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="hidden md:block p-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm bg-white font-medium"
-                  >
-                    <option value="newest">Sort: Newest</option>
-                    <option value="price-low">Price: Low to High</option>
-                    <option value="price-high">Price: High to Low</option>
-                    <option value="rating">Top Rated</option>
-                  </select>
+              {/* Price Range */}
+              <div className="mb-6 pb-6 border-b">
+                <label className="block text-sm font-semibold text-gray-700 mb-3">Price Range</label>
+                <div className="flex gap-2 mb-2">
+                  <input
+                    type="number"
+                    placeholder="Min"
+                    value={priceRange[0]}
+                    onChange={(e) => setPriceRange([parseInt(e.target.value) || 0, priceRange[1]])}
+                    className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                  />
+                  <input
+                    type="number"
+                    placeholder="Max"
+                    value={priceRange[1]}
+                    onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value) || 200000])}
+                    className="w-full px-2 py-1 border border-gray-300 rounded text-sm"
+                  />
+                </div>
+                <p className="text-xs text-gray-600">₹{priceRange[0]} - ₹{priceRange[1]}</p>
+              </div>
+
+              {/* Rating Filter */}
+              <div className="mb-4">
+                <label className="block text-sm font-semibold text-gray-700 mb-3">Minimum Rating</label>
+                <div className="space-y-2">
+                  {[5, 4, 3, 2, 1].map((star) => (
+                    <label key={star} className="flex items-center gap-2 cursor-pointer text-sm">
+                      <input type="checkbox" className="rounded" />
+                      <span>{"★".repeat(star)}{"☆".repeat(5 - star)} & up</span>
+                    </label>
+                  ))}
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Enhanced Products Grid */}
-            {paginatedProducts.length === 0 ? (
-              <div className="text-center py-20 bg-white rounded-2xl shadow-lg border border-gray-100">
-                <div className="max-w-md mx-auto">
-                  <div className="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-6">
-                    <Search className="w-12 h-12 text-gray-400" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                    No products found
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    Try adjusting your filters or search terms to find what
-                    you're looking for.
-                  </p>
+          {/* Products Section */}
+          <div className="lg:col-span-3">
+            {/* Sort & View Controls */}
+            <div className="bg-white rounded-lg shadow-md p-4 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="text-sm font-semibold text-gray-800">
+                Found <span className="text-blue-600">{filteredProducts.length}</span> products
+              </div>
+              <div className="flex items-center gap-4">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                >
+                  <option value="popularity">Popularity</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="rating">Highest Rating</option>
+                  <option value="discount">Highest Discount</option>
+                </select>
+                <div className="flex border border-gray-300 rounded-lg">
                   <button
-                    onClick={() => {
-                      setSelectedCategory("all");
-                      setSearchTerm("");
-                      setPriceRange([0, 200000]);
-                      setSortBy("newest");
-                      setCurrentPage(1);
-                    }}
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-medium transition-colors duration-200"
+                    onClick={() => setViewMode("grid")}
+                    className={`p-2 ${viewMode === "grid" ? "bg-blue-100 text-blue-600" : "text-gray-600"}`}
                   >
-                    Clear Filters
+                    <Grid size={20} />
+                  </button>
+                  <button
+                    onClick={() => setViewMode("list")}
+                    className={`p-2 ${viewMode === "list" ? "bg-blue-100 text-blue-600" : "text-gray-600"}`}
+                  >
+                    <List size={20} />
                   </button>
                 </div>
               </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {paginatedProducts.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    showRating={true}
-                  />
+            </div>
+
+            {/* Products Grid/List */}
+            {filteredProducts.length > 0 ? (
+              <div className={viewMode === "grid" ? "grid grid-cols-2 sm:grid-cols-3 gap-4" : "space-y-4"}>
+                {filteredProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} showRating={true} />
                 ))}
               </div>
-            )}
-
-            {/* Enhanced Pagination */}
-            {totalPages > 1 && (
-              <div className="flex justify-center mt-12">
-                <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-4">
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() =>
-                        setCurrentPage(Math.max(1, currentPage - 1))
-                      }
-                      disabled={currentPage === 1}
-                      className="p-3 rounded-xl border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-                    >
-                      <ChevronLeft className="w-5 h-5" />
-                    </button>
-
-                    {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                      const pageNum =
-                        Math.max(1, Math.min(totalPages - 4, currentPage - 2)) +
-                        i;
-                      return (
-                        <button
-                          key={pageNum}
-                          onClick={() => setCurrentPage(pageNum)}
-                          className={`px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
-                            currentPage === pageNum
-                              ? "bg-blue-500 text-white shadow-lg shadow-blue-200"
-                              : "border border-gray-200 hover:bg-gray-50 text-gray-700"
-                          }`}
-                        >
-                          {pageNum}
-                        </button>
-                      );
-                    })}
-
-                    <button
-                      onClick={() =>
-                        setCurrentPage(Math.min(totalPages, currentPage + 1))
-                      }
-                      disabled={currentPage === totalPages}
-                      className="p-3 rounded-xl border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
-                    >
-                      <ChevronRight className="w-5 h-5" />
-                    </button>
-                  </div>
-
-                  <div className="text-center mt-4 text-sm text-gray-600">
-                    Page {currentPage} of {totalPages} •{" "}
-                    {filteredProducts.length} total results
-                  </div>
-                </div>
+            ) : (
+              <div className="bg-white rounded-lg shadow-md p-12 text-center">
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">No products found</h3>
+                <p className="text-gray-600">Try adjusting your filters or search term</p>
               </div>
             )}
           </div>
