@@ -39,7 +39,7 @@ import AdminOrders from "./admin/AdminOrders.jsx";
 import AdminCustomers from "./admin/AdminCustomers.jsx";
 import AdminSettings from "./admin/AdminSettings.jsx";
 import ProtectedRoute from "./admin/ProtectedRoute.jsx";
-import Toast from "./components/Toast.jsx";
+import SearchResults from "./SearchResults.jsx";
 
 function AppContent() {
   return (

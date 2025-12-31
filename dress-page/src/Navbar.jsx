@@ -1,16 +1,25 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "./contexts/CartContext";
-import { Heart, ShoppingCart, User, LogOut, Menu, X } from "lucide-react";
+import { Heart, ShoppingCart, User, LogOut, Menu, X, Search } from "lucide-react";
 
 function Navbar() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [user, setUser] = useState(() => {
     const userData = localStorage.getItem('user');
     return userData ? JSON.parse(userData) : null;
   });
   const { getCartCount, wishlist } = useCart();
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery("");
+    }
+  };
 
   const handleLogout = async () => {
     try {
@@ -53,6 +62,26 @@ function Navbar() {
           <span className="text-xl underline font-bold">StyleNest</span>
         </div>
 
+        {/* Search Bar - Professional Style */}
+        <div className="flex-1 max-w-2xl mx-8">
+          <form onSubmit={handleSearch} className="relative">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search for products, brands & more"
+              className="w-full px-4 py-3 pr-12 rounded-lg border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+            />
+            <button
+              type="submit"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-md transition-colors"
+              title="Search"
+            >
+              <Search className="w-4 h-4" />
+            </button>
+          </form>
+        </div>
+
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-8">
           <button onClick={() => navigate("/")}>Home</button>
@@ -79,6 +108,23 @@ function Navbar() {
       {/* Mobile Menu */}
       {open && (
         <div className="md:hidden mt-4 bg-white rounded-lg p-4 flex flex-col gap-4 text-center shadow border border-gray-200">
+          {/* Mobile Search Bar */}
+          <form onSubmit={handleSearch} className="relative mb-4">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search products..."
+              className="w-full px-4 py-3 pr-12 rounded-lg border border-gray-300 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button
+              type="submit"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded-md transition-colors"
+            >
+              <Search className="w-4 h-4" />
+            </button>
+          </form>
+
           <button onClick={() => {navigate("/"); setOpen(false);}}>Home</button>
           <button onClick={() => {navigate("/about"); setOpen(false);}}>About</button>
           <button onClick={() => {navigate("/collection"); setOpen(false);}}>Collection</button>
