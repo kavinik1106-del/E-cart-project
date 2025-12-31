@@ -443,8 +443,35 @@ function HomePage() {
     });
   };
 
+  const handleSearch = async (query) => {
+    const searchTerm = query || searchQuery;
+    if (!searchTerm.trim()) {
+      setShowSearchDropdown(false);
+      return;
+    }
+
+    setIsSearching(true);
+    setShowSearchDropdown(true);
+
+    try {
+      // Filter products based on search query
+      const filtered = products.filter(product =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.category?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setSearchResults(filtered.slice(0, 8)); // Limit to 8 results
+      setSelectedResultIndex(0);
+    } catch (err) {
+      console.error("Search error:", err);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <Navbar />
 
       {/* Hero Section with Multiple Banners */}
