@@ -41,7 +41,7 @@ function LoginPage() {
   };
 
   /* ---------- SUBMIT ---------- */
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     let newErrors = {};
 
@@ -57,10 +57,38 @@ function LoginPage() {
     if (Object.values(newErrors).some(Boolean)) return;
 
     setLoading(true);
-    setTimeout(() => {
+    try {
+      if (method === "email") {
+        const response = await fetch("http://localhost:5000/api/auth/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          // Store user data and token
+          localStorage.setItem("user", JSON.stringify(data.data.user));
+          localStorage.setItem("token", data.data.token);
+          alert("Login successful! Welcome back.");
+          // Redirect to home or dashboard
+          window.location.href = "/";
+        } else {
+          setErrors({ general: data.message || "Login failed" });
+        }
+      } else {
+        // Handle OTP login - for now, show demo
+        alert("OTP login not implemented yet. Use email login.");
+      }
+    } catch (error) {
+      setErrors({ general: "Network error. Please try again." });
+      console.error("Login error:", error);
+    } finally {
       setLoading(false);
-      alert("Login successful ✅ (Demo)");
-    }, 1500);
+    }
   };
 
   return (
@@ -68,7 +96,7 @@ function LoginPage() {
       <Navbar />
 
       {/* HERO */}
-      <section className="bg-pink-600 text-white py-20 text-center">
+      <section className="bg-blue-600 text-white py-20 text-center">
         <h1 className="text-4xl font-bold">Sign in to StyleNest</h1>
         <p className="text-sm mt-3 opacity-90">
           Secure access to your orders, returns & saved items
@@ -83,14 +111,14 @@ function LoginPage() {
           <button
             onClick={() => setMethod("email")}
             className={`px-6 py-2 text-sm font-semibold rounded-l-lg
-              ${method === "email" ? "bg-pink-500 text-white" : "bg-gray-200"}`}
+              ${method === "email" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
           >
             Email & Password
           </button>
           <button
             onClick={() => setMethod("otp")}
             className={`px-6 py-2 text-sm font-semibold rounded-r-lg
-              ${method === "otp" ? "bg-pink-500 text-white" : "bg-gray-200"}`}
+              ${method === "otp" ? "bg-blue-500 text-white" : "bg-gray-200"}`}
           >
             Mobile OTP
           </button>
@@ -99,7 +127,7 @@ function LoginPage() {
         {/* ERROR SUMMARY */}
         {Object.values(errors).some(Boolean) && (
           <div className="bg-red-50 border border-red-200 text-red-600 text-sm p-3 rounded mb-5">
-            Please fix the errors below to continue.
+            {errors.general || "Please fix the errors below to continue."}
           </div>
         )}
 
@@ -137,7 +165,7 @@ function LoginPage() {
                   />
                   <span
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-4 text-xs text-pink-500 cursor-pointer"
+                    className="absolute right-3 top-4 text-xs text-blue-500 cursor-pointer"
                   >
                     {showPassword ? "HIDE" : "SHOW"}
                   </span>
@@ -199,7 +227,7 @@ function LoginPage() {
 
           {/* REMEMBER */}
           <label className="flex items-center gap-2 text-sm">
-            <input type="checkbox" className="accent-pink-500" />
+            <input type="checkbox" className="accent-blue-500" />
             Remember this device
           </label>
 
@@ -209,7 +237,7 @@ function LoginPage() {
             className={`w-full py-3 rounded-lg font-semibold
               ${loading
                 ? "bg-gray-300"
-                : "bg-pink-500 text-white hover:bg-pink-600"}`}
+                : "bg-blue-500 text-white hover:bg-blue-600"}`}
           >
             {loading ? "Verifying..." : "Login securely"}
           </button>

@@ -224,12 +224,12 @@ function Accessories() {
   
 
   return (
-    <div className="min-h-screen bg-pink-50">
+    <div className="min-h-screen bg-blue-50">
       <Navbar />
 
       {/* Header Card */}
       <div className="max-w-3xl mx-auto mt-6 px-4">
-        <div className="bg-pink-600 text-white rounded-2xl p-5 text-center shadow-md">
+        <div className="bg-blue-600 text-white rounded-2xl p-5 text-center shadow-md">
           <h1 className="text-2xl font-bold">Accessories & Daily Use</h1>
           <p className="text-sm mt-1">
             Beauty • Jewellery • Home • Essentials
@@ -256,7 +256,7 @@ function Accessories() {
               </div>
 
               <div className="p-4">
-                <div className="text-xs text-pink-600 font-semibold">
+                <div className="text-xs text-blue-600 font-semibold">
                   {p.brand} • {p.category}
                 </div>
 
@@ -270,11 +270,11 @@ function Accessories() {
                 </div>
 
                 <div className="mt-2 flex items-center justify-between">
-                  <div className="text-pink-600 font-bold">
+                  <div className="text-blue-600 font-bold">
                     {p.price}
                   </div>
 
-                  <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="bg-pink-600 text-white px-3 py-1 rounded hover:bg-pink-700 text-xs">
+                  <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-xs">
                     Details
                   </Link>
                 </div>

@@ -1,148 +1,222 @@
 import React from "react";
 import Navbar from "./Navbar.jsx";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import {
+  Shield,
+  Truck,
+  HeadphonesIcon,
+  Award,
+  Users,
+  ShoppingBag,
+  Star,
+  CheckCircle,
+  Globe,
+  Heart,
+  Zap
+} from "lucide-react";
+import Counter from "./components/Counter.jsx";
+
 
 export default function AboutPage() {
+  const navigate = useNavigate();
+
   const stats = [
-    { value: "10K+", label: "Happy Customers" },
-    { value: "500+", label: "Premium Designs" },
-    { value: "4.8★", label: "Customer Rating" },
-    { value: "Fast", label: "Delivery" },
+    { value: "10K+", label: "Happy Customers", icon: Users, color: "from-blue-500 to-blue-600" },
+    { value: "500+", label: "Premium Products", icon: ShoppingBag, color: "from-green-500 to-green-600" },
+    { value: "4.8★", label: "Customer Rating", icon: Star, color: "from-yellow-500 to-yellow-600" },
+    { value: "24/7", label: "Customer Support", icon: HeadphonesIcon, color: "from-purple-500 to-purple-600" },
+  ];
+
+  const values = [
+    {
+      icon: Shield,
+      title: "Secure Shopping",
+      description: "Your data and payments are protected with industry-standard security measures."
+    },
+    {
+      icon: Truck,
+      title: "Fast Delivery",
+      description: "Quick and reliable delivery across India with real-time tracking."
+    },
+    {
+      icon: Award,
+      title: "Quality Assured",
+      description: "Every product is carefully selected and verified for quality."
+    },
+    {
+      icon: Heart,
+      title: "Customer First",
+      description: "We put our customers at the heart of everything we do."
+    }
+  ];
+
+  const features = [
+    "Curated premium collections",
+    "Verified sellers & quality standards",
+    "Secure payments & data protection",
+    "Fast delivery & easy returns",
+    "Dedicated customer support",
+    "Transparent pricing"
+  ];
+
+  const team = [
+    {
+      name: "Arun Kumar",
+      role: "CEO & Founder",
+      bio: "Passionate about revolutionizing e-commerce in India"
+    },
+    {
+      name: "Meera Singh",
+      role: "Head of Operations",
+      bio: "Ensuring seamless delivery and customer satisfaction"
+    },
+    {
+      name: "Vikram Rao",
+      role: "Tech Lead",
+      bio: "Building innovative solutions for better shopping"
+    }
   ];
 
   return (
-    <div className="bg-pink-50 min-h-screen">
+    
+    <div className="min-h-screen bg-white">
       <Navbar />
 
-      {/* HERO SECTION */}
-      <section
-        className="relative h-[480px] bg-cover bg-center"
-        style={{ backgroundImage: "url('/banner3.jpg')" }}
-      >
-        {/* Pink overlay */}
-        <div className="absolute inset-0 bg-pink-900/70" />
+      {/* Hero Section */}
+      <section className="bg-gradient-to-br from-blue-600 to-purple-700 py-24 text-white text-center">
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
+          <Zap className="w-14 h-14 mx-auto mb-6" />
+          <h1 className="text-5xl font-bold mb-6">
+            About <span className="text-yellow-300">StyleNest</span>
+          </h1>
+          <p className="max-w-3xl mx-auto text-xl mb-8">
+            Your trusted destination for fashion, lifestyle, and home essentials.
+          </p>
+          <div className="flex justify-center gap-4">
+            <button
+              onClick={() => navigate("/")}
+              className="bg-white text-blue-600 px-8 py-4 rounded-xl font-bold"
+            >
+              Shop Now
+            </button>
+            <button
+              onClick={() => navigate("/collection")}
+              className="border-2 border-white px-8 py-4 rounded-xl font-bold"
+            >
+              Explore Collection
+            </button>
+          </div>
+        </motion.div>
+      </section>
 
-        {/* Hero Text */}
-        <div className="relative max-w-7xl mx-auto h-full flex items-center px-6">
-          <motion.div
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-white max-w-2xl"
-          >
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              About StyleNest
-            </h1>
-            <p className="text-lg text-pink-100 leading-relaxed">
-              A trusted e-commerce platform delivering curated fashion and
-              lifestyle products through a secure, customer-first shopping
-              experience.
-            </p>
-          </motion.div>
+      {/* Stats Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          {stats.map((stat, i) => (
+            <div key={i}>
+              <div className={`w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center mb-4`}>
+                <stat.icon className="text-white w-10 h-10" />
+              </div>
+              <div className="text-3xl font-bold">
+                <Counter
+                  end={parseInt(stat.value.replace(/[^\d]/g, ""))}
+                  suffix={stat.value.replace(/[\d]/g, "")}
+                />
+              </div>
+              <p className="text-gray-600">{stat.label}</p>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* ABOUT OVERVIEW */}
-      <section className="py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-20">
-          {/* WHO WE ARE */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="border-l-4 border-pink-600 pl-6"
-          >
-            <h2 className="text-3xl font-semibold text-pink-700 mb-6">
-              Who We Are
-            </h2>
-            <p className="text-gray-600 leading-relaxed mb-5">
-              StyleNest is a modern digital commerce platform that connects
-              customers with trusted sellers and carefully curated products.
-              We focus on reliability, transparency, and long-term customer
-              trust.
+      {/* Mission Section */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12">
+          <div>
+            <h2 className="text-4xl font-bold mb-6">Our Mission</h2>
+            <p className="text-lg text-gray-600 mb-4">
+              To deliver high-quality products at affordable prices while maintaining trust,
+              transparency, and exceptional service.
             </p>
-            <p className="text-gray-600 leading-relaxed">
-              By combining secure technology, efficient logistics, and
-              customer-centric design, we deliver a seamless shopping journey
-              from discovery to delivery.
+            <p className="text-lg text-gray-600">
+              We aim to redefine online shopping through innovation and customer-first thinking.
             </p>
-          </motion.div>
+          </div>
 
-          {/* WHAT MAKES US DIFFERENT */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="bg-pink-50 border border-pink-200 rounded-3xl p-10 shadow-lg"
-          >
-            <h3 className="text-2xl font-semibold text-pink-700 mb-6">
-              What Makes Us Different
-            </h3>
-            <ul className="space-y-4 text-gray-700">
-              <li>✔ Curated premium collections</li>
-              <li>✔ Verified sellers & quality standards</li>
-              <li>✔ Secure payments & data protection</li>
-              <li>✔ Fast delivery & easy returns</li>
-              <li>✔ Dedicated customer support</li>
-            </ul>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* TRUST STATS */}
-      <section className="py-24 bg-pink-100">
-        <div className="max-w-7xl mx-auto px-6">
-          <h2 className="text-3xl font-semibold text-pink-700 mb-14">
-            Trusted by Thousands
-          </h2>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {stats.map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 25 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-pink-600 text-white rounded-3xl p-8 shadow-lg"
-              >
-                <h3 className="text-4xl font-bold">{item.value}</h3>
-                <p className="mt-2 text-pink-100">{item.label}</p>
-              </motion.div>
+          <div className="bg-gray-50 p-8 rounded-xl">
+            <h3 className="text-2xl font-bold mb-4">Why Choose StyleNest?</h3>
+            {features.map((item, i) => (
+              <div key={i} className="flex items-center gap-3 mb-3">
+                <CheckCircle className="text-green-500" />
+                <span>{item}</span>
+              </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* INFO STRIP */}
-      <section className="border-t border-b bg-white">
-        <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-3 gap-10 text-center">
-          <div>
-            <h4 className="font-semibold text-pink-700">Secure Payments</h4>
-            <p className="text-sm text-gray-600 mt-2">
-              Industry-standard security
-            </p>
-          </div>
-          <div>
-            <h4 className="font-semibold text-pink-700">Easy Returns</h4>
-            <p className="text-sm text-gray-600 mt-2">
-              Transparent return policies
-            </p>
-          </div>
-          <div>
-            <h4 className="font-semibold text-pink-700">24/7 Support</h4>
-            <p className="text-sm text-gray-600 mt-2">
-              Always-on customer assistance
-            </p>
+      {/* WHY CUSTOMERS TRUST US (REPLACEMENT SECTION) */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-4xl font-bold mb-6">Why Customers Trust Us</h2>
+          <p className="text-xl text-gray-600 mb-12">
+            Reliability, security, and satisfaction — built into everything we do.
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            <div className="bg-white p-8 rounded-xl shadow">
+              <Shield className="w-12 h-12 mx-auto text-blue-600 mb-4" />
+              <h3 className="text-xl font-semibold mb-2">Secure Payments</h3>
+              <p className="text-gray-600">All transactions are encrypted and protected.</p>
+            </div>
+
+            <div className="bg-white p-8 rounded-xl shadow">
+              <Truck className="w-12 h-12 mx-auto text-green-600 mb-4" />
+              <h3 className="text-xl font-semibold mb-2">Fast Delivery</h3>
+              <p className="text-gray-600">Reliable pan-India shipping with tracking.</p>
+            </div>
+
+            <div className="bg-white p-8 rounded-xl shadow">
+              <HeadphonesIcon className="w-12 h-12 mx-auto text-purple-600 mb-4" />
+              <h3 className="text-xl font-semibold mb-2">24/7 Support</h3>
+              <p className="text-gray-600">Dedicated team always ready to help.</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="bg-pink-700 text-pink-100 text-center text-sm py-6">
-        © 2025 StyleNest. All rights reserved.
+      {/* Team Section */}
+      <section className="py-20">
+        <div className="max-w-7xl mx-auto text-center">
+          <h2 className="text-4xl font-bold mb-12">Meet Our Team</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {team.map((member, i) => (
+              <div key={i} className="bg-gray-50 p-8 rounded-xl">
+                <div className="w-24 h-24 mx-auto bg-blue-600 text-white flex items-center justify-center rounded-full text-3xl mb-4">
+                  {member.name[0]}
+                </div>
+                <h3 className="text-xl font-semibold">{member.name}</h3>
+                <p className="text-blue-600 mb-2">{member.role}</p>
+                <p className="text-gray-600">{member.bio}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Banner */}
+      <section className="py-16 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-center">
+        <Globe className="w-14 h-14 mx-auto mb-4" />
+        <h2 className="text-3xl font-bold mb-4">Trusted by Millions</h2>
+        <p className="max-w-2xl mx-auto text-blue-100">
+          Your security and satisfaction are our top priorities.
+        </p>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 text-white py-8 text-center">
+        <p className="text-gray-400">© 2025 StyleNest. All rights reserved.</p>
       </footer>
     </div>
   );

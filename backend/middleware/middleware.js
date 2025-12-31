@@ -1,27 +1,41 @@
 import logger from '../utils/logger.js';
 
 const errorHandler = (err, req, res, next) => {
-  logger.error('Error:', err);
+  try {
+    logger.error('Error:', err);
 
-  const statusCode = err.statusCode || 500;
-  const message = err.message || 'Internal server error';
+    const statusCode = err.statusCode || 500;
+    const message = err.message || 'Internal server error';
 
-  res.status(statusCode).json({
-    success: false,
-    error: message,
-    ...(process.env.DEBUG === 'true' && { stack: err.stack })
-  });
+    if (!res.headersSent) {
+      res.status(statusCode).json({
+        success: false,
+        error: message,
+        ...(process.env.DEBUG === 'true' && { stack: err.stack })
+      });
+    }
+  } catch (error) {
+    console.error('Error in errorHandler:', error);
+  }
 };
 
 const notFoundHandler = (req, res) => {
-  res.status(404).json({
-    success: false,
-    error: 'Route not found'
-  });
+  try {
+    res.status(404).json({
+      success: false,
+      error: 'Route not found'
+    });
+  } catch (error) {
+    console.error('Error in notFoundHandler:', error);
+  }
 };
 
 const requestLogger = (req, res, next) => {
-  logger.info(`${req.method} ${req.path}`);
+  try {
+    logger.info(`${req.method} ${req.path}`);
+  } catch (error) {
+    console.error('Error in requestLogger:', error);
+  }
   next();
 };
 
