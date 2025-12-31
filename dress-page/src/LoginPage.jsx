@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Navbar from "./Navbar.jsx";
 import axios from "axios";
-import { useCustomers } from "./contexts/CustomerContext"; // ✅ correct
+import { useCustomers } from "./contexts/useCustomers";
 
 
 function LoginPage() {

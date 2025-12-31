@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Mail, Phone, MapPin, Search } from "lucide-react";
 import AdminLayout from "./AdminLayout";
-import { useCustomers } from "../contexts/CustomerContext";
+import { useCustomers } from "../contexts/useCustomers";
 
 function AdminCustomersContent() {
   const { customers, fetchCustomers, loading, error } = useCustomers();

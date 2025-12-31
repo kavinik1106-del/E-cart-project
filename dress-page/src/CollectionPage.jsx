@@ -28,7 +28,7 @@ function CollectionPage() {
   ];
 
   /* ---------- STATE ---------- */
-  const navigate = useNavigate();
+  const Navigate = useNavigate();
   const { addToCart, removeFromCart, cart } = useCart();
   const [wishlist, setWishlist] = useState([]);
 

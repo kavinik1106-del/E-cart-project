@@ -1,8 +1,7 @@
 // src/contexts/CustomerContext.jsx
-import React, { createContext, useContext, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-
-const CustomerContext = createContext();
+import { CustomerContext } from "./CustomerContextConfig";
 
 export function CustomerProvider({ children }) {
   const [customers, setCustomers] = useState([]);
@@ -14,7 +13,7 @@ export function CustomerProvider({ children }) {
     setLoading(true);
     const res = await axios.get("http://localhost:5000/api/admin/customers/all");
     if (res.data.success) {
-      setCustomers(res.data.customers); // ✅ data is in res.data.data
+      setCustomers(res.data.data);
     }
   } catch (err) {
     console.error(err);
@@ -30,5 +29,3 @@ export function CustomerProvider({ children }) {
     </CustomerContext.Provider>
   );
 }
-
-export const useCustomers = () => useContext(CustomerContext);
