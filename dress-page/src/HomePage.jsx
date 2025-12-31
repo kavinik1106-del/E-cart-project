@@ -165,29 +165,148 @@ function HomePage() {
     });
   };
 
+  const handleSearch = async (query) => {
+    const searchTerm = query || searchQuery;
+    if (!searchTerm.trim()) {
+      setShowSearchDropdown(false);
+      return;
+    }
+
+    setIsSearching(true);
+    setShowSearchDropdown(true);
+
+    try {
+      // Filter products based on search query
+      const filtered = products.filter(product =>
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.category?.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setSearchResults(filtered.slice(0, 8)); // Limit to 8 results
+      setSelectedResultIndex(0);
+    } catch (err) {
+      console.error("Search error:", err);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <Navbar />
 
-      {/* Search Bar - FIRST */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-500 shadow-md border-b-4 border-yellow-400">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="relative max-w-2xl mx-auto">
-            <input
-              type="text"
-              placeholder="Search for products, brands and more..."
-              className="w-full px-6 py-4 text-lg border-2 border-yellow-400 rounded-full focus:border-yellow-300 focus:outline-none shadow-lg hover:shadow-xl transition-shadow bg-white"
+      {/* Enhanced Hero Section - Flipkart Style (Blue + Yellow Theme) */}
+<div className="relative overflow-hidden bg-blue-900 border-t-4 border-b-4 border-amber-400">
+  
+  {/* Hero Slides */}
+  <div
+    className="flex transition-transform duration-500 ease-in-out"
+    style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+  >
+    {heroSlides.map((slide, index) => (
+      <div key={index} className="w-full flex-shrink-0 relative">
+        <div className="relative h-[380px] bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 overflow-hidden">
+          
+          {/* Background Pattern */}
+          <div className="absolute inset-0 opacity-10">
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.12'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/svg%3E")`,
+              }}
             />
-            <button className="absolute right-3 top-1/2 -translate-y-1/2 bg-yellow-400 text-gray-900 p-3 rounded-full hover:bg-yellow-500 transition-colors font-bold">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
+          </div>
+
+          {/* Content */}
+          <div className="relative h-full flex items-center">
+            <div className="max-w-7xl mx-auto px-6 flex items-center justify-between w-full">
+              
+              {/* Text */}
+              <div className="text-white max-w-xl">
+                <h2 className="text-sm font-semibold mb-2 text-blue-100 uppercase tracking-wider">
+                  {slide.subtitle}
+                </h2>
+
+                <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+                  {slide.title}
+                </h1>
+
+                <p className="text-base mb-6 text-blue-100 leading-relaxed">
+                  {slide.description}
+                </p>
+
+                <div className="flex gap-4">
+                  <Link
+                    to="/women"
+                    className="bg-amber-400 text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-amber-500 transition-all duration-300 shadow-lg"
+                  >
+                    {slide.cta}
+                  </Link>
+
+                  <Link
+                    to="/collection"
+                    className="border border-white text-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-blue-700 transition-all duration-300"
+                  >
+                    View Collection
+                  </Link>
+                </div>
+              </div>
+
+              {/* Image */}
+              <div className="hidden lg:block relative">
+                <img
+                  src={slide.image}
+                  alt={slide.title}
+                  className="h-64 object-contain"
+                />
+
+                <div className="absolute -top-3 -right-3 bg-amber-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold shadow-md">
+                  🔥 Hot Deal
+                </div>
+              </div>
+
+            </div>
           </div>
         </div>
       </div>
+    ))}
+  </div>
 
-      {/* Categories Section - SECOND */}
+  {/* Navigation */}
+  <button
+    onClick={prevSlide}
+    className="absolute left-4 top-1/2 -translate-y-1/2 bg-blue-500/30 text-white p-2 rounded-full hover:bg-blue-500/40"
+  >
+    <ChevronLeft size={20} />
+  </button>
+
+  <button
+    onClick={nextSlide}
+    className="absolute right-4 top-1/2 -translate-y-1/2 bg-blue-500/30 text-white p-2 rounded-full hover:bg-blue-500/40"
+  >
+    <ChevronRight size={20} />
+  </button>
+
+  {/* Indicators */}
+  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-2">
+    {heroSlides.map((_, index) => (
+      <button
+        key={index}
+        onClick={() => setCurrentSlide(index)}
+        className={`w-2.5 h-2.5 rounded-full ${
+          index === currentSlide
+            ? "bg-amber-400"
+            : "bg-white/50"
+        }`}
+      />
+    ))}
+  </div>
+
+</div>
+
+
+    {/* Categories Section - SECOND */}
       <section className="py-12 bg-gradient-to-b from-white to-blue-50 border-b-4 border-yellow-400">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-8 text-center">Shop by Category</h2>
@@ -243,106 +362,6 @@ function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* Enhanced Hero Section - THIRD */}
-      <div className="relative overflow-hidden bg-gray-900">
-        {/* Hero Slides */}
-        <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
-          {heroSlides.map((slide, index) => (
-            <div key={index} className="w-full flex-shrink-0 relative">
-              <div className={`relative h-[600px] bg-gradient-to-r ${slide.gradient} overflow-hidden`}>
-                {/* Background Pattern */}
-                <div className="absolute inset-0 opacity-10">
-                  <div className="absolute inset-0" style={{
-                    backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-                  }}></div>
-                </div>
-
-                {/* Content */}
-                <div className="relative h-full flex items-center">
-                  <div className="max-w-7xl mx-auto px-4 flex items-center justify-between w-full">
-                    <div className="text-white max-w-2xl animate-fade-in-up">
-                      <h2 className="text-lg font-semibold mb-2 text-white/80 uppercase tracking-wider">
-                        {slide.subtitle}
-                      </h2>
-                      <h1 className="text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-                        {slide.title}
-                      </h1>
-                      <p className="text-xl mb-8 text-white/90 leading-relaxed max-w-lg">
-                        {slide.description}
-                      </p>
-                      <div className="flex flex-col sm:flex-row gap-4">
-                        <Link
-                          to="/women"
-                          className="bg-white text-gray-900 px-8 py-4 rounded-full font-semibold hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl text-lg"
-                        >
-                          {slide.cta}
-                        </Link>
-                        <Link
-                          to="/collection"
-                          className="border-2 border-white text-white px-8 py-4 rounded-full font-semibold hover:bg-white hover:text-gray-900 transition-all duration-300 transform hover:scale-105 text-lg"
-                        >
-                          View Collection
-                        </Link>
-                      </div>
-                    </div>
-
-                    {/* Hero Image */}
-                    <div className="hidden lg:block animate-fade-in-right">
-                      <div className="relative">
-                        <div className="absolute inset-0 bg-white/20 rounded-full blur-3xl scale-150"></div>
-                        <img
-                          src={slide.image}
-                          alt={slide.title}
-                          className="relative h-96 object-contain transform hover:scale-105 transition-transform duration-500"
-                        />
-                        <div className="absolute -top-4 -right-4 bg-yellow-400 text-gray-900 px-4 py-2 rounded-full text-sm font-bold animate-bounce shadow-lg">
-                          🔥 Hot Deal
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Navigation Controls */}
-        <button
-          onClick={prevSlide}
-          className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm text-white p-3 rounded-full hover:bg-white/30 transition-all duration-300 hover:scale-110 shadow-lg"
-        >
-          <ChevronLeft size={24} />
-        </button>
-        <button
-          onClick={nextSlide}
-          className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm text-white p-3 rounded-full hover:bg-white/30 transition-all duration-300 hover:scale-110 shadow-lg"
-        >
-          <ChevronRight size={24} />
-        </button>
-
-        {/* Auto-play Toggle */}
-        <button
-          onClick={toggleAutoPlay}
-          className="absolute bottom-4 right-4 bg-white/20 backdrop-blur-sm text-white p-3 rounded-full hover:bg-white/30 transition-all duration-300 hover:scale-110 shadow-lg"
-        >
-          {isAutoPlaying ? <Pause size={20} /> : <Play size={20} />}
-        </button>
-
-        {/* Slide Indicators */}
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
-          {heroSlides.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                index === currentSlide ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/75'
-              }`}
-            />
-          ))}
-        </div>
-      </div>
 
       {/* Featured Products - FOURTH - AMAZON STYLE GRID */}
       <section className="py-16 bg-white border-t-4 border-yellow-400">
@@ -405,25 +424,34 @@ function HomePage() {
       </section>
 
       {/* Deal of the Day */}
-      <section className="py-12 bg-gradient-to-r from-orange-400 to-red-500">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center text-white mb-8">
-            <h2 className="text-3xl font-bold mb-2">Lightning Deals</h2>
-            <p className="text-orange-100">Limited time offers - Stocks running out fast!</p>
-          </div>
+<section className="py-12 bg-gradient-to-r from-blue-600 to-yellow-400">
+  <div className="max-w-7xl mx-auto px-4">
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
-            {products.slice(0, 18).map((product) => (
-              <ProductCard
-                key={product.id}
-                product={product}
-                products={products}
-                showRating={true}
-              />
-            ))}
-          </div>
-        </div>
-      </section>
+    {/* Heading */}
+    <div className="text-center text-white mb-8">
+      <h2 className="text-3xl font-bold mb-2 tracking-wide">
+        Lightning Deals ⚡
+      </h2>
+      <p className="text-blue-100">
+        Limited time offers — grab them before stocks run out!
+      </p>
+    </div>
+
+    {/* Products Grid */}
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+      {products.slice(0, 18).map((product) => (
+        <ProductCard
+          key={product.id}
+          product={product}
+          products={products}
+          showRating={true}
+        />
+      ))}
+    </div>
+
+  </div>
+</section>
+
 
       {/* Trending Products */}
       <section className="py-16 bg-white">
@@ -578,70 +606,7 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="py-12 bg-gradient-to-r from-gray-50 to-blue-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">
-              What Our Customers Say
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Don't just take our word for it - hear from our satisfied customers
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-2xl shadow-lg">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <span className="text-blue-600 font-bold text-lg">P</span>
-                </div>
-                <div className="ml-4">
-                  <h4 className="font-semibold text-gray-800">Priya Sharma</h4>
-                  <div className="flex text-yellow-400">{"★".repeat(5)}</div>
-                </div>
-              </div>
-              <p className="text-gray-600 italic">
-                "Amazing quality products at great prices. The delivery was super fast
-                and the customer service is excellent!"
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl shadow-lg">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                  <span className="text-green-600 font-bold text-lg">R</span>
-                </div>
-                <div className="ml-4">
-                  <h4 className="font-semibold text-gray-800">Rahul Kumar</h4>
-                  <div className="flex text-yellow-400">{"★".repeat(5)}</div>
-                </div>
-              </div>
-              <p className="text-gray-600 italic">
-                "StyleNest has become my go-to shopping destination. The variety is
-                amazing and prices are unbeatable!"
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl shadow-lg">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                  <span className="text-purple-600 font-bold text-lg">A</span>
-                </div>
-                <div className="ml-4">
-                  <h4 className="font-semibold text-gray-800">Anjali Patel</h4>
-                  <div className="flex text-yellow-400">{"★".repeat(5)}</div>
-                </div>
-              </div>
-              <p className="text-gray-600 italic">
-                "Love the user-friendly interface and the quality of products. Highly
-                recommend StyleNest to everyone!"
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      
       {/* Newsletter Section */}
       <section className="py-16 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 relative overflow-hidden">
         <div className="absolute inset-0 bg-white bg-opacity-10"></div>

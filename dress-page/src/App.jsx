@@ -35,7 +35,7 @@ import AdminOrders from "./admin/AdminOrders.jsx";
 import AdminCustomers from "./admin/AdminCustomers.jsx";
 import AdminSettings from "./admin/AdminSettings.jsx";
 import ProtectedRoute from "./admin/ProtectedRoute.jsx";
-import Toast from "./components/Toast.jsx";
+import SearchResults from "./SearchResults.jsx";
 
 function AppContent() {
   const { toast } = useCart();
@@ -59,7 +59,7 @@ function AppContent() {
         <Route path="/appliances" element={<HomeAppliances />} />
         <Route path="/bicycles" element={<Bicycles />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/product/:id" element={<ProductDetailPage />} />
+        <Route path="/search" element={<SearchResults />} />
 
         {/* 🆕 NEW ROUTES */}
         <Route path="/cart" element={<CartPage />} />
