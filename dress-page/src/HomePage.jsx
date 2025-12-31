@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar.jsx";
 import ProductCard from "./ProductCard.jsx";
+import AdvancedSearch from "./components/AdvancedSearch.jsx";
 import { ChevronLeft, ChevronRight, Star, Truck, Shield, HeadphonesIcon, Quote, Zap, Award, Users, ShoppingBag, TrendingUp, Play, Pause } from "lucide-react";
 import { apiCall, API_ENDPOINTS } from "./config/apiConfig.js";
 
@@ -234,7 +235,7 @@ function HomePage() {
                 </div>
               </div>
             </div>
-          ))}
+          </div>
         </div>
 
         {/* Navigation Controls */}

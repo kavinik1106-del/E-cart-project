@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { TrendingUp, Users, Package, ShoppingCart, Eye, DollarSign } from "lucide-react";
+import { Navigate } from "react-router-dom";
+import { TrendingUp, Users, Package, ShoppingCart, Eye, DollarSign } from "lucide-react"; 
 
 const StatCard = ({ icon: IconComponent, title, value, color, trend }) => (
   <div className="bg-white rounded-lg shadow-md p-6 border-l-4" style={{ borderColor: color }}>
@@ -99,7 +100,6 @@ function AdminDashboard() {
           trend="12"
         />
         <StatCard
-          icon={ShoppingCart}
           title="Total Orders"
           value={stats.totalOrders}
           icon={Package}
@@ -107,7 +107,6 @@ function AdminDashboard() {
           trend="8"
         />
         <StatCard
-          icon={Package}
           title="Total Products"
           value={stats.totalProducts}
           icon={Package}
@@ -214,9 +213,9 @@ function AdminDashboard() {
             <div key={index} className="flex flex-col items-center gap-2">
               <div
                 className="bg-blue-500 w-6 rounded-t"
-                style={{ height: `${s.sales / 500}px` }}
+                style={{ height: `${item.sales / 500}px` }}
               ></div>
-              <span className="text-xs mt-1">{s.month}</span>
+              <span className="text-xs mt-1">{item.month}</span>
             </div>
           ))}
         </div>
