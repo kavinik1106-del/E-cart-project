@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from "react";
 import Navbar from "./Navbar.jsx";
 import ProductCard from "./ProductCard.jsx";
@@ -111,21 +112,13 @@ function CollectionPage() {
   });
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
-    switch (sortBy) {
-      case "price-low":
-        return a.price - b.price;
-      case "price-high":
-        return b.price - a.price;
-      case "rating":
-        return b.rating - a.rating;
-      case "newest":
-        return b.id - a.id;
-      default:
-        return 0;
-    }
+    if (sortBy === "price-low") return a.price - b.price;
+    if (sortBy === "price-high") return b.price - a.price;
+    if (sortBy === "rating") return b.rating - a.rating;
+    return b.id - a.id;
   });
 
-  /* ---------- PAGINATION ---------- */
+
   const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
   const paginatedProducts = sortedProducts.slice(
     (currentPage - 1) * itemsPerPage,
@@ -159,8 +152,9 @@ function CollectionPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 pt-20">
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
+
 
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 to-blue-500 text-white">
