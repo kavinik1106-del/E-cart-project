@@ -31,7 +31,7 @@ import PrivateRoute from "./components/PrivateRoute.jsx";
 import CartPage from "./CartPage.jsx";
 import WishlistPage from "./WishlistPage.jsx";
 import CheckoutPage from "./CheckoutPage.jsx";
-import { CartProvider } from "./contexts/CartContext.jsx";
+import { CartProvider, useCart } from "./contexts/CartContext.jsx";
 import AdminPanel from "./admin/AdminPanel.jsx";
 import AdminLogin from "./admin/AdminLogin.jsx";
 import AdminProducts from "./admin/AdminProducts.jsx";
@@ -39,8 +39,11 @@ import AdminOrders from "./admin/AdminOrders.jsx";
 import AdminCustomers from "./admin/AdminCustomers.jsx";
 import AdminSettings from "./admin/AdminSettings.jsx";
 import ProtectedRoute from "./admin/ProtectedRoute.jsx";
+import Toast from "./components/Toast.jsx";
 
-function App() {
+function AppContent() {
+  const { toast } = useCart();
+
   return (
     <CartProvider>
       <CustomerProvider>

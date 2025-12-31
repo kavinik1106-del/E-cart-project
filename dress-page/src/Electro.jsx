@@ -16,12 +16,12 @@ function Electro() {
   ];
 
   return (
-    <div className="min-h-screen bg-pink-50">
+    <div className="min-h-screen bg-blue-50">
       <Navbar />
 
       {/* Separate rounded pink card below the navbar */}
       <div className="max-w-3xl mx-auto mt-6 px-4">
-        <div className="bg-pink-600 text-white rounded-2xl p-5 text-center shadow-md">
+        <div className="bg-blue-600 text-white rounded-2xl p-5 text-center shadow-md">
           <h1 className="text-2xl font-bold">Electronics</h1>
           <p className="text-sm mt-1">Phones, Laptops, Watches & Tablets</p>
         </div>
@@ -38,13 +38,13 @@ function Electro() {
               </div>
 
               <div className="p-4">
-                <div className="text-xs text-pink-600 font-semibold">{p.category}</div>
+                <div className="text-xs text-blue-600 font-semibold">{p.category}</div>
                 <h3 className="mt-1 font-semibold text-sm">
                   <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="hover:underline">{p.name}</Link>
                 </h3>
                 <div className="mt-2 flex items-center justify-between">
-                  <div className="text-pink-600 font-bold">{p.price}</div>
-                  <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="bg-pink-600 text-white px-3 py-1 rounded hover:bg-pink-700 text-xs">Details</Link>
+                  <div className="text-blue-600 font-bold">{p.price}</div>
+                  <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-xs">Details</Link>
                 </div>
               </div>
             </div>

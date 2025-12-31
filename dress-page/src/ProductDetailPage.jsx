@@ -24,12 +24,12 @@ function ProductDetailPage() {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-pink-50 flex items-center justify-center">
+      <div className="min-h-screen bg-blue-50 flex items-center justify-center">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">Product not found</h2>
           <button
             onClick={() => navigate(-1)}
-            className="bg-pink-600 text-white px-6 py-2 rounded-lg hover:bg-pink-700"
+            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
           >
             Go Back
           </button>
@@ -66,19 +66,19 @@ function ProductDetailPage() {
             </p>
             <ul className="space-y-2 text-gray-700">
               <li className="flex items-start">
-                <span className="text-pink-600 mr-2">•</span>
+                <span className="text-blue-600 mr-2">•</span>
                 <span>Premium quality material ensuring durability and comfort</span>
               </li>
               <li className="flex items-start">
-                <span className="text-pink-600 mr-2">•</span>
+                <span className="text-blue-600 mr-2">•</span>
                 <span>Modern design that complements any style preference</span>
               </li>
               <li className="flex items-start">
-                <span className="text-pink-600 mr-2">•</span>
+                <span className="text-blue-600 mr-2">•</span>
                 <span>Available in multiple sizes and colors for perfect fit</span>
               </li>
               <li className="flex items-start">
-                <span className="text-pink-600 mr-2">•</span>
+                <span className="text-blue-600 mr-2">•</span>
                 <span>Easy to maintain and care for</span>
               </li>
             </ul>
@@ -117,7 +117,7 @@ function ProductDetailPage() {
               <div className="overflow-x-auto">
                 <table className="w-full border-collapse">
                   <thead>
-                    <tr className="bg-pink-50">
+                    <tr className="bg-blue-50">
                       <th className="border p-3 text-left text-sm font-semibold">Size</th>
                       <th className="border p-3 text-left text-sm font-semibold">Chest/Waist</th>
                       <th className="border p-3 text-left text-sm font-semibold">Length</th>
@@ -147,19 +147,19 @@ function ProductDetailPage() {
             <h3 className="font-semibold text-gray-800 mb-4">Care Instructions</h3>
             <ul className="space-y-3">
               <li className="flex items-start">
-                <span className="bg-pink-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0">1</span>
+                <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0">1</span>
                 <span className="text-gray-700">Wash with cold water. Machine wash on gentle cycle or hand wash recommended.</span>
               </li>
               <li className="flex items-start">
-                <span className="bg-pink-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0">2</span>
+                <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0">2</span>
                 <span className="text-gray-700">Use mild detergent only. Avoid bleach and harsh chemicals.</span>
               </li>
               <li className="flex items-start">
-                <span className="bg-pink-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0">3</span>
+                <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0">3</span>
                 <span className="text-gray-700">Dry flat in shade. Do not tumble dry or wring.</span>
               </li>
               <li className="flex items-start">
-                <span className="bg-pink-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0">4</span>
+                <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center mr-3 flex-shrink-0">4</span>
                 <span className="text-gray-700">Iron on low heat if needed. Avoid direct heat on printed areas.</span>
               </li>
             </ul>
@@ -254,7 +254,7 @@ function ProductDetailPage() {
       <main className="max-w-7xl mx-auto px-4 py-8">
         {/* Breadcrumb */}
         <div className="text-sm text-gray-600 mb-6">
-          <button onClick={() => navigate(-1)} className="hover:text-pink-600">
+          <button onClick={() => navigate(-1)} className="hover:text-blue-600">
             ← Back
           </button>
         </div>
@@ -270,7 +270,7 @@ function ProductDetailPage() {
                 className="w-full h-96 object-contain p-8"
               />
               {product.tag && (
-                <span className="absolute top-4 left-4 bg-pink-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                <span className="absolute top-4 left-4 bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
                   {product.tag}
                 </span>
               )}
@@ -288,7 +288,7 @@ function ProductDetailPage() {
                   key={idx}
                   onClick={() => setSelectedImage(img)}
                   className={`h-20 rounded-lg overflow-hidden border-2 transition ${
-                    selectedImage === img ? "border-pink-600" : "border-gray-200"
+                    selectedImage === img ? "border-blue-600" : "border-gray-200"
                   }`}
                 >
                   <img src={img} alt={`View ${idx + 1}`} className="w-full h-full object-contain p-2" />
@@ -303,7 +303,7 @@ function ProductDetailPage() {
             <div>
               <div className="flex items-start justify-between mb-2">
                 <div>
-                  <p className="text-sm text-pink-600 font-semibold uppercase">
+                  <p className="text-sm text-blue-600 font-semibold uppercase">
                     {product.category || product.type || product.brand}
                   </p>
                   <h1 className="text-3xl font-bold text-gray-800 mt-1">{product.name}</h1>
@@ -335,9 +335,9 @@ function ProductDetailPage() {
             </div>
 
             {/* Price Section */}
-            <div className="bg-pink-50 rounded-lg p-4">
+            <div className="bg-blue-50 rounded-lg p-4">
               <div className="flex items-baseline gap-3 mb-3">
-                <span className="text-3xl font-bold text-pink-600">₹{product.price}</span>
+                <span className="text-3xl font-bold text-blue-600">₹{product.price}</span>
                 {product.mrp && (
                   <span className="text-lg text-gray-400 line-through">₹{product.mrp}</span>
                 )}
@@ -361,7 +361,7 @@ function ProductDetailPage() {
                         onClick={() => setSelectedColor(color)}
                         className={`px-4 py-2 rounded-lg border-2 transition ${
                           selectedColor === color
-                            ? "border-pink-600 bg-pink-50"
+                            ? "border-blue-600 bg-blue-50"
                             : "border-gray-200 hover:border-gray-300"
                         }`}
                       >
@@ -383,7 +383,7 @@ function ProductDetailPage() {
                         onClick={() => setSelectedSize(size)}
                         className={`py-2 rounded-lg border-2 font-semibold transition ${
                           selectedSize === size
-                            ? "border-pink-600 bg-pink-600 text-white"
+                            ? "border-blue-600 bg-blue-600 text-white"
                             : "border-gray-200 hover:border-gray-300"
                         }`}
                       >
@@ -419,14 +419,14 @@ function ProductDetailPage() {
             <div className="grid grid-cols-2 gap-3">
               <button
                 onClick={handleAddToCart}
-                className="py-3 rounded-lg border-2 border-pink-600 text-pink-600 font-semibold hover:bg-pink-50 transition flex items-center justify-center gap-2"
+                className="py-3 rounded-lg border-2 border-blue-600 text-blue-600 font-semibold hover:bg-blue-50 transition flex items-center justify-center gap-2"
               >
                 <ShoppingCart size={20} />
                 Add to Cart
               </button>
               <button
                 onClick={handleBuyNow}
-                className="py-3 rounded-lg bg-pink-600 text-white font-semibold hover:bg-pink-700 transition"
+                className="py-3 rounded-lg bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold hover:from-blue-700 hover:to-purple-700 transition"
               >
                 Buy Now
               </button>
@@ -471,7 +471,7 @@ function ProductDetailPage() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-4 py-4 font-semibold transition ${
                   activeTab === tab.id
-                    ? "text-pink-600 border-b-2 border-pink-600"
+                    ? "text-blue-600 border-b-2 border-blue-600"
                     : "text-gray-600 hover:text-gray-800"
                 }`}
               >
