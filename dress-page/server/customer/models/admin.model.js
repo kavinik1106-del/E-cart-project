@@ -1,8 +1,7 @@
 import { DataTypes } from 'sequelize';
+import adminDB from '../../config/database.js';
 
-
-export default (sequelize) => {
-  const AdminCustomer = sequelize.define('Customer', {
+const AdminCustomer = adminDB.define('Customer', {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
@@ -45,5 +44,4 @@ export default (sequelize) => {
     tableName: 'customers',
   });
 
-  return AdminCustomer;
-};
+export default AdminCustomer;

@@ -19,6 +19,12 @@ import HomeAppliances from "./HomeAppliances.jsx";
 import LoginPage from "./LoginPageAPI.jsx";
 import SearchResults from "./SearchResults.jsx";
 import ProductDetailPage from "./ProductDetailPage.jsx";
+import ShoesCategory from "./ShoesCategory.jsx";
+import LoginPage from "./LoginPage.jsx";
+import { CustomerProvider } from "./contexts/CustomerContext";
+
+
+import PrivateRoute from "./components/PrivateRoute.jsx";
 
 
 /* Cart & Wishlist */
@@ -28,6 +34,7 @@ import CheckoutPage from "./CheckoutPage.jsx";
 import { CartProvider, useCart } from "./contexts/CartContext.jsx";
 
 /* Admin */
+import { CartProvider } from "./contexts/CartContext.jsx";
 import AdminPanel from "./admin/AdminPanel.jsx";
 import AdminLogin from "./admin/AdminLogin.jsx";
 import AdminProducts from "./admin/AdminProducts.jsx";
@@ -40,10 +47,9 @@ import ProtectedRoute from "./admin/ProtectedRoute.jsx";
 import Toast from "./components/Toast.jsx"; // <-- ADD THIS
 
 function AppContent() {
-  const { toast } = useCart();
-
   return (
-    <>
+    <CartProvider>
+      <CustomerProvider>
       <Routes>
         {/* Public Routes */}
         <Route path="/" element={<HomePage />} />
@@ -63,7 +69,11 @@ function AppContent() {
         <Route path="/appliances" element={<HomeAppliances />} />
         <Route path="/bicycles" element={<Bicycles />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/search" element={<SearchResults />} />
+        <Route path="/admin/customers" element={<AdminCustomers />} />
+        <Route path="/admin/customers" element={<AdminCustomers />} />
+        
+        <Route path="/product/:id" element={<ProductDetailPage />} />
+        
 
         {/* Cart */}
         <Route path="/cart" element={<CartPage />} />
@@ -130,8 +140,18 @@ function App() {
   return (
     <CartProvider>
       <AppContent />
+        <Route path="/admin" element={<ProtectedRoute><AdminPanel /></ProtectedRoute>} />
+        <Route path="/admin/products" element={<ProtectedRoute><AdminProducts /></ProtectedRoute>} />
+        <Route path="/admin/orders" element={<ProtectedRoute><AdminOrders /></ProtectedRoute>} />
+        <Route path="/admin/customers" element={<ProtectedRoute><AdminCustomers /></ProtectedRoute>} />
+        <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
+        
+
+    </Routes>
+    </CustomerProvider>
     </CartProvider>
   );
 }
 
 export default App;
+export default AppContent;    
