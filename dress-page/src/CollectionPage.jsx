@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from "react";
 import Navbar from "./Navbar.jsx";
 import ProductCard from "./ProductCard.jsx";
@@ -789,21 +790,13 @@ function CollectionPage() {
   });
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
-    switch (sortBy) {
-      case "price-low":
-        return a.price - b.price;
-      case "price-high":
-        return b.price - a.price;
-      case "rating":
-        return b.rating - a.rating;
-      case "newest":
-        return b.id - a.id;
-      default:
-        return 0;
-    }
+    if (sortBy === "price-low") return a.price - b.price;
+    if (sortBy === "price-high") return b.price - a.price;
+    if (sortBy === "rating") return b.rating - a.rating;
+    return b.id - a.id;
   });
 
-  /* ---------- PAGINATION ---------- */
+
   const totalPages = Math.ceil(sortedProducts.length / itemsPerPage);
   const paginatedProducts = sortedProducts.slice(
     (currentPage - 1) * itemsPerPage,
@@ -835,57 +828,17 @@ function CollectionPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
 
-      {/* Enhanced Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white">
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-pattern"></div>
-        </div>
 
-        {/* Floating Elements */}
-        <div className="absolute top-20 left-10 w-20 h-20 bg-white/5 rounded-full blur-xl animate-pulse" />
-        <div className="absolute bottom-20 right-10 w-32 h-32 bg-yellow-300/10 rounded-full blur-2xl animate-pulse delay-1000" />
-
-        <div className="relative max-w-7xl mx-auto px-6 py-16">
-          <div className="text-center">
-            <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <Sparkles className="w-4 h-4 text-yellow-300" />
-              Premium Collection
-            </div>
-
-            <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-              Discover Our{" "}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-300">
-                Complete Collection
-              </span>
-            </h1>
-
-            <p className="text-xl lg:text-2xl mb-8 text-blue-100 leading-relaxed max-w-4xl mx-auto">
-              Explore thousands of premium products across fashion, electronics,
-              home essentials, and more. Curated for quality, style, and value.
-            </p>
-
-            {/* Quick Stats */}
-            <div className="flex flex-wrap justify-center gap-8 mb-8 text-center">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl px-6 py-4">
-                <div className="text-2xl font-bold text-yellow-300">
-                  {allProducts.length}+
-                </div>
-                <div className="text-sm text-blue-200">Products</div>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl px-6 py-4">
-                <div className="text-2xl font-bold text-yellow-300">50+</div>
-                <div className="text-sm text-blue-200">Brands</div>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl px-6 py-4">
-                <div className="text-2xl font-bold text-yellow-300">8</div>
-                <div className="text-sm text-blue-200">Categories</div>
-              </div>
-            </div>
-          </div>
+      {/* Hero Section */}
+      <div className="bg-gradient-to-r from-blue-600 to-blue-500 text-white">
+        <div className="max-w-7xl mx-auto px-4 py-8">
+          <h1 className="text-4xl font-bold mb-2">Explore All Products</h1>
+          <p className="text-lg text-blue-100 max-w-2xl">
+            Discover our complete collection of premium products across all categories
+          </p>
         </div>
       </div>
 
