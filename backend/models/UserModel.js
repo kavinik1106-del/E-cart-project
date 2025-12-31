@@ -8,8 +8,16 @@ class UserModel {
       INSERT INTO users (email, password, first_name, last_name, phone)
       VALUES (?, ?, ?, ?, ?)
     `;
-    const [result] = await pool.query(query, [email, password, first_name, last_name, phone]);
-    return result;
+    try {
+      const [result] = await pool.query(query, [email, password, first_name, last_name, phone]);
+      return {
+        insertId: result.insertId,
+        affectedRows: result.affectedRows
+      };
+    } catch (error) {
+      console.error('Error creating user:', error);
+      throw error;
+    }
   }
 
   // Find user by email

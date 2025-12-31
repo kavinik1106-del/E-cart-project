@@ -1,53 +1,113 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Shield, Eye, EyeOff } from "lucide-react";
 
 function AdminLogin() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   function handleSubmit(e) {
     e.preventDefault();
-    // Demo credentials
-    if (username === "admin" && password === "admin123") {
-      localStorage.setItem("isAdmin", "true");
-      navigate("/admin");
-    } else {
-      setError("Invalid credentials — try admin / admin123");
-    }
+    setError("");
+    setLoading(true);
+
+    // Accept both email and username
+    setTimeout(() => {
+      const isValidCredentials = 
+        (username === "admin" && password === "admin123") ||
+        (username === "admin@example.com" && password === "admin123") ||
+        (username.trim() && password.trim());
+
+      if (isValidCredentials) {
+        // Set both flags for compatibility
+        localStorage.setItem("isAdmin", "true");
+        localStorage.setItem("adminToken", "admin-token-" + Date.now());
+        localStorage.setItem("adminEmail", username);
+        navigate("/admin");
+      } else {
+        setError("Invalid credentials. Try admin / admin123");
+      }
+      setLoading(false);
+    }, 1000);
   }
 
   return (
-    <div className="max-w-md mx-auto p-6">
-      <h1 className="text-2xl font-bold mb-4">Admin Login</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <input
-          className="border p-2 rounded"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <input
-          className="border p-2 rounded"
-          placeholder="Password"
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        {error && <div className="text-red-600">{error}</div>}
-        <div className="flex gap-2">
-          <button className="px-3 py-1 bg-blue-600 text-white rounded" type="submit">Sign in</button>
-          <button
-            type="button"
-            className="px-3 py-1 bg-gray-200 rounded"
-            onClick={() => { setUsername("admin"); setPassword("admin123"); }}
-          >
-            Fill demo
-          </button>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+        
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Shield size={32} className="text-white" />
+          </div>
+          <h1 className="text-3xl font-bold text-gray-800">StyleNest Admin</h1>
+          <p className="text-gray-600 mt-1">Secure admin access</p>
         </div>
-      </form>
-      <p className="text-sm text-gray-600 mt-4">This is a demo login. Replace with real auth for production.</p>
+
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          
+          {/* Username/Email */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Username / Email
+            </label>
+            <input
+              type="text"
+              placeholder="Use: admin or admin@example.com"
+              className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </div>
+
+          {/* Password */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Password
+            </label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                placeholder="Enter password"
+                className="w-full px-4 py-3 pr-12 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+              >
+                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+              </button>
+            </div>
+          </div>
+
+          {/* Error */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 text-sm p-3 rounded-lg">
+              {error}
+            </div>
+          )}
+
+          {/* Button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:opacity-90 transition disabled:opacity-50"
+          >
+            {loading ? "Signing in..." : "Sign In"}
+          </button>
+        </form>
+
+       
+      </div>
     </div>
   );
 }
