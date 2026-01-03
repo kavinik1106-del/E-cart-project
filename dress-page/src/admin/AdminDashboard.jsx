@@ -61,7 +61,7 @@ function AdminDashboard() {
   return (
     <div className="space-y-6">
       {/* Test Heading */}
-      <div className="bg-blue-100 p-4 rounded mb-4">
+      <div className="bg-primary/20 p-4 rounded mb-4">
         <h1 className="text-2xl font-bold text-blue-900">Admin Dashboard</h1>
         <p className="text-blue-700">Stats: Sales={stats.totalSales}, Orders={stats.totalOrders}</p>
       </div>
@@ -130,9 +130,9 @@ function AdminDashboard() {
                           order.status === "Delivered"
                             ? "bg-green-100 text-green-800"
                             : order.status === "Processing"
-                            ? "bg-blue-100 text-blue-800"
+                            ? "bg-primary/20 text-primary"
                             : order.status === "Shipped"
-                            ? "bg-yellow-100 text-yellow-800"
+                            ? "bg-secondary/20 text-secondary"
                             : "bg-gray-100 text-gray-800"
                         }`}
                       >
@@ -188,7 +188,7 @@ function AdminDashboard() {
           {salesOverview.map((item, index) => (
             <div key={index} className="flex flex-col items-center gap-2">
               <div
-                className="bg-blue-500 w-6 rounded-t"
+                className="bg-primary w-6 rounded-t"
                 style={{ height: `${item.sales / 500}px` }}
               ></div>
               <span className="text-xs mt-1">{item.month}</span>

@@ -833,14 +833,17 @@ function CollectionPage() {
 
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-500 text-white">
-        <div className="max-w-7xl mx-auto px-4 py-8">
-          <h1 className="text-4xl font-bold mb-2">Explore All Products</h1>
-          <p className="text-lg text-blue-100 max-w-2xl">
-            Discover our complete collection of premium products across all categories
-          </p>
-        </div>
-      </div>
+<div className="bg-primary text-white">
+  <div className="max-w-7xl mx-auto px-4 py-20 flex flex-col items-center justify-center text-center">
+    <h1 className="text-4xl md:text-5xl font-bold mb-4">
+      Explore All Products
+    </h1>
+    <p className="text-lg md:text-xl text-blue-100 max-w-2xl">
+      Discover our complete collection of premium products across all categories
+    </p>
+  </div>
+</div>
+
 
       {/* Enhanced Categories Section */}
       <section className="bg-white mt-2 p-6 shadow-lg border-b border-gray-100">
@@ -882,7 +885,7 @@ function CollectionPage() {
                 <div
                   className={`w-24 h-24 mx-auto rounded-2xl border-4 flex items-center justify-center text-3xl mb-3 transition-all duration-300 ${
                     selectedCategory === "all"
-                      ? "border-blue-500 bg-blue-50 shadow-lg shadow-blue-200"
+                      ? "border-primary bg-primary/10 shadow-lg shadow-primary/20"
                       : "border-gray-200 bg-gray-50 hover:border-blue-300 hover:shadow-md"
                   }`}
                 >
@@ -955,7 +958,7 @@ function CollectionPage() {
             <div className="lg:hidden mb-6">
               <button
                 onClick={() => setShowFilters(!showFilters)}
-                className="flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl hover:from-blue-600 hover:to-blue-700 w-full shadow-lg transition-all duration-300 font-medium"
+                className="flex items-center justify-center gap-3 px-6 py-4 bg-primary text-white rounded-2xl hover:bg-primary w-full shadow-lg transition-all duration-300 font-medium"
               >
                 <Filter className="w-5 h-5" />
                 Filters & Sort
@@ -1111,7 +1114,7 @@ function CollectionPage() {
                       setSortBy("newest");
                       setCurrentPage(1);
                     }}
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-medium transition-colors duration-200"
+                    className="bg-primary hover:bg-primary text-white px-6 py-3 rounded-xl font-medium transition-colors duration-200"
                   >
                     Clear Filters
                   </button>
@@ -1154,7 +1157,7 @@ function CollectionPage() {
                           onClick={() => setCurrentPage(pageNum)}
                           className={`px-4 py-3 rounded-xl font-medium transition-all duration-200 ${
                             currentPage === pageNum
-                              ? "bg-blue-500 text-white shadow-lg shadow-blue-200"
+                              ? "bg-primary text-white shadow-lg shadow-primary/20"
                               : "border border-gray-200 hover:bg-gray-50 text-gray-700"
                           }`}
                         >

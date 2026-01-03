@@ -8,14 +8,13 @@ function ProductDetail() {
   const { id: _id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+  const { addToCart, toggleWishlist, isInWishlist } = useCart();
   const product = location.state?.product;
 
   const [qty, setQty] = useState(1);
   const [size, setSize] = useState(product?.sizeGuide ? Object.keys(product.sizeGuide)[0] : "M");
   const [selectedQuantity, setSelectedQuantity] = useState(product?.quantityGuide ? Object.keys(product.quantityGuide)[0] : null);
   const [color, setColor] = useState("Default");
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [activeTab, setActiveTab] = useState("description");
 
   // Get product price based on quantity selection
@@ -40,7 +39,7 @@ function ProductDetail() {
         <div className="max-w-4xl mx-auto p-6 text-center">
           <h2 className="text-2xl font-bold">Product not found</h2>
           <p className="mt-2 text-gray-600">No product data was provided. Go back to the catalog.</p>
-          <Link to="/collection" className="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded">Browse Collection</Link>
+          <Link to="/collection" className="mt-4 inline-block bg-primary text-white px-4 py-2 rounded">Browse Collection</Link>
         </div>
       </div>
     );
@@ -120,8 +119,8 @@ function ProductDetail() {
                           onClick={() => setSelectedQuantity(key)}
                           className={`px-4 py-2 border rounded-lg font-medium transition ${
                             selectedQuantity === key
-                              ? 'bg-blue-600 text-white border-blue-600'
-                              : 'bg-white text-gray-700 border-gray-300 hover:border-blue-600'
+                              ? 'bg-primary text-white border-primary'
+                              : 'bg-white text-gray-700 border-gray-300 hover:border-primary'
                           }`}
                         >
                           <div>{key}</div>
@@ -143,8 +142,8 @@ function ProductDetail() {
                           onClick={() => setSize(s)}
                           className={`px-4 py-2 border rounded-lg font-medium transition ${
                             size === s
-                              ? 'bg-blue-600 text-white border-blue-600'
-                              : 'bg-white text-gray-700 border-gray-300 hover:border-blue-600'
+                              ? 'bg-primary text-white border-primary'
+                              : 'bg-white text-gray-700 border-gray-300 hover:border-primary'
                           }`}
                         >
                           {s}
@@ -226,15 +225,15 @@ function ProductDetail() {
               <div className="flex gap-4 mb-6">
                 <button
                   onClick={handleAddToCart}
-                  className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-semibold transition"
+                  className="flex-1 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary font-semibold transition"
                 >
                   Add to Cart
                 </button>
                 <button
-                  onClick={() => setIsWishlisted(!isWishlisted)}
+                  onClick={() => toggleWishlist(product)}
                   className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition"
                 >
-                  <Heart size={20} className={isWishlisted ? "fill-red-600 text-red-600" : ""} />
+                  <Heart size={20} className={isInWishlist(product.id) ? "fill-red-600 text-red-600" : ""} />
                 </button>
                 <button className="px-6 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition">
                   <Share2 size={20} />
@@ -599,7 +598,7 @@ function ProductDetail() {
                       <Link
                         to={`/product/${r.id}`}
                         state={{ product: r }}
-                        className="w-full bg-blue-600 text-white px-3 py-2 rounded text-sm font-semibold hover:bg-blue-700 transition block text-center"
+                        className="w-full bg-primary text-white px-3 py-2 rounded text-sm font-semibold hover:bg-primary transition block text-center"
                       >
                         View Details
                       </Link>

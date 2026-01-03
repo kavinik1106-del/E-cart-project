@@ -99,7 +99,7 @@ function ProductCard({ product, products = [], showRating = false }) {
           {/* Quick Add Button */}
           <button
             onClick={handleQuickAdd}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition text-sm font-medium"
+            className="w-full bg-primary text-white py-2 rounded-lg hover:bg-primary transition text-sm font-medium"
           >
             Quick Add
           </button>

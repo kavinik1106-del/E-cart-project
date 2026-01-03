@@ -1,427 +1,273 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './LoginPage.css';
-import { apiCall, API_ENDPOINTS } from './config/apiConfig.js';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Eye, EyeOff } from "lucide-react";
+import { apiCall, API_ENDPOINTS } from "./config/apiConfig.js";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('login');
+
+  // ===== STATES =====
+  const [activeTab, setActiveTab] = useState("login");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
-  const [messageType, setMessageType] = useState('');
+  const [message, setMessage] = useState("");
+  const [messageType, setMessageType] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-  // Login form state
   const [loginData, setLoginData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
 
-  // Register form state
   const [registerData, setRegisterData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    first_name: '',
-    last_name: '',
-    phone: ''
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    phone: "",
   });
 
-  // Handle login input change
-  const handleLoginChange = (e) => {
-    const { name, value } = e.target;
-    setLoginData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+  // ===== VALIDATIONS =====
+  const validateEmail = (v) =>
+    !v
+      ? "Email is required"
+      : !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+      ? "Enter a valid email"
+      : "";
 
-  // Password strength checker
-  const getPasswordStrength = (password) => {
-    let strength = 0;
-    if (password.length >= 8) strength++;
-    if (/[A-Z]/.test(password)) strength++;
-    if (/[a-z]/.test(password)) strength++;
-    if (/[0-9]/.test(password)) strength++;
-    if (/[^A-Za-z0-9]/.test(password)) strength++;
-    return strength;
-  };
+  const validatePassword = (v) =>
+    !v ? "Password is required" : v.length < 6 ? "Min 6 characters" : "";
 
-  const getPasswordStrengthText = (strength) => {
-    if (strength <= 1) return { text: 'Weak', color: 'text-red-500' };
-    if (strength <= 3) return { text: 'Medium', color: 'text-yellow-500' };
-    return { text: 'Strong', color: 'text-green-500' };
-  };
+  const validateMobile = (v) =>
+    !/^[6-9]\d{9}$/.test(v) ? "Enter valid 10-digit number" : "";
 
-  // Login handler
+  const validateName = (v) => (!v ? "This field is required" : "");
+
+  // ===== LOGIN =====
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (loading) return;
 
-    // Quick client-side validation for clearer feedback
-    if (!loginData.email || !loginData.password) {
-      setMessageType('error');
-      setMessage('Please enter both email and password');
+    const emailError = validateEmail(loginData.email);
+    const passwordError = validatePassword(loginData.password);
+
+    if (emailError || passwordError) {
+      setMessageType("error");
+      setMessage(emailError || passwordError);
       return;
     }
 
     setLoading(true);
-    setMessage('');
+    setMessage("");
 
     try {
-      const response = await apiCall(API_ENDPOINTS.LOGIN, {
-        method: 'POST',
-        body: JSON.stringify({
-          email: loginData.email,
-          password: loginData.password
-        })
+      const res = await apiCall(API_ENDPOINTS.LOGIN, {
+        method: "POST",
+        body: JSON.stringify(loginData),
       });
 
-      const data = await response.json();
+      const data = await res.json();
 
-      if (data.success) {
-        setMessageType('success');
-        setMessage('Login successful! Redirecting...');
-
-        // Store user data in localStorage
-        localStorage.setItem('user', JSON.stringify(data.data.user));
-        localStorage.setItem('token', data.data.token);
-
-        setTimeout(() => {
-          navigate('/');
-        }, 1000);
-      } else {
-        setMessageType('error');
-        setMessage(data.message || 'Login failed');
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Invalid credentials");
       }
-    } catch (error) {
-      setMessageType('error');
-      // Network / parsing errors
-      const friendly = error.message && error.message.includes('Failed to fetch')
-        ? 'Network error: cannot reach the server. Is the backend running?'
-        : 'Unexpected error: ' + (error.message || 'Please try again');
-      setMessage(friendly);
-      console.error('Login error:', error);
+
+      localStorage.setItem("token", data.data.token);
+      localStorage.setItem("user", JSON.stringify(data.data.user));
+
+      setMessageType("success");
+      setMessage("Login successful! Redirecting...");
+      setTimeout(() => navigate("/"), 1000);
+    } catch (err) {
+      setMessageType("error");
+      setMessage(err.message || "Unable to login");
     } finally {
       setLoading(false);
     }
   };
 
-  // Register handler
+  // ===== REGISTER =====
   const handleRegister = async (e) => {
     e.preventDefault();
+    if (loading) return;
+
+    const errors = [
+      validateName(registerData.first_name),
+      validateName(registerData.last_name),
+      validateEmail(registerData.email),
+      validatePassword(registerData.password),
+      registerData.password !== registerData.confirmPassword
+        ? "Passwords do not match"
+        : "",
+      validateMobile(registerData.phone),
+    ].filter(Boolean);
+
+    if (errors.length) {
+      setMessageType("error");
+      setMessage(errors[0]);
+      return;
+    }
+
     setLoading(true);
-    setMessage('');
-
-    // Validation
-    if (!registerData.email || !registerData.password || !registerData.confirmPassword) {
-      setMessageType('error');
-      setMessage('Please fill in all required fields');
-      setLoading(false);
-      return;
-    }
-
-    if (registerData.password !== registerData.confirmPassword) {
-      setMessageType('error');
-      setMessage('Passwords do not match');
-      setLoading(false);
-      return;
-    }
-
-    if (registerData.password.length < 6) {
-      setMessageType('error');
-      setMessage('Password must be at least 6 characters');
-      setLoading(false);
-      return;
-    }
+    setMessage("");
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          email: registerData.email,
-          password: registerData.password,
-          confirmPassword: registerData.confirmPassword,
-          first_name: registerData.first_name,
-          last_name: registerData.last_name,
-          phone: registerData.phone
-        })
+      const res = await apiCall(API_ENDPOINTS.REGISTER, {
+        method: "POST",
+        body: JSON.stringify(registerData),
       });
 
-      const data = await response.json();
+      const data = await res.json();
 
-      if (data.success) {
-        setMessageType('success');
-        setMessage('Registration successful! Please login.');
-
-        // Reset form
-        setRegisterData({
-          email: '',
-          password: '',
-          confirmPassword: '',
-          first_name: '',
-          last_name: '',
-          phone: ''
-        });
-
-        // Switch to login tab after 2 seconds
-        setTimeout(() => {
-          setActiveTab('login');
-          setMessage('');
-        }, 2000);
-      } else {
-        setMessageType('error');
-        setMessage(data.message || 'Registration failed');
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || "Registration failed");
       }
-    } catch (error) {
-      setMessageType('error');
-      setMessage('Error: ' + error.message);
+
+      setMessageType("success");
+      setMessage("Account created! Please login.");
+
+      setRegisterData({
+        first_name: "",
+        last_name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        phone: "",
+      });
+
+      setTimeout(() => {
+        setActiveTab("login");
+        setMessage("");
+      }, 1500);
+    } catch (err) {
+      setMessageType("error");
+      setMessage(err.message || "Unable to register");
     } finally {
       setLoading(false);
     }
   };
 
+  // ===== UI =====
   return (
-    <div className="login-page">
-      <div className="login-container">
-        {/* Logo/Brand */}
-        <div className="brand-section">
-          <h1 className="brand-logo">StyleNest</h1>
-          <p className="brand-tagline">Your Fashion Destination</p>
+    <div className="min-h-screen flex flex-col md:flex-row bg-gray-50">
+      {/* LEFT: Brand + Illustration */}
+      <div className="hidden md:flex w-1/2 bg-primary items-center justify-center">
+        <div className="text-center px-12 py-24 text-yellow-50 max-w-lg">
+          <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight mb-4">StyleNest</h1>
+          <p className="text-sm sm:text-lg opacity-90 mb-6">Discover premium fashion picks — curated collections, fast delivery, and secure checkout.</p>
+
+          <ul className="text-left space-y-3 mt-6">
+            <li className="flex items-start gap-3">
+              <span className="mt-1 bg-yellow-400 text-indigo-800 rounded-full px-2 py-1 text-xs font-semibold">1</span>
+              <span className="text-sm">Handpicked collections from trusted brands</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="mt-1 bg-yellow-400 text-indigo-800 rounded-full px-2 py-1 text-xs font-semibold">2</span>
+              <span className="text-sm">Secure payments & buyer protection</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <span className="mt-1 bg-yellow-400 text-indigo-800 rounded-full px-2 py-1 text-xs font-semibold">3</span>
+              <span className="text-sm">Easy returns within 30 days</span>
+            </li>
+          </ul>
         </div>
+      </div>
 
-        {/* Login/Register Card */}
-        <div className="auth-card">
-          <div className="auth-header">
-            <h2 className="auth-title">
-              {activeTab === 'login' ? 'Sign in' : 'Create account'}
-            </h2>
-            {activeTab === 'login' && (
-              <p className="auth-subtitle">Welcome back! Please sign in to your account.</p>
-            )}
+      {/* RIGHT: Card */}
+      <div className="flex-1 flex items-center justify-center p-8">
+        <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+          <div className="mb-6 text-center">
+            <div className="mx-auto w-14 h-14 rounded-lg bg-primary flex items-center justify-center text-white font-bold text-lg shadow-md">SN</div>
+            <h2 className="text-2xl font-bold mt-4">Welcome back</h2>
+            <p className="text-sm text-gray-500 mt-1">Sign in to continue to StyleNest</p>
           </div>
 
-          {/* Tab Switcher */}
-          <div className="tab-switcher">
-            <button
-              className={`tab-btn ${activeTab === 'login' ? 'active' : ''}`}
-              onClick={() => setActiveTab('login')}
-            >
-              Sign in
-            </button>
-            <button
-              className={`tab-btn ${activeTab === 'register' ? 'active' : ''}`}
-              onClick={() => setActiveTab('register')}
-            >
-              New customer? Create account
-            </button>
+          {/* Tabs */}
+          <div className="flex mb-4 bg-gray-50 rounded-lg p-1">
+            {['login', 'register'].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => { setActiveTab(tab); setMessage(''); }}
+                className={`flex-1 py-2 text-sm font-medium rounded-md transition ${activeTab === tab ? 'bg-white shadow-sm text-primary' : 'text-gray-500'}`}>
+                {tab === 'login' ? 'Sign in' : 'Create account'}
+              </button>
+            ))}
           </div>
 
-          {/* Message Display */}
           {message && (
-            <div className={`message ${messageType}`}>
-              {message}
-            </div>
+            <p className={`text-center text-sm mb-4 ${messageType === 'success' ? 'text-green-600' : 'text-red-500'}`}>{message}</p>
           )}
 
-          {/* LOGIN FORM */}
+          {/* LOGIN */}
           {activeTab === 'login' && (
-            <form onSubmit={handleLogin} className="auth-form">
-              <div className="form-group">
-                <label htmlFor="login-email">Email or mobile phone number</label>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <label className="text-xs text-gray-600 mb-1 block">Email</label>
                 <input
-                  type="email"
-                  id="login-email"
                   name="email"
+                  placeholder="you@domain.com"
                   value={loginData.email}
-                  onChange={handleLoginChange}
-                  placeholder="Enter your email"
-                  required
-                  className="form-input"
+                  onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
+                  className="w-full border border-gray-200 p-3 rounded-lg focus:ring-2 focus:ring-blue-200 outline-none"
                 />
               </div>
 
-              <div className="form-group">
-                <label htmlFor="login-password">Password</label>
-                <input
-                  type="password"
-                  id="login-password"
-                  name="password"
-                  value={loginData.password}
-                  onChange={handleLoginChange}
-                  placeholder="Enter your password"
-                  required
-                  className="form-input"
-                />
+              <div>
+                <label className="text-xs text-gray-600 mb-1 block">Password</label>
+                <div className="relative">
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    placeholder="Enter your password"
+                    value={loginData.password}
+                    onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                    className="w-full border border-gray-200 p-3 rounded-lg pr-10 focus:ring-2 focus:ring-blue-200 outline-none"
+                  />
+                  <button type="button" className="absolute right-3 top-3 text-gray-400" onClick={() => setShowPassword(!showPassword)}>{showPassword ? <EyeOff /> : <Eye />}</button>
+                </div>
               </div>
 
-              <div className="form-options">
-                <label className="checkbox-label">
-                  <input type="checkbox" className="checkbox-input" />
-                  <span className="checkmark"></span>
-                  Keep me signed in
+              <div className="flex items-center justify-between text-sm">
+                <label className="flex items-center gap-2 text-gray-600">
+                  <input type="checkbox" className="h-4 w-4" /> Remember me
                 </label>
-                <a href="#forgot" className="forgot-link">Forgot your password?</a>
+                <button type="button" className="text-primary font-medium">Forgot?</button>
               </div>
 
-              <button
-                type="submit"
-                className="auth-button"
-                disabled={loading}
-              >
+              <button disabled={loading} className="w-full py-3 rounded-lg bg-primary text-white font-semibold shadow-md hover:opacity-95">
                 {loading ? 'Signing in...' : 'Sign in'}
               </button>
 
-              <div className="form-footer">
-                <p className="terms-text">
-                  By continuing, you agree to StyleNest's{' '}
-                  <a href="#conditions" className="link">Conditions of Use</a> and{' '}
-                  <a href="#privacy" className="link">Privacy Notice</a>.
-                </p>
+              <div className="flex items-center gap-3 mt-2">
+                <div className="flex-1 h-px bg-gray-200" />
+                <div className="text-xs text-gray-400">or continue with</div>
+                <div className="flex-1 h-px bg-gray-200" />
+              </div>
+
+              <div className="flex gap-3 mt-3">
+                <button type="button" className="flex-1 py-2 rounded-lg border border-gray-200 text-sm">Continue with Google</button>
+                <button type="button" className="py-2 px-3 rounded-lg border border-gray-200 text-sm">Apple</button>
               </div>
             </form>
           )}
 
-          {/* REGISTER FORM */}
+          {/* REGISTER */}
           {activeTab === 'register' && (
-            <form onSubmit={handleRegister} className="auth-form">
-              <div className="form-row">
-                <div className="form-group">
-                  <label htmlFor="first-name">First name</label>
-                  <input
-                    type="text"
-                    id="first-name"
-                    name="first_name"
-                    value={registerData.first_name}
-                    onChange={handleRegisterChange}
-                    placeholder="First name"
-                    className="form-input"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="last-name">Last name</label>
-                  <input
-                    type="text"
-                    id="last-name"
-                    name="last_name"
-                    value={registerData.last_name}
-                    onChange={handleRegisterChange}
-                    placeholder="Last name"
-                    className="form-input"
-                  />
-                </div>
+            <form onSubmit={handleRegister} className="space-y-3">
+              <div className="grid grid-cols-2 gap-3">
+                <input placeholder="First name" onChange={(e) => setRegisterData({ ...registerData, first_name: e.target.value })} className="w-full border border-gray-200 p-3 rounded-lg" />
+                <input placeholder="Last name" onChange={(e) => setRegisterData({ ...registerData, last_name: e.target.value })} className="w-full border border-gray-200 p-3 rounded-lg" />
               </div>
+              <input placeholder="Email" onChange={(e) => setRegisterData({ ...registerData, email: e.target.value })} className="w-full border border-gray-200 p-3 rounded-lg" />
+              <input placeholder="Phone" onChange={(e) => setRegisterData({ ...registerData, phone: e.target.value })} className="w-full border border-gray-200 p-3 rounded-lg" />
+              <input type="password" placeholder="Password" onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })} className="w-full border border-gray-200 p-3 rounded-lg" />
+              <input type="password" placeholder="Confirm password" onChange={(e) => setRegisterData({ ...registerData, confirmPassword: e.target.value })} className="w-full border border-gray-200 p-3 rounded-lg" />
 
-              <div className="form-group">
-                <label htmlFor="reg-email">Email</label>
-                <input
-                  type="email"
-                  id="reg-email"
-                  name="email"
-                  value={registerData.email}
-                  onChange={handleRegisterChange}
-                  placeholder="Enter your email"
-                  required
-                  className="form-input"
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="phone">Mobile number (optional)</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={registerData.phone}
-                  onChange={handleRegisterChange}
-                  placeholder="Enter your mobile number"
-                  className="form-input"
-                />
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="reg-password">Password</label>
-                <input
-                  type="password"
-                  id="reg-password"
-                  name="password"
-                  value={registerData.password}
-                  onChange={handleRegisterChange}
-                  placeholder="At least 6 characters"
-                  required
-                  className="form-input"
-                />
-                {registerData.password && (
-                  <div className="password-strength">
-                    <div className="strength-bar">
-                      <div 
-                        className={`strength-fill strength-${getPasswordStrength(registerData.password)}`}
-                        style={{ width: `${(getPasswordStrength(registerData.password) / 5) * 100}%` }}
-                      ></div>
-                    </div>
-                    <span className={`strength-text ${getPasswordStrengthText(getPasswordStrength(registerData.password)).color}`}>
-                      {getPasswordStrengthText(getPasswordStrength(registerData.password)).text}
-                    </span>
-                  </div>
-                )}
-                <div className="password-hint">
-                  Passwords must be at least 6 characters.
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="confirm-password">Re-enter password</label>
-                <input
-                  type="password"
-                  id="confirm-password"
-                  name="confirmPassword"
-                  value={registerData.confirmPassword}
-                  onChange={handleRegisterChange}
-                  placeholder="Re-enter your password"
-                  required
-                  className="form-input"
-                />
-              </div>
-
-              <button
-                type="submit"
-                className="auth-button"
-                disabled={loading}
-              >
-                {loading ? 'Creating account...' : 'Create your StyleNest account'}
-              </button>
-
-              <div className="form-footer">
-                <p className="terms-text">
-                  By creating an account, you agree to StyleNest's{' '}
-                  <a href="#conditions" className="link">Conditions of Use</a> and{' '}
-                  <a href="#privacy" className="link">Privacy Notice</a>.
-                </p>
-              </div>
+              <button disabled={loading} className="w-full py-3 rounded-lg bg-primary text-white font-semibold shadow-md">{loading ? 'Creating...' : 'Create account'}</button>
             </form>
           )}
-        </div>
 
-        {/* Footer Links */}
-        <div className="footer-links">
-          <div className="footer-section">
-            <h4>Need help?</h4>
-            <ul>
-              <li><a href="#forgot">Forgot Password</a></li>
-              <li><a href="#help">Help Center</a></li>
-              <li><a href="#contact">Contact Us</a></li>
-            </ul>
-          </div>
-          <div className="footer-section">
-            <h4>Shopping</h4>
-            <ul>
-              <li><a href="#deals">Today's Deals</a></li>
-              <li><a href="#categories">Shop by Category</a></li>
-              <li><a href="#new">New Arrivals</a></li>
-            </ul>
-          </div>
+          <p className="text-center text-xs text-gray-400 mt-6">🔒 Your login information is protected. By continuing you agree to our Terms of Service.</p>
         </div>
       </div>
     </div>

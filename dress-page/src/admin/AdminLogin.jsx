@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Shield, Eye, EyeOff } from "lucide-react";
+import { apiCall, API_ENDPOINTS } from "../config/apiConfig.js";
 
 function AdminLogin() {
   const [username, setUsername] = useState("");
@@ -11,38 +12,44 @@ function AdminLogin() {
 
   const navigate = useNavigate();
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     setError("");
     setLoading(true);
 
-    // Accept both email and username
-    setTimeout(() => {
-      const isValidCredentials = 
-        (username === "admin" && password === "admin123") ||
-        (username === "admin@example.com" && password === "admin123") ||
-        (username.trim() && password.trim());
+    try {
+      const response = await apiCall(API_ENDPOINTS.ADMIN_LOGIN, {
+        method: "POST",
+        body: JSON.stringify({
+          username: username,
+          password: password,
+        }),
+      });
 
-      if (isValidCredentials) {
-        // Set both flags for compatibility
+      if (response.success) {
+        // Store the real JWT token
         localStorage.setItem("isAdmin", "true");
-        localStorage.setItem("adminToken", "admin-token-" + Date.now());
+        localStorage.setItem("adminToken", response.data.token);
         localStorage.setItem("adminEmail", username);
         navigate("/admin");
       } else {
-        setError("Invalid credentials. Try admin / admin123");
+        setError(response.error || "Invalid credentials");
       }
+    } catch (err) {
+      setError("Login failed. Please try again.");
+      console.error("Login error:", err);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-primary/5 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
         
         {/* Logo */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-gradient-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
             <Shield size={32} className="text-white" />
           </div>
           <h1 className="text-3xl font-bold text-gray-800">StyleNest Admin</h1>
@@ -100,7 +107,7 @@ function AdminLogin() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 rounded-lg font-semibold hover:opacity-90 transition disabled:opacity-50"
+            className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:opacity-90 transition disabled:opacity-50"
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>

@@ -108,7 +108,7 @@ function AdminCustomersContent() {
               className="bg-white rounded-lg shadow-md border border-gray-100 p-6 hover:shadow-lg transition"
             >
               <div className="flex items-start justify-between mb-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                <div className="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold text-lg">
                   {customer.name.charAt(0)}
                 </div>
               </div>
