@@ -16,9 +16,13 @@ import Bicycles from "./bicycles.jsx";
 import Accessories from "./accessories.jsx";
 import Footwear from "./footwear.jsx";
 import HomeAppliances from "./HomeAppliances.jsx";
-import LoginPage from "./LoginPageAPI.jsx";
-import SearchResults from "./SearchResults.jsx";
+import ShoesCategory from "./ShoesCategory.jsx";
+import LoginPage from "./LoginPage.jsx";
 import ProductDetailPage from "./ProductDetailPage.jsx";
+import { CustomerProvider } from "./contexts/CustomerContext";
+
+
+import PrivateRoute from "./components/PrivateRoute.jsx";
 
 
 /* Cart & Wishlist */
@@ -40,7 +44,6 @@ import Toast from "./components/Toast.jsx"; // <-- ADD THIS
 
 function AppContent() {
   const { toast } = useCart();
-
   return (
     <>
       <Routes>
@@ -62,7 +65,10 @@ function AppContent() {
         <Route path="/appliances" element={<HomeAppliances />} />
         <Route path="/bicycles" element={<Bicycles />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/search" element={<SearchResults />} />
+        <Route path="/admin/customers" element={<AdminCustomers />} />
+        
+        <Route path="/product/:id" element={<ProductDetailPage />} />
+        
 
         {/* Cart */}
         <Route path="/cart" element={<CartPage />} />
@@ -128,9 +134,11 @@ function AppContent() {
 function App() {
   return (
     <CartProvider>
-      <AppContent />
+      <CustomerProvider>
+        <AppContent />
+      </CustomerProvider>
     </CartProvider>
   );
 }
 
-export default App;
+export default App;    

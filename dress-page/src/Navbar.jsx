@@ -50,7 +50,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="bg-gradient-to-r bg-blue-600  text-white px-4 py-4 shadow-md md:px-8 lg:px-16">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r bg-blue-600 text-white px-4 py-4 shadow-md md:px-8 lg:px-16">
       <div className="flex items-center justify-between">
 
         {/* Logo */}
@@ -87,60 +87,17 @@ function Navbar() {
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex gap-8 items-center">
-          <button onClick={() => navigate("/")} className="hover:text-blue-200 transition-colors cursor-pointer">Home</button>
-          <button onClick={() => navigate("/about")} className="hover:text-blue-200 transition-colors cursor-pointer">About</button>
-          <button onClick={() => navigate("/collection")} className="hover:text-blue-200 transition-colors cursor-pointer">Collection</button>
-          <button onClick={() => navigate("/contact")} className="hover:text-blue-200 transition-colors cursor-pointer">Contact</button>
-          <button onClick={() => navigate("/order")} className="hover:text-blue-200 transition-colors cursor-pointer">Order</button>
-
-          {/* Cart and Wishlist Icons */}
-          <div className="flex gap-4 items-center">
-            <button 
-              onClick={() => navigate("/wishlist")}
-              className="relative hover:text-red-300 transition-colors"
-              title="Wishlist"
-            >
-              <Heart size={24} />
-              {wishlist.length > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {wishlist.length}
-                </span>
-              )}
-            </button>
-            
-            <button 
-              onClick={() => navigate("/cart")}
-              className="relative hover:text-yellow-300 transition-colors"
-              title="Cart"
-            >
-              <ShoppingCart size={24} />
-              {getCartCount() > 0 && (
-                <span className="absolute -top-2 -right-2 bg-yellow-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {getCartCount()}
-                </span>
-              )}
-            </button>
-          </div>
-
-          {user ? (
-            <>
-              <span className="text-sm bg-white/10 backdrop-blur-sm px-3 py-1 rounded-full text-white font-semibold tracking-wide border border-white/20 drop-shadow-md">
-  Welcome, <span className="text-blue-400">{user.first_name || user.email}</span>
-</span>
-
-              <button onClick={handleLogout} className="flex items-center gap-2 bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors font-semibold">
-                <LogOut size={16} />
-                Logout
-              </button>
-            </>
-          ) : (
-            <button onClick={() => navigate("/login")} className="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors font-semibold">Login</button>
-          )}
-
-          <button onClick={() => navigate(localStorage.getItem("isAdmin") === "true" ? "/admin" : "/admin/login")} className="bg-gradient-to-r from-orange-400 to-orange-600 text-white px-4 py-2 rounded-lg hover:from-orange-500 hover:to-orange-700 transition-all font-semibold">Admin</button>
-
-
+        <div className="hidden md:flex gap-8">
+          <button onClick={() => navigate("/")}>Home</button>
+          <button onClick={() => navigate("/login")}>Login</button>
+          <button onClick={() => navigate("/about")}>About</button>
+          <button onClick={() => navigate("/collection")}>Collection</button>
+          <button onClick={() => navigate("/contact")}>Contact</button>
+          <button onClick={() => navigate("/order")}>Order</button>
+          <button onClick={() => navigate("/register")}>Register</button>
+          <button onClick={() => navigate(localStorage.getItem("isAdmin") === "true" ? "/admin" : "/admin/login")}>Admin</button>
+          
+          
         </div>
 
         {/* Mobile Toggle */}
