@@ -35,6 +35,15 @@ export default function LoginPage() {
     }));
   };
 
+  // Handle register input change (was missing)
+  const handleRegisterChange = (e) => {
+    const { name, value } = e.target;
+    setRegisterData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
   // Password strength checker
   const getPasswordStrength = (password) => {
     let strength = 0;
@@ -67,7 +76,7 @@ export default function LoginPage() {
     setMessage('');
 
     try {
-      const response = await apiCall(API_ENDPOINTS.LOGIN, {
+      const data = await apiCall(API_ENDPOINTS.LOGIN, {
         method: 'POST',
         body: JSON.stringify({
           email: loginData.email,
@@ -75,9 +84,7 @@ export default function LoginPage() {
         })
       });
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (data && data.success) {
         setMessageType('success');
         setMessage('Login successful! Redirecting...');
 
@@ -85,12 +92,15 @@ export default function LoginPage() {
         localStorage.setItem('user', JSON.stringify(data.data.user));
         localStorage.setItem('token', data.data.token);
 
+        // Notify navbar (and other listeners) that user changed
+        window.dispatchEvent(new Event('userUpdated'));
+
         setTimeout(() => {
           navigate('/');
         }, 1000);
       } else {
         setMessageType('error');
-        setMessage(data.message || 'Login failed');
+        setMessage(data?.message || 'Login failed');
       }
     } catch (error) {
       setMessageType('error');
@@ -105,7 +115,7 @@ export default function LoginPage() {
     }
   };
 
-  // Register handler
+  // Register handler (now attempts auto-login on success)
   const handleRegister = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -134,11 +144,8 @@ export default function LoginPage() {
     }
 
     try {
-      const response = await fetch('http://localhost:5000/api/auth/register', {
+      const data = await apiCall(API_ENDPOINTS.REGISTER, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify({
           email: registerData.email,
           password: registerData.password,
@@ -149,9 +156,47 @@ export default function LoginPage() {
         })
       });
 
-      const data = await response.json();
+      if (data && data.success) {
+        // Try to auto-login the new user so they appear in the navbar immediately
+        try {
+          const loginResult = await apiCall(API_ENDPOINTS.LOGIN, {
+            method: 'POST',
+            body: JSON.stringify({
+              email: registerData.email,
+              password: registerData.password
+            })
+          });
 
-      if (data.success) {
+          if (loginResult && loginResult.success) {
+            // Save user + token and notify Navbar
+            localStorage.setItem('user', JSON.stringify(loginResult.data.user));
+            localStorage.setItem('token', loginResult.data.token);
+            window.dispatchEvent(new Event('userUpdated'));
+
+            setMessageType('success');
+            setMessage('Registration successful — logged in! Redirecting...');
+
+            // Reset register form
+            setRegisterData({
+              email: '',
+              password: '',
+              confirmPassword: '',
+              first_name: '',
+              last_name: '',
+              phone: ''
+            });
+
+            setTimeout(() => {
+              navigate('/');
+            }, 1000);
+
+            return;
+          }
+        } catch (err) {
+          console.error('Auto-login error after registration:', err);
+        }
+
+        // If auto-login didn't succeed, fall back to prompting user to sign in
         setMessageType('success');
         setMessage('Registration successful! Please login.');
 
@@ -172,7 +217,7 @@ export default function LoginPage() {
         }, 2000);
       } else {
         setMessageType('error');
-        setMessage(data.message || 'Registration failed');
+        setMessage(data?.message || 'Registration failed');
       }
     } catch (error) {
       setMessageType('error');

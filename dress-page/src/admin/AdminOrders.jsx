@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Package, Truck, CheckCircle, Clock, ChevronDown, RefreshCw } from "lucide-react";
 import AdminLayout from "./AdminLayout";
+import { apiCall, API_ENDPOINTS } from "../config/apiConfig.js";
 
 function AdminOrdersContent() {
   const [orders, setOrders] = useState([]);
@@ -92,17 +93,12 @@ function AdminOrdersContent() {
 
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/orders/${orderId}/status`, {
+      const result = await apiCall(`${API_ENDPOINTS.ORDER(orderId)}/status`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify({ status: newStatus })
       });
 
-      const result = await response.json();
-
-      if (result.success) {
+      if (result && result.success) {
         setOrders((prev) =>
           prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
         );

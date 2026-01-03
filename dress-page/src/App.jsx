@@ -35,7 +35,6 @@ import AdminOrders from "./admin/AdminOrders.jsx";
 import AdminCustomers from "./admin/AdminCustomers.jsx";
 import AdminSettings from "./admin/AdminSettings.jsx";
 import ProtectedRoute from "./admin/ProtectedRoute.jsx";
-
 /* ✅ Toast Component */
 import Toast from "./components/Toast.jsx"; // <-- ADD THIS
 

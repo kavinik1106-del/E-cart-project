@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "./Navbar.jsx";
+import { apiCall, API_ENDPOINTS } from './config/apiConfig.js';
 
 function LoginPage() {
   const [method, setMethod] = useState("email");
@@ -59,17 +60,12 @@ function LoginPage() {
     setLoading(true);
     try {
       if (method === "email") {
-        const response = await fetch("http://localhost:5000/api/auth/login", {
+        const data = await apiCall(API_ENDPOINTS.LOGIN, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
           body: JSON.stringify({ email, password })
         });
 
-        const data = await response.json();
-
-        if (response.ok && data.success) {
+        if (data && data.success) {
           // Store user data and token
           localStorage.setItem("user", JSON.stringify(data.data.user));
           localStorage.setItem("token", data.data.token);
@@ -77,7 +73,7 @@ function LoginPage() {
           // Redirect to home or dashboard
           window.location.href = "/";
         } else {
-          setErrors({ general: data.message || "Login failed" });
+          setErrors({ general: data?.message || "Login failed" });
         }
       } else {
         // Handle OTP login - for now, show demo
