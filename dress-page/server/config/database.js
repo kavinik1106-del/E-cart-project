@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const sequelize = new Sequelize(
+const adminDB = new Sequelize(
   process.env.DB_NAME || 'admin_panel_db',
   process.env.DB_USER || 'root',
   process.env.DB_PASSWORD || 'root',
@@ -11,7 +11,7 @@ const sequelize = new Sequelize(
     host: process.env.DB_HOST || 'localhost',
     port: process.env.DB_PORT || 3306,
     dialect: 'mysql',
-    logging: false, // Set to console.log to see SQL queries
+    logging: false,
     pool: {
       max: 5,
       min: 0,
@@ -21,4 +21,4 @@ const sequelize = new Sequelize(
   }
 );
 
-export default sequelize;
+export default adminDB;
