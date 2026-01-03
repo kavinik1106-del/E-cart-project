@@ -206,7 +206,7 @@ function AdminSettingsContent() {
 
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition flex items-center justify-center gap-2 font-semibold"
+              className="w-full bg-primary text-white py-2 rounded-lg hover:bg-primary transition flex items-center justify-center gap-2 font-semibold"
             >
               <Save size={18} /> Save Settings
             </button>

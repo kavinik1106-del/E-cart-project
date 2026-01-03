@@ -5,12 +5,12 @@ import { vegetableProducts } from "./data/vegetableProducts.js";
 
 function Vegetables() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-50">
+    <div className="min-h-screen bg-primary/10">
       <Navbar />
 
       {/* Header Banner */}
       <div className="max-w-6xl mx-auto mt-6 px-4">
-        <div className="bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-2xl p-8 text-center shadow-lg">
+        <div className="bg-primary text-white rounded-2xl p-8 text-center shadow-lg">
           <h1 className="text-4xl font-bold mb-2">Fresh & Organic</h1>
           <p className="text-green-100">Farm fresh vegetables and authentic Indian spices delivered daily</p>
         </div>

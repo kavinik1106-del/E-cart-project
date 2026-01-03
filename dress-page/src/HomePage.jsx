@@ -4,6 +4,8 @@ import Navbar from "./Navbar.jsx";
 import ProductCard from "./ProductCard.jsx";
 import { ChevronLeft, ChevronRight, Star, Truck, Shield, HeadphonesIcon, Quote, Zap, Award, Users, ShoppingBag, TrendingUp, Play, Pause } from "lucide-react";
 import { apiCall, API_ENDPOINTS } from "./config/apiConfig.js";
+import { Facebook, Instagram, Twitter, MapPin, Mail } from "lucide-react";
+
 
 function HomePage() {
   
@@ -67,7 +69,7 @@ function HomePage() {
       description: "Explore our curated collection of trendy dresses, accessories, and home essentials with unbeatable prices and quality.",
       image: "/banner.avif",
       cta: "Shop Now",
-      gradient: "from-purple-600 via-pink-600 to-red-600"
+      // gradient: "from-purple-600 via-pink-600 to-red-600"
     },
     {
       title: "New Arrivals Daily",
@@ -75,7 +77,7 @@ function HomePage() {
       description: "Stay ahead of trends with our daily updated collection featuring the latest in fashion and lifestyle products.",
       image: "/homeoffer.avif",
       cta: "Explore New",
-      gradient: "from-blue-600 via-cyan-600 to-teal-600"
+      // gradient: "from-blue-600 via-cyan-600 to-teal-600"
     },
     {
       title: "Exclusive Deals",
@@ -83,7 +85,7 @@ function HomePage() {
       description: "Don't miss out on our limited-time offers. Premium quality products at prices you'll love.",
       image: "/eleoffer1.avif",
       cta: "View Deals",
-      gradient: "from-orange-600 via-red-600 to-pink-600"
+      // gradient: "from-orange-600 via-red-600 to-pink-600"
     }
   ];
 
@@ -193,11 +195,12 @@ function HomePage() {
   };
 
   return (
+    <div className="min-h-screen bg-white">
     <div className="min-h-screen bg-gray-50 pt-20">
       <Navbar />
 
-      {/* Enhanced Hero Section - Flipkart Style (Blue + Yellow Theme) */}
-<div className="relative overflow-hidden bg-blue-900 border-t-4 border-b-4 border-amber-400">
+      {/* Enhanced Hero Section */}
+<div className="relative overflow-hidden  border-t-4 border-b-4 border-amber-400">
   
   {/* Hero Slides */}
   <div
@@ -206,7 +209,7 @@ function HomePage() {
   >
     {heroSlides.map((slide, index) => (
       <div key={index} className="w-full flex-shrink-0 relative">
-        <div className="relative h-[380px] bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 overflow-hidden">
+        <div className="relative h-[380px] bg-primary overflow-hidden">
           
           {/* Background Pattern */}
           <div className="absolute inset-0 opacity-10">
@@ -239,14 +242,14 @@ function HomePage() {
                 <div className="flex gap-4">
                   <Link
                     to="/women"
-                    className="bg-amber-400 text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-amber-500 transition-all duration-300 shadow-lg"
+                    className="bg-secondary text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-secondary transition-all duration-300 shadow-lg"
                   >
                     {slide.cta}
                   </Link>
 
                   <Link
                     to="/collection"
-                    className="border border-white text-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-blue-700 transition-all duration-300"
+                    className="border border-white text-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-primary transition-all duration-300"
                   >
                     View Collection
                   </Link>
@@ -261,7 +264,7 @@ function HomePage() {
                   className="h-64 object-contain"
                 />
 
-                <div className="absolute -top-3 -right-3 bg-amber-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold shadow-md">
+                <div className="absolute -top-3 -right-3 bg-secondary text-gray-900 px-3 py-1 rounded-full text-xs font-bold shadow-md">
                   🔥 Hot Deal
                 </div>
               </div>
@@ -276,14 +279,14 @@ function HomePage() {
   {/* Navigation */}
   <button
     onClick={prevSlide}
-    className="absolute left-4 top-1/2 -translate-y-1/2 bg-blue-500/30 text-white p-2 rounded-full hover:bg-blue-500/40"
+    className="absolute left-4 top-1/2 -translate-y-1/2 bg-primary/30 text-white p-2 rounded-full hover:bg-primary/40"
   >
     <ChevronLeft size={20} />
   </button>
 
   <button
     onClick={nextSlide}
-    className="absolute right-4 top-1/2 -translate-y-1/2 bg-blue-500/30 text-white p-2 rounded-full hover:bg-blue-500/40"
+    className="absolute right-4 top-1/2 -translate-y-1/2 bg-primary/30 text-white p-2 rounded-full hover:bg-primary/40"
   >
     <ChevronRight size={20} />
   </button>
@@ -296,7 +299,7 @@ function HomePage() {
         onClick={() => setCurrentSlide(index)}
         className={`w-2.5 h-2.5 rounded-full ${
           index === currentSlide
-            ? "bg-amber-400"
+            ? "bg-secondary"
             : "bg-white/50"
         }`}
       />
@@ -307,9 +310,9 @@ function HomePage() {
 
 
     {/* Categories Section - SECOND */}
-      <section className="py-12 bg-gradient-to-b from-white to-blue-50 border-b-4 border-yellow-400">
+      <section className="py-12 bg-white border-b-4 border-secondary">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-8 text-center">Shop by Category</h2>
+          <h2 className="text-3xl font-bold text-primary mb-8 text-center">Shop by Category</h2>
 
           <div className="relative">
             <button
@@ -330,18 +333,18 @@ function HomePage() {
                   to={cat.route}
                   className="flex-shrink-0 group"
                 >
-                  <div className="bg-white p-6 rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-blue-300 hover:border-yellow-400">
+                  <div className="bg-white p-6 rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-blue-300 hover:border-secondary">
                     <div className="relative">
                       <img
                         src={cat.image}
                         alt={cat.name}
                         className="w-24 h-24 mx-auto rounded-full border-4 border-white shadow-lg object-cover group-hover:scale-110 transition-transform duration-300"
                       />
-                      <div className="absolute -top-2 -right-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                      <div className="absolute -top-2 -right-2 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
                         {cat.count}
                       </div>
                     </div>
-                    <p className="text-center mt-4 text-gray-800 font-semibold group-hover:text-blue-600 transition-colors text-lg">
+                    <p className="text-center mt-4 text-gray-800 font-semibold group-hover:text-primary transition-colors text-lg">
                       {cat.name}
                     </p>
                     <p className="text-center text-sm text-gray-500 mt-1">
@@ -364,14 +367,14 @@ function HomePage() {
       </section>
 
       {/* Featured Products - FOURTH - AMAZON STYLE GRID */}
-      <section className="py-16 bg-white border-t-4 border-yellow-400">
+      <section className="py-16 bg-white border-t-4 border-secondary">
         <div className="max-w-7xl mx-auto px-4">
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-2">Recommended For You</h2>
             <p className="text-gray-600">Based on your browsing history and preferences</p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
             {products.map((product) => (
               <ProductCard
                 key={product.id}
@@ -385,7 +388,7 @@ function HomePage() {
           <div className="text-center mt-12">
             <Link
               to="/collection"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 via-blue-500 to-yellow-400 text-white px-8 py-4 rounded-full font-semibold hover:from-blue-700 hover:via-blue-600 hover:to-yellow-500 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105"
+              className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full font-semibold hover:bg-primary transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105"
             >
               View All {products.length} Products
               <ChevronRight className="w-5 h-5" />
@@ -395,14 +398,14 @@ function HomePage() {
       </section>
 
       {/* Best Sellers Section */}
-      <section className="py-16 bg-gradient-to-br from-yellow-50 via-blue-50 to-white border-t-4 border-yellow-400">
+      <section className="py-16 bg-secondary/10 border-t-4 border-secondary">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent mb-2">⭐ Best Sellers</h2>
+              <h2 className="text-2xl font-bold text-primary mb-2">⭐ Best Sellers</h2>
               <p className="text-gray-600">Most loved products by customers</p>
             </div>
-            <Link to="/collection" className="bg-yellow-400 text-gray-900 hover:bg-yellow-500 font-semibold flex items-center gap-2 px-4 py-2 rounded-full transition-all">
+            <Link to="/collection" className="bg-secondary text-gray-900 hover:bg-secondary font-semibold flex items-center gap-2 px-4 py-2 rounded-full transition-all">
               View All
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -410,7 +413,7 @@ function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
             {products.slice(0, 24).map((product) => (
               <ProductCard
                 key={product.id}
@@ -424,7 +427,7 @@ function HomePage() {
       </section>
 
       {/* Deal of the Day */}
-<section className="py-12 bg-gradient-to-r from-blue-600 to-yellow-400">
+<section className="py-12 bg-primary">
   <div className="max-w-7xl mx-auto px-4">
 
     {/* Heading */}
@@ -438,7 +441,7 @@ function HomePage() {
     </div>
 
     {/* Products Grid */}
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
       {products.slice(0, 18).map((product) => (
         <ProductCard
           key={product.id}
@@ -461,7 +464,7 @@ function HomePage() {
               <h2 className="text-2xl font-bold text-gray-800 mb-2">Trending Now</h2>
               <p className="text-gray-600">Most popular products this week</p>
             </div>
-            <Link to="/collection" className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2">
+            <Link to="/collection" className="text-primary hover:text-primary font-semibold flex items-center gap-2">
               View All
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -469,7 +472,7 @@ function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
             {products.slice(5, 29).map((product) => (
               <ProductCard
                 key={product.id}
@@ -483,14 +486,14 @@ function HomePage() {
       </section>
 
       {/* Recently Viewed Products */}
-      <section className="py-16 bg-gradient-to-br from-purple-50 to-pink-50">
+      <section className="py-16 bg-primary/10">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-2xl font-bold text-gray-800 mb-2">Recently Viewed</h2>
               <p className="text-gray-600">Items you've looked at</p>
             </div>
-            <Link to="/collection" className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2">
+            <Link to="/collection" className="text-primary hover:text-primary font-semibold flex items-center gap-2">
               View All
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -498,7 +501,7 @@ function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
             {products.slice(10, 34).map((product) => (
               <ProductCard
                 key={product.id}
@@ -519,7 +522,7 @@ function HomePage() {
               <h2 className="text-2xl font-bold text-gray-800 mb-2">Top Rated Products</h2>
               <p className="text-gray-600">Highest rated by customers</p>
             </div>
-            <Link to="/collection" className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2">
+            <Link to="/collection" className="text-primary hover:text-primary font-semibold flex items-center gap-2">
               View All
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -527,7 +530,7 @@ function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
             {products.slice(15, 39).map((product) => (
               <ProductCard
                 key={product.id}
@@ -541,14 +544,14 @@ function HomePage() {
       </section>
 
       {/* New Arrivals */}
-      <section className="py-16 bg-gradient-to-br from-green-50 to-blue-50">
+      <section className="py-16 bg-primary/10">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
             <div>
               <h2 className="text-2xl font-bold text-gray-800 mb-2">New Arrivals</h2>
               <p className="text-gray-600">Just added to our store</p>
             </div>
-            <Link to="/collection" className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2">
+            <Link to="/collection" className="text-primary hover:text-primary font-semibold flex items-center gap-2">
               View All
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -556,7 +559,7 @@ function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
             {products.slice(20, 44).map((product) => (
               <ProductCard
                 key={product.id}
@@ -575,7 +578,7 @@ function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
@@ -608,107 +611,173 @@ function HomePage() {
 
       
       {/* Newsletter Section */}
-      <section className="py-16 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 relative overflow-hidden">
-        <div className="absolute inset-0 bg-white bg-opacity-10"></div>
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-white bg-opacity-5 rounded-full"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white bg-opacity-5 rounded-full"></div>
-        <div className="relative max-w-4xl mx-auto px-4 text-center">
-          <div className="mb-6">
-            <div className="inline-block p-4 bg-white bg-opacity-20 rounded-full mb-4 backdrop-blur-sm">
-              <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-              </svg>
-            </div>
-          </div>
-          <h2 className="text-4xl font-bold text-black mb-4">Stay Updated with StyleNest</h2>
-          <p className="text-back-100 mb-8 text-xl leading-relaxed max-w-2xl mx-auto">
-            Subscribe to our newsletter and get exclusive deals, new product launches, and style tips delivered to your inbox.
-          </p>
+<section className="py-16 bg-primary relative overflow-hidden">
+  {/* Background Effects */}
+  <div className="absolute inset-0 bg-white/5"></div>
+  <div className="absolute -top-40 -right-40 w-80 h-80 bg-secondary/10 rounded-full"></div>
+  <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-400/10 rounded-full"></div>
 
-          <div className="max-w-lg mx-auto">
-            <div className="flex flex-col sm:flex-row gap-4 bg-white bg-opacity-20 backdrop-blur-sm rounded-2xl p-2">
-              <input
-                type="email"
-                placeholder="Enter your email address"
-                className="flex-1 px-6 py-4 rounded-xl border-0 focus:ring-2 focus:ring-white focus:ring-opacity-50 bg-white bg-opacity-90 text-gray-800 placeholder-gray-500 text-lg"
-              />
-              <button className="px-8 py-4 bg-gradient-to-r from-yellow-400 to-orange-500 text-gray-900 rounded-xl hover:from-yellow-500 hover:to-orange-600 transition-all duration-300 font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105">
-                Subscribe Now
-              </button>
-            </div>
-          </div>
-
-          <p className="text-indigo-1000 text-sm mt-6 flex items-center justify-center gap-2">
-            <Shield className="w-4 h-4" />
-            We respect your privacy. Unsubscribe at any time.
-          </p>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">StyleNest</h3>
-              <p className="text-gray-400 mb-4">Your one-stop destination for all your shopping needs.</p>
-              <div className="flex gap-4">
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                  </svg>
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.749.098.118.112.221.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.747-1.378 0 0-.599 2.282-.744 2.84-.282 1.084-1.064 2.456-1.549 3.235C9.584 23.815 10.77 24.001 12.017 24.001c6.624 0 11.99-5.367 11.99-11.987C24.007 5.367 18.641.001.012.017z"/>
-                  </svg>
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.749.098.118.112.221.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.747-1.378 0 0-.599 2.282-.744 2.84-.282 1.084-1.064 2.456-1.549 3.235C9.584 23.815 10.77 24.001 12.017 24.001c6.624 0 11.99-5.367 11.99-11.987C24.007 5.367 18.641.001.012.017z"/>
-                  </svg>
-                </a>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">FAQ</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Shipping Info</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Categories</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><Link to="/women" className="hover:text-white transition-colors">Women Fashion</Link></li>
-                <li><Link to="/men" className="hover:text-white transition-colors">Men Fashion</Link></li>
-                <li><Link to="/electro" className="hover:text-white transition-colors">Electronics</Link></li>
-                <li><Link to="/vegetables" className="hover:text-white transition-colors">Groceries</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Customer Service</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Returns</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Size Guide</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Track Order</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 StyleNest. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+  <div className="relative max-w-4xl mx-auto px-4 text-center">
+    {/* Icon */}
+    <div className="mb-6">
+      <div className="inline-flex items-center justify-center p-4 bg-white/20 rounded-full backdrop-blur-sm">
+        <svg
+          className="w-12 h-12 text-secondary"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+          />
+        </svg>
+      </div>
     </div>
-  );
+
+    {/* Text */}
+    <h2 className="text-4xl font-bold text-white mb-4">
+      Stay Updated with StyleNest
+    </h2>
+    <p className="text-blue-100 mb-8 text-xl leading-relaxed max-w-2xl mx-auto">
+      Subscribe to our newsletter and get exclusive deals, new arrivals, and
+      style tips delivered straight to your inbox.
+    </p>
+
+    {/* Input + Button */}
+    <div className="max-w-lg mx-auto">
+      <div className="flex flex-col sm:flex-row gap-4 bg-white/15 backdrop-blur-sm rounded-2xl p-2">
+        <input
+          type="email"
+          placeholder="Enter your email address"
+          className="flex-1 px-6 py-4 rounded-xl border-0 
+                     bg-white/90 text-gray-800 placeholder-gray-500 text-lg
+                     focus:outline-none focus:ring-2 focus:ring-secondary"
+        />
+        <button
+          className="px-8 py-4 
+                     bg-secondary hover:bg-secondary 
+                     text-gray-900 
+                     rounded-xl 
+                     transition-all duration-300 
+                     font-bold text-lg 
+                     shadow-lg hover:shadow-xl 
+                     transform hover:scale-105
+                     focus:outline-none focus:ring-2 focus:ring-yellow-300"
+        >
+          Subscribe Now
+        </button>
+      </div>
+    </div>
+
+    {/* Privacy Note */}
+    <p className="text-blue-100 text-sm mt-6 flex items-center justify-center gap-2">
+      <Shield className="w-4 h-4 text-secondary" />
+      We respect your privacy. Unsubscribe at any time.
+    </p>
+  </div>
+</section>
+
+      {/* Home Page Footer */}
+<footer className="bg-primary text-white">
+  <div className="max-w-7xl mx-auto px-6 py-12">
+
+    <div className="grid md:grid-cols-4 gap-8">
+
+      {/* Brand Section */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <img
+            src="/logo5.jpg"
+            alt="StyleNest"
+            className="w-10 h-10 rounded-full"
+          />
+          <h3 className="text-2xl font-bold text-secondary">
+            StyleNest
+          </h3>
+        </div>
+
+        <p className="text-blue-100 text-sm leading-relaxed">
+          India’s trusted online fashion store delivering premium quality,
+          secure payments, and fast shipping.
+        </p>
+
+        {/* Social Icons */}
+        <div className="flex space-x-4">
+          <div className="w-10 h-10 bg-primary/40 hover:bg-secondary text-white hover:text-gray-900 rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer">
+            <Facebook className="w-5 h-5" />
+          </div>
+          <div className="w-10 h-10 bg-primary/40 hover:bg-secondary text-white hover:text-gray-900 rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer">
+            <Instagram className="w-5 h-5" />
+          </div>
+          <div className="w-10 h-10 bg-primary/40 hover:bg-secondary text-white hover:text-gray-900 rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer">
+            <Twitter className="w-5 h-5" />
+          </div>
+        </div>
+      </div>
+
+      {/* Shop */}
+      <div className="space-y-4">
+        <h4 className="text-lg font-semibold">Shop</h4>
+        <ul className="space-y-2 text-sm text-blue-100">
+          <li><a href="/collection" className="hover:text-secondary transition">All Collections</a></li>
+          <li><a href="/new" className="hover:text-secondary transition">New Arrivals</a></li>
+          <li><a href="/best-sellers" className="hover:text-secondary transition">Best Sellers</a></li>
+          <li><a href="/offers" className="hover:text-secondary transition">Offers</a></li>
+        </ul>
+      </div>
+
+      {/* Customer Care */}
+      <div className="space-y-4">
+        <h4 className="text-lg font-semibold">Customer Care</h4>
+        <ul className="space-y-2 text-sm text-blue-100">
+          <li><a href="/contact" className="hover:text-yellow-400 transition">Contact Us</a></li>
+          <li><a href="#" className="hover:text-yellow-400 transition">Shipping Info</a></li>
+          <li><a href="#" className="hover:text-yellow-400 transition">Returns & Refunds</a></li>
+          <li><a href="#" className="hover:text-yellow-400 transition">Size Guide</a></li>
+        </ul>
+      </div>
+
+      {/* Trust & Contact */}
+      <div className="space-y-4">
+        <h4 className="text-lg font-semibold">Trusted by Customers</h4>
+        <p className="text-sm text-blue-100">
+          Secure payments • 7-day easy returns • 24×7 support
+        </p>
+
+        <div className="space-y-3 text-sm text-blue-100">
+          <div className="flex items-center gap-3">
+            <MapPin className="w-4 h-4 text-secondary" />
+            <span>Chennai, India</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <Mail className="w-4 h-4 text-secondary" />
+            <span>support@stylenest.com</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    {/* Bottom Bar */}
+    <div className="border-t border-blue-800/50 mt-10 pt-6">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+        <p className="text-blue-200 text-sm">
+          © 2025 StyleNest. All rights reserved. | Made with India
+        </p>
+        <div className="flex gap-6 text-sm text-blue-200">
+          <a href="#" className="hover:text-yellow-400 transition">Privacy Policy</a>
+          <a href="#" className="hover:text-yellow-400 transition">Terms</a>
+          <a href="#" className="hover:text-yellow-400 transition">Cookies</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</footer>
+</div> );
 }
 
 export default HomePage;

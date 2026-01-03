@@ -25,7 +25,7 @@ function ShoesCategory() {
       <Navbar />
 
       {/* Header Banner */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-8">
+      <div className="bg-primary text-white py-8">
         <div className="max-w-7xl mx-auto px-4">
           <h1 className="text-4xl font-bold mb-2">Shoes Collection</h1>
           <p className="text-blue-100">Step into style with our premium shoe collection</p>
