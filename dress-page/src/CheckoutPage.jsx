@@ -28,7 +28,7 @@ function CheckoutPage() {
   });
 
   const [formErrors, setFormErrors] = useState({});
-  const [currentStep, setCurrentStep] = useState(1); // 1: Shipping, 2: Payment, 3: Review
+  const [currentStep, _setCurrentStep] = useState(1); // 1: Shipping, 2: Payment, 3: Review
 
   // Get current user
   const getCurrentUser = () => {
@@ -153,7 +153,7 @@ function CheckoutPage() {
           <h2 className="text-2xl font-bold mb-4">Your cart is empty</h2>
           <button 
             onClick={() => navigate("/")}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg"
+            className="bg-primary text-white px-6 py-3 rounded-lg"
           >
             Continue Shopping
           </button>
@@ -183,7 +183,7 @@ function CheckoutPage() {
             <div className="space-y-3">
               <button
                 onClick={() => navigate("/")}
-                className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:opacity-90 transition-colors"
               >
                 Continue Shopping
               </button>
@@ -212,28 +212,28 @@ function CheckoutPage() {
           <div className="flex items-center justify-center">
             <div className="flex items-center space-x-4">
               <div className={`flex items-center justify-center w-10 h-10 rounded-full ${
-                currentStep >= 1 ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-600'
+                currentStep >= 1 ? 'bg-primary text-white' : 'bg-gray-300 text-gray-600'
               }`}>
                 <User className="w-5 h-5" />
               </div>
-              <div className={`h-1 w-16 ${currentStep >= 2 ? 'bg-blue-600' : 'bg-gray-300'}`}></div>
+              <div className={`h-1 w-16 ${currentStep >= 2 ? 'bg-primary' : 'bg-gray-300'}`}></div>
               <div className={`flex items-center justify-center w-10 h-10 rounded-full ${
-                currentStep >= 2 ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-600'
+                currentStep >= 2 ? 'bg-primary text-white' : 'bg-gray-300 text-gray-600'
               }`}>
                 <CreditCard className="w-5 h-5" />
               </div>
-              <div className={`h-1 w-16 ${currentStep >= 3 ? 'bg-blue-600' : 'bg-gray-300'}`}></div>
+              <div className={`h-1 w-16 ${currentStep >= 3 ? 'bg-primary' : 'bg-gray-300'}`}></div>
               <div className={`flex items-center justify-center w-10 h-10 rounded-full ${
-                currentStep >= 3 ? 'bg-blue-600 text-white' : 'bg-gray-300 text-gray-600'
+                currentStep >= 3 ? 'bg-primary text-white' : 'bg-gray-300 text-gray-600'
               }`}>
                 <CheckCircle className="w-5 h-5" />
               </div>
             </div>
           </div>
           <div className="flex justify-center mt-4 space-x-16 text-sm">
-            <span className={`font-medium ${currentStep >= 1 ? 'text-blue-600' : 'text-gray-500'}`}>Information</span>
-            <span className={`font-medium ${currentStep >= 2 ? 'text-blue-600' : 'text-gray-500'}`}>Payment</span>
-            <span className={`font-medium ${currentStep >= 3 ? 'text-blue-600' : 'text-gray-500'}`}>Confirmation</span>
+            <span className={`font-medium ${currentStep >= 1 ? 'text-primary' : 'text-gray-500'}`}>Information</span>
+            <span className={`font-medium ${currentStep >= 2 ? 'text-primary' : 'text-gray-500'}`}>Payment</span>
+            <span className={`font-medium ${currentStep >= 3 ? 'text-primary' : 'text-gray-500'}`}>Confirmation</span>
           </div>
         </div>
 
@@ -420,7 +420,7 @@ function CheckoutPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-yellow-500 text-white py-4 rounded-lg font-semibold hover:bg-yellow-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-all duration-200"
+                className="w-full bg-secondary text-primary py-4 rounded-lg font-semibold hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-all duration-200"
               >
                 {loading ? (
                   <>
@@ -439,7 +439,7 @@ function CheckoutPage() {
                   Secure Checkout
                 </div>
                 <div className="flex items-center">
-                  <Truck size={16} className="mr-1 text-blue-600" />
+                  <Truck size={16} className="mr-1 text-primary" />
                   Fast Delivery
                 </div>
                 <div className="flex items-center">
@@ -466,7 +466,7 @@ function CheckoutPage() {
                   <div className="flex-1">
                     <h3 className="font-medium">{item.name}</h3>
                     <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
-                    <p className="font-semibold text-blue-600">{item.price}</p>
+                    <p className="font-semibold text-primary">{item.price}</p>
                   </div>
                 </div>
               ))}

@@ -53,8 +53,14 @@ export const apiCall = async (url, options = {}) => {
     config.headers.Authorization = `Bearer ${userToken}`;
   }
 
+  console.log(`🔵 API Request: ${config.method} ${url}`);
+  console.log(`   Headers:`, config.headers);
+  if (config.body) console.log(`   Body:`, config.body);
+
   try {
     const response = await fetch(url, config);
+
+    console.log(`🟢 API Response: ${response.status} ${response.statusText}`);
 
     let data = null;
     const contentType = response.headers.get("content-type");
@@ -62,13 +68,17 @@ export const apiCall = async (url, options = {}) => {
     // Parse JSON ONLY if response is JSON
     if (contentType && contentType.includes("application/json")) {
       data = await response.json();
+      console.log(`   Data:`, data);
     }
 
     // Always return a consistent object
     if (!response.ok) {
+      console.error(`❌ API Error (${response.status}):`, data);
       return {
         success: false,
         message: data?.message || `Request failed (${response.status})`,
+        error: data,
+        status: response.status
       };
     }
 
@@ -79,10 +89,11 @@ export const apiCall = async (url, options = {}) => {
       }
     );
   } catch (error) {
-    console.error("API Call Error:", error);
+    console.error("🔴 API Call Error:", error);
     return {
       success: false,
       message: "Server not reachable. Please try again later.",
+      error: error.message,
     };
   }
 };

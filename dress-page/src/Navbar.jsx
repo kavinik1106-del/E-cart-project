@@ -51,7 +51,6 @@ function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 bg-primary text-white px-4 py-4 shadow-md md:px-8 lg:px-16">
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r bg-blue-600 text-white px-4 py-4 shadow-md md:px-8 lg:px-16">
       <div className="flex items-center justify-between">
         {/* Logo */}
         <div
@@ -74,7 +73,7 @@ function Navbar() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search for products, brands & more"
-              className="w-full px-4 py-3 pr-12 rounded-lg border border-blue-200 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-secondary shadow-sm"
+              className="w-full px-4 py-3 pr-12 rounded-lg border border-primary/20 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-secondary shadow-sm"
             />
             <button
               type="submit"
@@ -91,7 +90,7 @@ function Navbar() {
             <button
               key={item}
               onClick={() => navigate(item === "Home" ? "/" : `/${item.toLowerCase()}`)}
-              className="hover:text-yellow-300 transition"
+              className="hover:text-secondary transition"
             >
               {item}
             </button>
@@ -113,11 +112,11 @@ function Navbar() {
           {/* Cart */}
           <button
             onClick={() => navigate("/cart")}
-            className="relative hover:text-yellow-300"
+            className="relative hover:text-secondary"
           >
             <ShoppingCart size={24} />
             {getCartCount() > 0 && (
-              <span className="absolute -top-2 -right-2 bg-secondary text-primary text-xs w-5 h-5 rounded-full flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-secondary text-primary text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
                 {getCartCount()}
               </span>
             )}
@@ -126,25 +125,28 @@ function Navbar() {
           {/* Auth */}
           {user ? (
             <>
-              <span className="text-sm bg-white/10 px-3 py-1 rounded-full">
-                Welcome,{" "}
-                <span className="text-yellow-300 font-semibold">
-                  {user.first_name || user.email}
-                </span>
-              </span>
+              <div className="flex items-center gap-2 text-sm bg-white/10 px-4 py-2 rounded-lg">
+                <User size={18} />
+                <div>
+                  <div className="font-semibold">{user.first_name || user.email.split('@')[0]}</div>
+                  <div className="text-xs opacity-75">Profile</div>
+                </div>
+              </div>
               <button
                 onClick={handleLogout}
-                className="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100"
+                className="bg-white text-primary px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 flex items-center gap-2 text-sm"
               >
                 <LogOut size={16} />
+                Logout
               </button>
             </>
           ) : (
             <button
               onClick={() => navigate("/login")}
-              className="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100"
+              className="flex items-center gap-2 bg-white text-primary px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition"
             >
-              Login
+              <User size={18} />
+              <span>Login</span>
             </button>
           )}
 
@@ -157,21 +159,10 @@ function Navbar() {
                   : "/admin/login"
               )
             }
-            className="bg-secondary text-primary px-4 py-2 rounded-lg font-semibold hover:bg-secondary shadow"
+            className="bg-secondary text-primary px-4 py-2 rounded-lg font-semibold hover:opacity-90 shadow"
           >
             Admin
           </button>
-        <div className="hidden md:flex gap-8">
-          <button onClick={() => navigate("/")}>Home</button>
-          <button onClick={() => navigate("/login")}>Login</button>
-          <button onClick={() => navigate("/about")}>About</button>
-          <button onClick={() => navigate("/collection")}>Collection</button>
-          <button onClick={() => navigate("/contact")}>Contact</button>
-          <button onClick={() => navigate("/order")}>Order</button>
-          <button onClick={() => navigate("/register")}>Register</button>
-          <button onClick={() => navigate(localStorage.getItem("isAdmin") === "true" ? "/admin" : "/admin/login")}>Admin</button>
-          
-          
         </div>
 
         {/* Mobile Toggle */}
@@ -189,7 +180,7 @@ function Navbar() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search products..."
-              className="w-full px-4 py-3 pr-12 rounded-lg border border-blue-200 focus:ring-2 focus:ring-secondary"
+              className="w-full px-4 py-3 pr-12 rounded-lg border border-primary/20 focus:ring-2 focus:ring-secondary"
             />
             <button
               type="submit"
@@ -206,7 +197,7 @@ function Navbar() {
                 navigate(item === "Home" ? "/" : `/${item.toLowerCase()}`);
                 setOpen(false);
               }}
-              className="block w-full text-left"
+              className="block w-full text-left hover:text-primary font-medium"
             >
               {item}
             </button>
@@ -221,7 +212,7 @@ function Navbar() {
               );
               setOpen(false);
             }}
-            className="bg-secondary text-primary font-semibold py-2 rounded-lg"
+            className="bg-secondary text-primary font-semibold py-2 rounded-lg w-full"
           >
             Admin
           </button>

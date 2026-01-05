@@ -61,6 +61,11 @@ function HomePage() {
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [_searchQuery, _setSearchQuery] = useState("");
+  const [_searchResults, _setSearchResults] = useState([]);
+  const [_showSearchDropdown, _setShowSearchDropdown] = useState(false);
+  const [_isSearching, _setIsSearching] = useState(false);
+  const [_selectedResultIndex, _setSelectedResultIndex] = useState(0);
 
   const heroSlides = [
     {
@@ -154,7 +159,7 @@ function HomePage() {
     setIsAutoPlaying(false);
   };
 
-  const toggleAutoPlay = () => {
+  const _handleToggleAutoPlay = () => {
     setIsAutoPlaying(!isAutoPlaying);
   };
 
@@ -167,15 +172,15 @@ function HomePage() {
     });
   };
 
-  const handleSearch = async (query) => {
-    const searchTerm = query || searchQuery;
+  const _handleSearch = async (query) => {
+    const searchTerm = query || _searchQuery;
     if (!searchTerm.trim()) {
-      setShowSearchDropdown(false);
+      _setShowSearchDropdown(false);
       return;
     }
 
-    setIsSearching(true);
-    setShowSearchDropdown(true);
+    _setIsSearching(true);
+    _setShowSearchDropdown(true);
 
     try {
       // Filter products based on search query
@@ -184,19 +189,18 @@ function HomePage() {
         product.brand.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.category?.toLowerCase().includes(searchTerm.toLowerCase())
       );
-      setSearchResults(filtered.slice(0, 8)); // Limit to 8 results
-      setSelectedResultIndex(0);
+      _setSearchResults(filtered.slice(0, 8)); // Limit to 8 results
+      _setSelectedResultIndex(0);
     } catch (err) {
       console.error("Search error:", err);
-      setSearchResults([]);
+      _setSearchResults([]);
     } finally {
-      setIsSearching(false);
+      _setIsSearching(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-white">
-    <div className="min-h-screen bg-gray-50 pt-20">
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
 
       {/* Enhanced Hero Section */}
@@ -227,7 +231,7 @@ function HomePage() {
               
               {/* Text */}
               <div className="text-white max-w-xl">
-                <h2 className="text-sm font-semibold mb-2 text-blue-100 uppercase tracking-wider">
+                <h2 className="text-sm font-semibold mb-2 text-white/80 uppercase tracking-wider">
                   {slide.subtitle}
                 </h2>
 
@@ -235,7 +239,7 @@ function HomePage() {
                   {slide.title}
                 </h1>
 
-                <p className="text-base mb-6 text-blue-100 leading-relaxed">
+                <p className="text-base mb-6 text-white/80 leading-relaxed">
                   {slide.description}
                 </p>
 
@@ -333,7 +337,7 @@ function HomePage() {
                   to={cat.route}
                   className="flex-shrink-0 group"
                 >
-                  <div className="bg-white p-6 rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-blue-300 hover:border-secondary">
+                  <div className="bg-white p-6 rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-primary/30 hover:border-secondary">
                     <div className="relative">
                       <img
                         src={cat.image}
@@ -435,7 +439,7 @@ function HomePage() {
       <h2 className="text-3xl font-bold mb-2 tracking-wide">
         Lightning Deals ⚡
       </h2>
-      <p className="text-blue-100">
+      <p className="text-white/80">
         Limited time offers — grab them before stocks run out!
       </p>
     </div>
@@ -577,7 +581,7 @@ function HomePage() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
-              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
                 <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
@@ -615,7 +619,7 @@ function HomePage() {
   {/* Background Effects */}
   <div className="absolute inset-0 bg-white/5"></div>
   <div className="absolute -top-40 -right-40 w-80 h-80 bg-secondary/10 rounded-full"></div>
-  <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-400/10 rounded-full"></div>
+  <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-primary/10 rounded-full"></div>
 
   <div className="relative max-w-4xl mx-auto px-4 text-center">
     {/* Icon */}
@@ -641,7 +645,7 @@ function HomePage() {
     <h2 className="text-4xl font-bold text-white mb-4">
       Stay Updated with StyleNest
     </h2>
-    <p className="text-blue-100 mb-8 text-xl leading-relaxed max-w-2xl mx-auto">
+    <p className="text-white/80 mb-8 text-xl leading-relaxed max-w-2xl mx-auto">
       Subscribe to our newsletter and get exclusive deals, new arrivals, and
       style tips delivered straight to your inbox.
     </p>
@@ -673,7 +677,7 @@ function HomePage() {
     </div>
 
     {/* Privacy Note */}
-    <p className="text-blue-100 text-sm mt-6 flex items-center justify-center gap-2">
+    <p className="text-white/80 text-sm mt-6 flex items-center justify-center gap-2">
       <Shield className="w-4 h-4 text-secondary" />
       We respect your privacy. Unsubscribe at any time.
     </p>
@@ -699,7 +703,7 @@ function HomePage() {
           </h3>
         </div>
 
-        <p className="text-blue-100 text-sm leading-relaxed">
+        <p className="text-white/80 text-sm leading-relaxed">
           India’s trusted online fashion store delivering premium quality,
           secure payments, and fast shipping.
         </p>
@@ -721,7 +725,7 @@ function HomePage() {
       {/* Shop */}
       <div className="space-y-4">
         <h4 className="text-lg font-semibold">Shop</h4>
-        <ul className="space-y-2 text-sm text-blue-100">
+        <ul className="space-y-2 text-sm text-white/80">
           <li><a href="/collection" className="hover:text-secondary transition">All Collections</a></li>
           <li><a href="/new" className="hover:text-secondary transition">New Arrivals</a></li>
           <li><a href="/best-sellers" className="hover:text-secondary transition">Best Sellers</a></li>
@@ -732,22 +736,22 @@ function HomePage() {
       {/* Customer Care */}
       <div className="space-y-4">
         <h4 className="text-lg font-semibold">Customer Care</h4>
-        <ul className="space-y-2 text-sm text-blue-100">
-          <li><a href="/contact" className="hover:text-yellow-400 transition">Contact Us</a></li>
-          <li><a href="#" className="hover:text-yellow-400 transition">Shipping Info</a></li>
-          <li><a href="#" className="hover:text-yellow-400 transition">Returns & Refunds</a></li>
-          <li><a href="#" className="hover:text-yellow-400 transition">Size Guide</a></li>
+        <ul className="space-y-2 text-sm text-white/80">
+          <li><a href="/contact" className="hover:text-secondary transition">Contact Us</a></li>
+          <li><a href="#" className="hover:text-secondary transition">Shipping Info</a></li>
+          <li><a href="#" className="hover:text-secondary transition">Returns & Refunds</a></li>
+          <li><a href="#" className="hover:text-secondary transition">Size Guide</a></li>
         </ul>
       </div>
 
       {/* Trust & Contact */}
       <div className="space-y-4">
         <h4 className="text-lg font-semibold">Trusted by Customers</h4>
-        <p className="text-sm text-blue-100">
+        <p className="text-sm text-white/80">
           Secure payments • 7-day easy returns • 24×7 support
         </p>
 
-        <div className="space-y-3 text-sm text-blue-100">
+        <div className="space-y-3 text-sm text-white/80">
           <div className="flex items-center gap-3">
             <MapPin className="w-4 h-4 text-secondary" />
             <span>Chennai, India</span>
@@ -777,7 +781,8 @@ function HomePage() {
 
   </div>
 </footer>
-</div> );
+    </div>
+  );
 }
 
 export default HomePage;

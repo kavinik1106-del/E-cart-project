@@ -2,7 +2,61 @@
 
 @theme {
   --color-primary: #2596be;
-  --color-secondary: #fdb415;
+  --color-secondary: #ff5227;
+}
+
+:root {
+  --primary: #2596be;
+  --secondary: #ff5227;
+  --primary-light: #40a9d6;
+  --primary-dark: #1a6d91;
+  --secondary-light: #ff7a4d;
+  --secondary-dark: #e63f1a;
+}
+
+/* Custom color utilities for consistent branding */
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.bg-secondary {
+  background-color: var(--secondary);
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.text-secondary {
+  color: var(--secondary);
+}
+
+.border-primary {
+  border-color: var(--primary);
+}
+
+.border-secondary {
+  border-color: var(--secondary);
+}
+
+.hover\:bg-primary:hover {
+  background-color: var(--primary);
+}
+
+.hover\:bg-secondary:hover {
+  background-color: var(--secondary);
+}
+
+.hover\:text-primary:hover {
+  color: var(--primary);
+}
+
+.hover\:text-secondary:hover {
+  color: var(--secondary);
+}
+
+.focus\:ring-primary:focus {
+  --tw-ring-color: var(--primary);
 }
 
 /* Custom animations for HomePage */

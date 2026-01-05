@@ -1,5 +1,6 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { CartProvider } from "./contexts/CartContext.jsx";
 
 /* Pages */
 import HomePage from "./HomePage.jsx";
@@ -39,7 +40,7 @@ import ProtectedRoute from "./admin/ProtectedRoute.jsx";
 import Toast from "./components/Toast.jsx";
 
 function AppContent() {
-  const { toast } = useCart();
+  const { toast: _toast } = useCart();
   return (
     <Routes>
       {/* Public Routes */}
@@ -60,30 +61,6 @@ function AppContent() {
       <Route path="/appliances" element={<HomeAppliances />} />
       <Route path="/bicycles" element={<Bicycles />} />
       <Route path="/login" element={<LoginPage />} />
-    <>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/collection" element={<CollectionPage />} />
-        <Route path="/kidswear" element={<KidsWear />} />
-        <Route path="/product/:id" element={<ProductDetailPage />} />
-
-        <Route path="/order" element={<OrderPage />} />
-        <Route path="/electro" element={<Electro />} />
-        <Route path="/women" element={<WomenDress />} />
-        <Route path="/men" element={<MenDress />} />
-        <Route path="/footwear" element={<Footwear />} />
-        <Route path="/accessories" element={<Accessories />} />
-        <Route path="/vegetables" element={<Vegetables />} />
-        <Route path="/appliances" element={<HomeAppliances />} />
-        <Route path="/bicycles" element={<Bicycles />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/admin/customers" element={<AdminCustomers />} />
-        
-        <Route path="/product/:id" element={<ProductDetailPage />} />
-        
 
       {/* Cart */}
       <Route path="/cart" element={<CartPage />} />
@@ -140,31 +117,18 @@ function App() {
   const { toast } = useCart();
 
   return (
-    <CustomerProvider>
-      <AppContent />
-
-      {/* Toast Notification (provided by CartContext) */}
-      {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => {}}
-        />
-      )}
-    </CustomerProvider>
-  );
-}
-
-export default App;
-    </>
-  );
-}
-
-function App() {
-  return (
     <CartProvider>
       <CustomerProvider>
         <AppContent />
+
+        {/* Toast Notification (provided by CartContext) */}
+        {toast && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            onClose={() => {}}
+          />
+        )}
       </CustomerProvider>
     </CartProvider>
   );

@@ -57,10 +57,10 @@ export const register = async (req, res, next) => {
       });
     }
 
-    if (password.length < 6) {
+    if (password.length < 8) {
       return res.status(400).json({ 
         success: false, 
-        message: 'Password must be at least 6 characters' 
+        message: 'Password must be at least 8 characters' 
       });
     }
 
@@ -117,20 +117,8 @@ export const login = async (req, res, next) => {
     // Find user
     const user = await UserModel.findByEmail(email);
     if (!user) {
-      // Log failed login attempt
-      await LoginSessionModel.create({
-        user_id: null,
-        email,
-        ip_address: req.ip || req.connection.remoteAddress,
-        user_agent: req.get('User-Agent'),
-        device_info: {
-          userAgent: req.get('User-Agent'),
-          platform: req.get('User-Agent')?.includes('Mobile') ? 'mobile' : 'desktop'
-        },
-        session_token: null,
-        login_status: 'failed',
-        failure_reason: 'User not found'
-      });
+      // Don't log failed attempts for non-existent users (user_id cannot be null)
+      logger.warn(`Login attempt with non-existent email: ${email}`);
 
       return res.status(401).json({
         success: false,
