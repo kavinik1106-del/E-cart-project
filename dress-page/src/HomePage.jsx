@@ -766,15 +766,15 @@ function HomePage() {
     </div>
 
     {/* Bottom Bar */}
-    <div className="border-t border-blue-800/50 mt-10 pt-6">
+    <div className="border-t border-primary/20 mt-10 pt-6">
       <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-        <p className="text-blue-200 text-sm">
+        <p className="text-white/80 text-sm">
           © 2025 StyleNest. All rights reserved. | Made with India
         </p>
-        <div className="flex gap-6 text-sm text-blue-200">
-          <a href="#" className="hover:text-yellow-400 transition">Privacy Policy</a>
-          <a href="#" className="hover:text-yellow-400 transition">Terms</a>
-          <a href="#" className="hover:text-yellow-400 transition">Cookies</a>
+        <div className="flex gap-6 text-sm text-white/80">
+          <a href="#" className="hover:text-secondary transition">Privacy Policy</a>
+          <a href="#" className="hover:text-secondary transition">Terms</a>
+          <a href="#" className="hover:text-secondary transition">Cookies</a>
         </div>
       </div>
     </div>

@@ -114,7 +114,7 @@ function AdminOrdersContent() {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
           <p className="mt-4 text-gray-600">Loading orders...</p>
         </div>
       </div>
@@ -142,7 +142,7 @@ function AdminOrdersContent() {
       {/* Loading State */}
       {loading && (
         <div className="text-center py-8">
-          <RefreshCw size={40} className="animate-spin mx-auto text-blue-600 mb-4" />
+          <RefreshCw size={40} className="animate-spin mx-auto text-primary mb-4" />
           <p className="text-gray-600">Loading orders...</p>
         </div>
       )}

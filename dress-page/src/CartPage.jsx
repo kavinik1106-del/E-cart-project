@@ -26,7 +26,7 @@ function CartPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 to="/"
-                className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+                className="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:opacity-90 transition-colors"
               >
                 <ArrowLeft size={20} className="mr-2" />
                 Continue Shopping
@@ -60,7 +60,7 @@ function CartPage() {
 
                     <div className="flex-1">
                       <h4 className="font-semibold text-lg">{item.name}</h4>
-                      <p className="text-blue-600 font-bold text-xl">₹{item.price.toLocaleString('en-IN')}</p>
+                      <p className="text-primary font-bold text-xl">₹{item.price.toLocaleString('en-IN')}</p>
                       
                       {/* Size and Color if available */}
                       {(item.size || item.color) && (
@@ -102,7 +102,7 @@ function CartPage() {
                             toggleWishlist(item);
                             removeFromCart(item.id);
                           }}
-                          className="text-blue-500 hover:text-blue-700 text-sm underline hover:no-underline transition-colors ml-2"
+                          className="text-primary hover:opacity-80 text-sm underline hover:no-underline transition-colors ml-2"
                         >
                           Move to Wishlist
                         </button>
@@ -140,7 +140,7 @@ function CartPage() {
 
                 <Link
   to="/checkout"
-  className="block text-center bg-yellow-400 hover:bg-yellow-500 
+  className="block text-center bg-secondary hover:opacity-90 
              text-gray-900 py-3 rounded-lg font-semibold 
              transition-colors"
 >
@@ -149,7 +149,7 @@ function CartPage() {
 
 <Link
   to="/"
-  className="block text-center mt-3 text-blue-600 hover:text-blue-800 transition-colors"
+  className="block text-center mt-3 text-primary hover:opacity-80 transition-colors"
 >
   Continue Shopping
 </Link>

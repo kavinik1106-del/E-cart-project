@@ -62,7 +62,7 @@ function Navbar() {
             alt="StyleNest Logo"
             className="w-10 h-10 rounded-full border-2 border-white"
           />
-          <span className="text-xl font-bold underline">StyleNest</span>
+          <span className="text-xl font-bold ">StyleNest</span>
         </div>
 
         {/* Search Bar */}

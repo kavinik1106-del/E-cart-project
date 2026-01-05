@@ -107,7 +107,7 @@ function AdminSettingsContent() {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
           <p className="mt-4 text-gray-600">Loading settings...</p>
         </div>
       </div>
@@ -146,7 +146,7 @@ function AdminSettingsContent() {
                 type="text"
                 value={settings.storeName}
                 onChange={(e) => handleSettingsChange("storeName", e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
               />
             </div>
 
@@ -158,7 +158,7 @@ function AdminSettingsContent() {
                 type="email"
                 value={settings.storeEmail}
                 onChange={(e) => handleSettingsChange("storeEmail", e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
               />
             </div>
 
@@ -170,7 +170,7 @@ function AdminSettingsContent() {
                 type="tel"
                 value={settings.storePhone}
                 onChange={(e) => handleSettingsChange("storePhone", e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
               />
             </div>
 
@@ -182,7 +182,7 @@ function AdminSettingsContent() {
                 <select
                   value={settings.currency}
                   onChange={(e) => handleSettingsChange("currency", e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
                 >
                   <option>USD</option>
                   <option>EUR</option>
@@ -199,7 +199,7 @@ function AdminSettingsContent() {
                   type="number"
                   value={settings.taxRate}
                   onChange={(e) => handleSettingsChange("taxRate", parseFloat(e.target.value))}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
                 />
               </div>
             </div>
@@ -232,7 +232,7 @@ function AdminSettingsContent() {
                   type="checkbox"
                   checked={settings.notifications[key]}
                   onChange={() => handleNotificationChange(key)}
-                  className="w-4 h-4 text-blue-600"
+                  className="w-4 h-4 text-primary"
                 />
                 <span className="ml-3 font-semibold text-gray-700">{label}</span>
               </label>
@@ -258,7 +258,7 @@ function AdminSettingsContent() {
                 onChange={(e) =>
                   setPasswordForm({ ...passwordForm, current: e.target.value })
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
               />
               <button
                 type="button"
@@ -280,7 +280,7 @@ function AdminSettingsContent() {
               onChange={(e) =>
                 setPasswordForm({ ...passwordForm, new: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
             />
           </div>
 
@@ -294,7 +294,7 @@ function AdminSettingsContent() {
               onChange={(e) =>
                 setPasswordForm({ ...passwordForm, confirm: e.target.value })
               }
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
             />
           </div>
 

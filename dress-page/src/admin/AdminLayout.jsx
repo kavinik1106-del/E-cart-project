@@ -44,7 +44,7 @@ function AdminLayout({ children }) {
         } bg-primary text-white transition-all duration-300 flex flex-col shadow-xl`}
       >
         {/* Logo */}
-        <div className="p-4 border-b border-blue-500 flex items-center justify-between">
+        <div className="p-4 border-b border-primary flex items-center justify-between">
           <div
             className={`flex items-center gap-3 ${
               !sidebarOpen && "justify-center w-full"
@@ -90,10 +90,10 @@ function AdminLayout({ children }) {
         </nav>
 
         {/* Logout */}
-        <div className="p-4 border-t border-blue-700">
+        <div className="p-4 border-t border-primary/30">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-blue-100 hover:bg-red-500 hover:text-white transition-all"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-white/80 hover:bg-red-500 hover:text-white transition-all"
           >
             <LogOut size={20} />
             {sidebarOpen && <span>Logout</span>}
@@ -112,7 +112,7 @@ function AdminLayout({ children }) {
             >
               {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
-            <h1 className="text-2xl font-bold text-blue-700">
+            <h1 className="text-2xl font-bold text-gray-800">
               Admin Dashboard
             </h1>
           </div>

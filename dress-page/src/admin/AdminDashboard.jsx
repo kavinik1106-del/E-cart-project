@@ -62,8 +62,8 @@ function AdminDashboard() {
     <div className="space-y-6">
       {/* Test Heading */}
       <div className="bg-primary/20 p-4 rounded mb-4">
-        <h1 className="text-2xl font-bold text-blue-900">Admin Dashboard</h1>
-        <p className="text-blue-700">Stats: Sales={stats.totalSales}, Orders={stats.totalOrders}</p>
+        <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
+        <p className="text-gray-600">Stats: Sales={stats.totalSales}, Orders={stats.totalOrders}</p>
       </div>
 
       {/* Stats Grid */}
@@ -104,7 +104,7 @@ function AdminDashboard() {
         <div className="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-gray-800">Recent Orders</h2>
-            <button className="text-blue-600 hover:text-blue-700 font-medium text-sm">View All</button>
+            <button className="text-primary hover:opacity-80 font-medium text-sm">View All</button>
           </div>
 
           <div className="overflow-x-auto">
