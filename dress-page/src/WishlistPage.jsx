@@ -94,13 +94,13 @@ function WishlistPage() {
                 <div className="flex border border-gray-300 rounded-lg">
                   <button
                     onClick={() => setViewMode("grid")}
-                    className={`p-2 ${viewMode === "grid" ? "bg-blue-600 text-white" : "text-gray-600"} rounded-l-lg`}
+                    className={`p-2 ${viewMode === "grid" ? "bg-primary text-white" : "text-gray-600"} rounded-l-lg`}
                   >
                     <Grid size={18} />
                   </button>
                   <button
                     onClick={() => setViewMode("list")}
-                    className={`p-2 ${viewMode === "list" ? "bg-blue-600 text-white" : "text-gray-600"} rounded-r-lg`}
+                    className={`p-2 ${viewMode === "list" ? "bg-primary text-white" : "text-gray-600"} rounded-r-lg`}
                   >
                     <List size={18} />
                   </button>
@@ -141,7 +141,7 @@ function WishlistPage() {
             </p>
             <Link
               to="/"
-              className="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+              className="inline-flex items-center px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-primary transition-colors"
             >
               <ShoppingCart size={20} className="mr-2" />
               Continue Shopping
@@ -228,7 +228,7 @@ function WishlistPage() {
                   {/* Add to Cart Button */}
                   <button
                     onClick={() => handleAddToCart(item)}
-                    className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition text-sm font-medium flex items-center justify-center gap-2"
+                    className="w-full bg-primary text-white py-2 rounded-lg hover:bg-primary transition text-sm font-medium flex items-center justify-center gap-2"
                   >
                     <ShoppingCart size={16} />
                     Add to Cart

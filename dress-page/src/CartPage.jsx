@@ -139,18 +139,21 @@ function CartPage() {
                 </div>
 
                 <Link
-                  to="/checkout"
-                  className="block text-center bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold"
-                >
-                  Proceed to Checkout
-                </Link>
-                
-                <Link
-                  to="/"
-                  className="block text-center mt-3 text-blue-600 hover:text-blue-800"
-                >
-                  Continue Shopping
-                </Link>
+  to="/checkout"
+  className="block text-center bg-yellow-400 hover:bg-yellow-500 
+             text-gray-900 py-3 rounded-lg font-semibold 
+             transition-colors"
+>
+  Proceed to Checkout
+</Link>
+
+<Link
+  to="/"
+  className="block text-center mt-3 text-blue-600 hover:text-blue-800 transition-colors"
+>
+  Continue Shopping
+</Link>
+
               </div>
             </div>
           </div>

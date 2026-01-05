@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { X, Plus, Edit2, Trash2, Search, Eye } from "lucide-react";
+import { apiCall, API_ENDPOINTS } from "../config/apiConfig.js";
 import AdminLayout from "./AdminLayout";
 
 function AdminProductsContent() {
@@ -40,7 +41,17 @@ function AdminProductsContent() {
     try {
       setLoading(true);
       setError(null);
-      
+
+      const response = await apiCall(API_ENDPOINTS.PRODUCTS);
+      if (response.success) {
+        setProducts(response.data);
+      } else {
+        throw new Error(response.error || 'Failed to fetch products');
+      }
+    } catch (err) {
+      console.error('Error fetching products:', err);
+      setError('Failed to load products. Using demo data.');
+
       // Fallback demo products
       const demoProducts = [
         { id: 1, name: "iPhone 15 Pro Max", type: "Electronics", price: 124999, image: "https://via.placeholder.com/200?text=iPhone", description: "Premium smartphone", stock: 50 },
@@ -49,10 +60,8 @@ function AdminProductsContent() {
         { id: 4, name: "Fresh Tomatoes", type: "Vegetables", price: 45, image: "https://via.placeholder.com/200?text=Tomato", description: "Fresh organic tomatoes", stock: 200 },
         { id: 5, name: "Electric Kettle", type: "Home Appliances", price: 2499, image: "https://via.placeholder.com/200?text=Kettle", description: "1.5L capacity", stock: 40 }
       ];
-      
+
       setProducts(demoProducts);
-    } catch (err) {
-      console.error(err);
     } finally {
       setLoading(false);
     }
@@ -181,7 +190,7 @@ function AdminProductsContent() {
         <h1 className="text-3xl font-bold text-gray-900">Product Management</h1>
         <button
           onClick={handleAdd}
-          className="bg-blue-500 text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-blue-600 transition"
+          className="bg-primary text-white px-6 py-2 rounded-lg flex items-center gap-2 hover:bg-primary transition"
         >
           <Plus size={20} /> Add Product
         </button>
@@ -287,7 +296,7 @@ function AdminProductsContent() {
                     onClick={() => setCurrentPage(i + 1)}
                     className={`px-3 py-2 rounded ${
                       currentPage === i + 1
-                        ? "bg-blue-500 text-white"
+                        ? "bg-primary text-white"
                         : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                     }`}
                   >
@@ -416,7 +425,7 @@ function AdminProductsContent() {
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                  className="flex-1 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary transition"
                 >
                   {editingId ? "Update" : "Add"}
                 </button>
