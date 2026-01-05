@@ -140,8 +140,8 @@ function CartPage() {
 
                 <Link
   to="/checkout"
-  className="block text-center bg-yellow-400 hover:bg-yellow-500 
-             text-gray-900 py-3 rounded-lg font-semibold 
+  className="block text-center bg-secondary hover:bg-secondary 
+             text-white py-3 rounded-lg font-semibold 
              transition-colors"
 >
   Proceed to Checkout

@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "./Navbar.jsx";
-import { Link } from "react-router-dom";
+import ProductCard from "./ProductCard.jsx";
 
 function KidsWear() {
   const products = [
@@ -8,96 +8,144 @@ function KidsWear() {
       id: 1,
       category: "Dress",
       name: "Kids Party Dress",
-      price: "₹1,299",
+      price: 1299,
+      mrp: 1799,
       image: "/kid1.webp",
+      rating: 4.5,
+      reviews: 89,
+      discount: 28
     },
     {
       id: 2,
       category: "Shoes",
       name: "Kids Sports Shoes",
-      price: "₹999",
+      price: 999,
+      mrp: 1399,
       image: "/kid.jpg",
+      rating: 4.3,
+      reviews: 67,
+      discount: 29
     },
     {
       id: 3,
       category: "Innerwear",
       name: "Kids Inner Set",
-      price: "₹399",
+      price: 399,
+      mrp: 599,
       image: "/kid2.jpg",
+      rating: 4.1,
+      reviews: 45,
+      discount: 33
     },
     {
       id: 4,
       category: "Glasses",
       name: "Kids Sunglasses",
-      price: "₹499",
+      price: 499,
+      mrp: 699,
       image: "/kid3.jpg",
+      rating: 4.2,
+      reviews: 34,
+      discount: 29
     },
     {
       id: 5,
       category: "Dress",
       name: "Kids Casual Wear",
-      price: "₹899",
+      price: 899,
+      mrp: 1199,
       image: "/kid4.jpg",
+      rating: 4.4,
+      reviews: 78,
+      discount: 25
     },
     {
       id: 6,
       category: "Shoes",
       name: "Kids Sandals",
-      price: "₹699",
+      price: 699,
+      mrp: 999,
       image: "/kid5.jpg",
+      rating: 4.0,
+      reviews: 56,
+      discount: 30
     },
     {
-      id: 6,
+      id: 7,
       category: "Shoes",
-      name: "Kids Sandals",
-      price: "₹699",
+      name: "Kids Canvas Shoes",
+      price: 799,
+      mrp: 1099,
       image: "/kid6.jpg",
+      rating: 4.3,
+      reviews: 42,
+      discount: 27
     },
     {
-      id: 6,
-      category: "Shoes",
-      name: "Kids Sandals",
-      price: "₹699",
+      id: 8,
+      category: "Dress",
+      name: "Kids Summer Dress",
+      price: 649,
+      mrp: 899,
       image: "/kid7.jpg",
+      rating: 4.6,
+      reviews: 91,
+      discount: 28
     },
     {
-      id: 6,
-      category: "Shoes",
-      name: "Kids Sandals",
-      price: "₹699",
+      id: 9,
+      category: "Accessories",
+      name: "Kids Cap",
+      price: 299,
+      mrp: 399,
       image: "/kid8.jpg",
+      rating: 3.9,
+      reviews: 23,
+      discount: 25
     },
     {
-      id: 6,
-      category: "Shoes",
-      name: "Kids Sandals",
-      price: "₹699",
+      id: 10,
+      category: "Innerwear",
+      name: "Kids Socks Set",
+      price: 199,
+      mrp: 299,
       image: "/kid9.jpg",
+      rating: 4.2,
+      reviews: 67,
+      discount: 33
     },
     {
-      id: 6,
-      category: "Shoes",
-      name: "Kids Sandals",
-      price: "₹699",
+      id: 11,
+      category: "Dress",
+      name: "Kids Winter Jacket",
+      price: 1499,
+      mrp: 1999,
       image: "/kid10.jpg",
+      rating: 4.7,
+      reviews: 112,
+      discount: 25
     },
     {
-      id: 6,
+      id: 12,
       category: "Shoes",
-      name: "Kids Sandals",
-      price: "₹699",
+      name: "Kids Boots",
+      price: 1199,
+      mrp: 1599,
       image: "/kid11.jpg",
+      rating: 4.4,
+      reviews: 78,
+      discount: 25
     },
-    
   ];
+    
 
   return (
-    <div className="min-h-screen bg-blue-50">
+    <div className="min-h-screen bg-primary">
       <Navbar />
 
       {/* Header Card */}
       <div className="max-w-3xl mx-auto mt-6 px-4">
-        <div className="bg-blue-600 text-white rounded-2xl p-5 text-center shadow-md">
+        <div className="bg-white text-primary rounded-2xl p-5 text-center shadow-md border-2 border-primary">
           <h1 className="text-2xl font-bold">Kids Wear</h1>
           <p className="text-sm mt-1">
             Dresses, Shoes, Innerwear & Accessories
@@ -108,37 +156,13 @@ function KidsWear() {
       {/* Products */}
       <main className="max-w-7xl mx-auto px-4 py-8">
         <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
-          {products.map((p) => (
-            <div
-              key={p.id}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition"
-            >
-              <div className="h-40 bg-gray-100 flex items-center justify-center">
-                <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="w-full h-full flex items-center justify-center">
-                  <img
-                    src={p.image}
-                    alt={p.name}
-                    className="h-full object-contain p-3"
-                  />
-                </Link>
-              </div>
-
-              <div className="p-4">
-                <div className="text-xs text-blue-600 font-semibold">
-                  {p.category}
-                </div>
-                <h3 className="mt-1 font-semibold text-sm">
-                  <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="hover:underline">{p.name}</Link>
-                </h3>
-
-                <div className="mt-2 flex items-center justify-between">
-                  <div className="text-blue-600 font-bold">{p.price}</div>
-                  <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-xs">
-                    Details
-                  </Link>
-                </div>
-              </div>
-            </div>
+          {products.map((product) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              products={products}
+              showRating={true}
+            />
           ))}
         </section>
       </main>
