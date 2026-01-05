@@ -777,7 +777,9 @@ function HomePage() {
 
   </div>
 </footer>
-</div> );
+</div>
+</div>
+  );
 }
 
 export default HomePage;

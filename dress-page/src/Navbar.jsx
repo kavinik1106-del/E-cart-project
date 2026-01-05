@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "./contexts/CartContext";
-import { apiCall, API_ENDPOINTS } from './config/apiConfig.js';
-import { Heart, ShoppingCart, User, LogOut, Menu, X, Search } from "lucide-react";
+import { apiCall, API_ENDPOINTS } from "./config/apiConfig.js";
+import {
+  Heart,
+  ShoppingCart,
+  LogOut,
+  Menu,
+  X,
+  Search,
+} from "lucide-react";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -15,14 +22,13 @@ function Navbar() {
 
   const { getCartCount, wishlist } = useCart();
 
-  // Update user state when other components update localStorage (e.g. after login/register)
   useEffect(() => {
     const onUserUpdated = () => {
-      const userData = localStorage.getItem('user');
+      const userData = localStorage.getItem("user");
       setUser(userData ? JSON.parse(userData) : null);
     };
-    window.addEventListener('userUpdated', onUserUpdated);
-    return () => window.removeEventListener('userUpdated', onUserUpdated);
+    window.addEventListener("userUpdated", onUserUpdated);
+    return () => window.removeEventListener("userUpdated", onUserUpdated);
   }, []);
 
   const handleSearch = (e) => {
@@ -30,6 +36,7 @@ function Navbar() {
     if (searchQuery.trim()) {
       navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery("");
+      setOpen(false);
     }
   };
 
@@ -37,10 +44,13 @@ function Navbar() {
     try {
       const token = localStorage.getItem("token");
       if (token) {
-        await apiCall(API_ENDPOINTS.LOGOUT, { method: 'POST', body: JSON.stringify({ token }) });
+        await apiCall(API_ENDPOINTS.LOGOUT, {
+          method: "POST",
+          body: JSON.stringify({ token }),
+        });
       }
-    } catch (error) {
-      console.error("Logout error:", error);
+    } catch (err) {
+      console.error(err);
     }
 
     localStorage.removeItem("user");
@@ -50,8 +60,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-primary text-white px-4 py-4 shadow-md md:px-8 lg:px-16">
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r bg-blue-600 text-white px-4 py-4 shadow-md md:px-8 lg:px-16">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-blue-600 text-white px-4 py-4 shadow-md md:px-8 lg:px-16">
       <div className="flex items-center justify-between">
         {/* Logo */}
         <div
@@ -60,64 +69,57 @@ function Navbar() {
         >
           <img
             src="/logo5.jpg"
-            alt="StyleNest Logo"
+            alt="StyleNest"
             className="w-10 h-10 rounded-full border-2 border-white"
           />
           <span className="text-xl font-bold underline">StyleNest</span>
         </div>
 
-        {/* Search Bar */}
+        {/* Search - Desktop */}
         <div className="hidden md:block flex-1 max-w-2xl mx-8">
           <form onSubmit={handleSearch} className="relative">
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search for products, brands & more"
-              className="w-full px-4 py-3 pr-12 rounded-lg border border-blue-200 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-secondary shadow-sm"
+              placeholder="Search products..."
+              className="w-full px-4 py-3 pr-12 rounded-lg text-gray-800"
             />
-            <button
-              type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary hover:bg-secondary hover:text-primary text-white p-2 rounded-md transition"
-            >
-              <Search className="w-4 h-4" />
+            <button className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-600 p-2 rounded">
+              <Search size={16} />
             </button>
           </form>
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex gap-8 items-center">
+        <div className="hidden md:flex items-center gap-6">
           {["Home", "About", "Collection", "Contact", "Order"].map((item) => (
             <button
               key={item}
-              onClick={() => navigate(item === "Home" ? "/" : `/${item.toLowerCase()}`)}
-              className="hover:text-yellow-300 transition"
+              onClick={() =>
+                navigate(item === "Home" ? "/" : `/${item.toLowerCase()}`)
+              }
+              className="hover:text-yellow-300"
             >
               {item}
             </button>
           ))}
 
           {/* Wishlist */}
-          <button
-            onClick={() => navigate("/wishlist")}
-            className="relative hover:text-red-300"
-          >
-            <Heart size={24} />
+          <button onClick={() => navigate("/wishlist")} className="relative">
+            <Heart size={22} />
             {wishlist.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-red-500 text-xs w-5 h-5 rounded-full flex items-center justify-center">
                 {wishlist.length}
               </span>
             )}
           </button>
 
           {/* Cart */}
-          <button
-            onClick={() => navigate("/cart")}
-            className="relative hover:text-yellow-300"
-          >
-            <ShoppingCart size={24} />
+          <button onClick={() => navigate("/cart")} className="relative">
+            <ShoppingCart size={22} />
             {getCartCount() > 0 && (
-              <span className="absolute -top-2 -right-2 bg-secondary text-primary text-xs w-5 h-5 rounded-full flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-yellow-400 text-blue-600 text-xs w-5 h-5 rounded-full flex items-center justify-center">
                 {getCartCount()}
               </span>
             )}
@@ -127,14 +129,11 @@ function Navbar() {
           {user ? (
             <>
               <span className="text-sm bg-white/10 px-3 py-1 rounded-full">
-                Welcome,{" "}
-                <span className="text-yellow-300 font-semibold">
-                  {user.first_name || user.email}
-                </span>
+                {user.first_name || user.email}
               </span>
               <button
                 onClick={handleLogout}
-                className="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100"
+                className="bg-white text-blue-600 px-3 py-2 rounded"
               >
                 <LogOut size={16} />
               </button>
@@ -142,7 +141,7 @@ function Navbar() {
           ) : (
             <button
               onClick={() => navigate("/login")}
-              className="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100"
+              className="bg-white text-blue-600 px-4 py-2 rounded"
             >
               Login
             </button>
@@ -157,21 +156,10 @@ function Navbar() {
                   : "/admin/login"
               )
             }
-            className="bg-secondary text-primary px-4 py-2 rounded-lg font-semibold hover:bg-secondary shadow"
+            className="bg-yellow-400 text-blue-700 px-4 py-2 rounded"
           >
             Admin
           </button>
-        <div className="hidden md:flex gap-8">
-          <button onClick={() => navigate("/")}>Home</button>
-          <button onClick={() => navigate("/login")}>Login</button>
-          <button onClick={() => navigate("/about")}>About</button>
-          <button onClick={() => navigate("/collection")}>Collection</button>
-          <button onClick={() => navigate("/contact")}>Contact</button>
-          <button onClick={() => navigate("/order")}>Order</button>
-          <button onClick={() => navigate("/register")}>Register</button>
-          <button onClick={() => navigate(localStorage.getItem("isAdmin") === "true" ? "/admin" : "/admin/login")}>Admin</button>
-          
-          
         </div>
 
         {/* Mobile Toggle */}
@@ -182,20 +170,16 @@ function Navbar() {
 
       {/* Mobile Menu */}
       {open && (
-        <div className="md:hidden mt-4 bg-white text-gray-800 rounded-lg p-4 space-y-4 shadow">
+        <div className="md:hidden mt-4 bg-white text-gray-800 rounded-lg p-4 space-y-3">
           <form onSubmit={handleSearch} className="relative">
             <input
-              type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search products..."
-              className="w-full px-4 py-3 pr-12 rounded-lg border border-blue-200 focus:ring-2 focus:ring-secondary"
+              placeholder="Search..."
+              className="w-full px-4 py-2 pr-10 rounded border"
             />
-            <button
-              type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary hover:bg-secondary text-white p-2 rounded-md"
-            >
-              <Search className="w-4 h-4" />
+            <button className="absolute right-2 top-1/2 -translate-y-1/2">
+              <Search size={16} />
             </button>
           </form>
 
@@ -213,17 +197,10 @@ function Navbar() {
           ))}
 
           <button
-            onClick={() => {
-              navigate(
-                localStorage.getItem("isAdmin") === "true"
-                  ? "/admin"
-                  : "/admin/login"
-              );
-              setOpen(false);
-            }}
-            className="bg-secondary text-primary font-semibold py-2 rounded-lg"
+            onClick={() => navigate("/login")}
+            className="w-full bg-blue-600 text-white py-2 rounded"
           >
-            Admin
+            Login
           </button>
         </div>
       )}

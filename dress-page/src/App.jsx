@@ -25,7 +25,7 @@ import { CustomerProvider } from "./contexts/CustomerContext";
 import CartPage from "./CartPage.jsx";
 import WishlistPage from "./WishlistPage.jsx";
 import CheckoutPage from "./CheckoutPage.jsx";
-import { useCart } from "./contexts/CartContext.jsx";
+import { useCart, CartProvider } from "./contexts/CartContext.jsx";
 
 /* Admin */
 import AdminPanel from "./admin/AdminPanel.jsx";
@@ -41,7 +41,8 @@ import Toast from "./components/Toast.jsx";
 function AppContent() {
   const { toast } = useCart();
   return (
-    <Routes>
+    <>
+      <Routes>
       {/* Public Routes */}
       <Route path="/" element={<HomePage />} />
       <Route path="/about" element={<AboutPage />} />
@@ -60,37 +61,11 @@ function AppContent() {
       <Route path="/appliances" element={<HomeAppliances />} />
       <Route path="/bicycles" element={<Bicycles />} />
       <Route path="/login" element={<LoginPage />} />
-    <>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/collection" element={<CollectionPage />} />
-        <Route path="/kidswear" element={<KidsWear />} />
-        <Route path="/product/:id" element={<ProductDetailPage />} />
-
-        <Route path="/order" element={<OrderPage />} />
-        <Route path="/electro" element={<Electro />} />
-        <Route path="/women" element={<WomenDress />} />
-        <Route path="/men" element={<MenDress />} />
-        <Route path="/footwear" element={<Footwear />} />
-        <Route path="/accessories" element={<Accessories />} />
-        <Route path="/vegetables" element={<Vegetables />} />
-        <Route path="/appliances" element={<HomeAppliances />} />
-        <Route path="/bicycles" element={<Bicycles />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/admin/customers" element={<AdminCustomers />} />
-        
-        <Route path="/product/:id" element={<ProductDetailPage />} />
-        
-
-      {/* Cart */}
-      <Route path="/cart" element={<CartPage />} />
       <Route path="/wishlist" element={<WishlistPage />} />
+      <Route path="/cart" element={<CartPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
 
-      {/* Admin */}
+      {/* Admin Routes */}
       <Route path="/admin/login" element={<AdminLogin />} />
       <Route
         path="/admin"
@@ -100,66 +75,17 @@ function AppContent() {
           </ProtectedRoute>
         }
       />
-      <Route
-        path="/admin/products"
-        element={
-          <ProtectedRoute>
-            <AdminProducts />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/orders"
-        element={
-          <ProtectedRoute>
-            <AdminOrders />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/customers"
-        element={
-          <ProtectedRoute>
-            <AdminCustomers />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/admin/settings"
-        element={
-          <ProtectedRoute>
-            <AdminSettings />
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
-  );
-}
-
-function App() {
-  const { toast } = useCart();
-
-  return (
-    <CustomerProvider>
-      <AppContent />
-
-      {/* Toast Notification (provided by CartContext) */}
+      <Route path="/admin/products" element={<ProtectedRoute><AdminProducts /></ProtectedRoute>} />
+      <Route path="/admin/orders" element={<ProtectedRoute><AdminOrders /></ProtectedRoute>} />
+      <Route path="/admin/customers" element={<ProtectedRoute><AdminCustomers /></ProtectedRoute>} />
+      <Route path="/admin/settings" element={<ProtectedRoute><AdminSettings /></ProtectedRoute>} />
+      </Routes>
       {toast && (
-        <Toast
-          message={toast.message}
-          type={toast.type}
-          onClose={() => {}}
-        />
+        <Toast message={toast.message} type={toast.type} onClose={() => {}} />
       )}
-    </CustomerProvider>
-  );
-}
-
-export default App;
     </>
   );
 }
-
 function App() {
   return (
     <CartProvider>
