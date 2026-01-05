@@ -288,21 +288,21 @@ function WomenDress() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+    <div className="min-h-screen bg-white">
       <Navbar />
 
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-pink-500 via-purple-500 to-indigo-600 text-white">
+      <div className="relative overflow-hidden bg-primary text-white">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="absolute top-0 left-0 w-full h-full">
-          <div className="absolute top-20 left-10 w-32 h-32 bg-yellow-400/20 rounded-full blur-3xl"></div>
+          <div className="absolute top-20 left-10 w-32 h-32 bg-secondary/20 rounded-full blur-3xl"></div>
           <div className="absolute bottom-20 right-10 w-40 h-40 bg-pink-300/20 rounded-full blur-3xl"></div>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-purple-400/10 rounded-full blur-3xl"></div>
         </div>
 
         <div className="relative max-w-7xl mx-auto px-6 py-16">
           <div className="text-center">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-yellow-200 bg-clip-text text-transparent">
+            <h1 className="text-5xl md:text-6xl font-bold mb-6 text-secondary">
               Women's Collection
             </h1>
             <p className="text-xl md:text-2xl text-pink-100 mb-8 max-w-3xl mx-auto leading-relaxed">
@@ -396,7 +396,7 @@ function WomenDress() {
           {/* Color Filter */}
           <div className="mt-6 pt-6 border-t border-gray-200">
             <h3 className="text-lg font-semibold mb-4 text-gray-800 flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-gradient-to-r from-red-400 to-pink-400"></div>
+              <div className="w-4 h-4 rounded-full bg-secondary"></div>
               Filter by Color
             </h3>
             <div className="flex flex-wrap gap-3">

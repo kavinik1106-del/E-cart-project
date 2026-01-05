@@ -2,442 +2,166 @@ import React, { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Navbar from "./Navbar.jsx";
 import ProductCard from "./ProductCard.jsx";
-import AdvancedSearch from "./components/AdvancedSearch.jsx";
+import { ChevronLeft, ChevronRight, Star, Truck, Shield, HeadphonesIcon, Quote, Zap, Award, Users, ShoppingBag, TrendingUp, Play, Pause } from "lucide-react";
+import { apiCall, API_ENDPOINTS } from "./config/apiConfig.js";
+import { Facebook, Instagram, Twitter, MapPin, Mail } from "lucide-react";
+
 
 function HomePage() {
+  
   const categories = [
-    { name: "Electronics", image: "mobile.jpg", route: "/electro" },
-    { name: "Women Dresses", image: "dress1.webp", route: "/women" },
-    { name: "Men Dresses", image: "men2.jpg", route: "/men" },
-    { name: "Vegetables", image: "veg2.webp", route: "/vegetables" },
-    { name: "Home Appliances", image: "OIP (1).jpg", route: "/appliances" },
-    { name: "Kids Wear", image: "OIP (1).webp", route: "/kidswear" },
-    { name: "Footwear", image: "OIP (2).webp", route: "/footwear" },
-    { name: "Accessories", image: "acces.jpg", route: "/accessories" },
+    { name: "Electronics", image: "/mobile.jpg", route: "/electro", count: 245 },
+    { name: "Women Dresses", image: "/dress1.webp", route: "/women", count: 189 },
+    { name: "Men Dresses", image: "/men2.jpg", route: "/men", count: 156 },
+    { name: "Vegetables", image: "/veg2.webp", route: "/vegetables", count: 98 },
+    { name: "Home Appliances", image: "/OIP (1).jpg", route: "/appliances", count: 134 },
+    { name: "Kids Wear", image: "/OIP (1).webp", route: "/kidswear", count: 87 },
+    { name: "Footwear", image: "/OIP (2).webp", route: "/footwear", count: 203 },
+    { name: "Accessories", image: "/acces.jpg", route: "/accessories", count: 167 },
   ];
 
-  const dresses = [
-    {
-      id: 1,
-      name: "Half Saree",
-      price: "₹1,400",
-      mrp: "₹2,500",
-      image: "saree1.webp",
-      rating: 4.5,
-      reviews: 150,
-      tag: "Trending",
-    },
-    {
-      id: 2,
-      name: "Traditional Dress",
-      price: "₹4,000",
-      mrp: "₹5,500",
-      image: "dress1.webp",
-      rating: 4.6,
-      reviews: 200,
-      tag: "Bestseller",
-    },
-    {
-      id: 3,
-      name: "Pink Dress",
-      price: "₹1,200",
-      mrp: "₹2,000",
-      image: "pink.jpg",
-      rating: 4.4,
-      reviews: 180,
-      tag: "New",
-    },
-    {
-      id: 4,
-      name: "Red Dress",
-      price: "₹999",
-      mrp: "₹1,500",
-      image: "red.jpg",
-      rating: 4.3,
-      reviews: 120,
-      tag: "Sale",
-    },
-    {
-      id: 5,
-      name: "Kids Dress",
-      price: "₹799",
-      mrp: "₹1,299",
-      image: "kid1.webp",
-      rating: 4.4,
-      reviews: 140,
-      tag: "Popular",
-    },
-    {
-      id: 6,
-      name: "Men Kurta",
-      price: "₹1,499",
-      mrp: "₹2,299",
-      image: "men.webp",
-      rating: 4.5,
-      reviews: 160,
-      tag: "Hot",
-    },
-    {
-      id: 6,
-      brand: "Nilkamal",
-      category: "Chair",
-      name: "Nilkamal Plastic Chair",
-      price: "₹1,299",
-      rating: 4.3,
-      image: "/ring1.jpg",
-    },
-    {
-      id: 6,
-      brand: "Nilkamal",
-      category: "Chair",
-      name: "Nilkamal Plastic Chair",
-      price: "₹1,299",
-      rating: 4.3,
-      image: "/hairclip4.webp",
-    },
-    {
-      id: 6,
-      brand: "Nilkamal",
-      category: "Chair",
-      name: "Nilkamal Plastic Chair",
-      price: "₹1,299",
-      rating: 4.3,
-      image: "/hairclip5.jpg",
-      tag:"best seller"
-    },
-    {
-      id: 6,
-      brand: "Nilkamal",
-      category: "Chair",
-      name: "Nilkamal Plastic Chair",
-      price: "₹1,299",
-      rating: 4.3,
-      image: "/powder.jpg",
-    },
-    {
-      id: 6,
-      brand: "Hero",
-      category: "Mountain Bicycle",
-      name: "Hero Ranger",
-      price: "₹10,999",
-      rating: 4.5,
-      image: "/bicyclem3.jpg",
-    },
-    {
-      id: 6,
-      brand: "Hero",
-      category: "Mountain Bicycle",
-      name: "Hero Ranger",
-      price: "₹10,999",
-      rating: 4.5,
-      image: "/bicyclew3.jpg",
-    },
-    {
-      id: 6,
-      brand: "Hero",
-      category: "Mountain Bicycle",
-      name: "Hero Ranger",
-      price: "₹10,999",
-      rating: 4.5,
-      image: "/bicyclem.jpg",
-       tag: "Premium",
-    },
-    {
-      id: 6,
-      brand: "Hero",
-      category: "Mountain Bicycle",
-      name: "Hero Ranger",
-      price: "₹10,999",
-      rating: 4.5,
-      image: "/bicyclew1.jpg",
-    },
-     { id: 1, category: "Phone", name: "Galaxy X Pro", price: "₹29,999", image: "/mobile.jpg" },
-    { id: 2, category: "Laptop", name: "SwiftBook 14", price: "₹49,999", image: "/laptop.webp" },
-    { id: 3, category: "Watch", name: "Pulse Watch 3", price: "₹7,999", image: "/smartwatch.webp" },
-    { id: 4, category: "Tablet", name: "TabOne 10", price: "₹19,499", image: "/OIP (3).webp" },
-    { id: 5, category: "Phone", name: "Nova S", price: "₹18,999", image: "/mobile.jpg" },
-    { id: 6, category: "Laptop", name: "Workmate Pro", price: "₹62,999", image: "/OIP (9).webp" },
-    { id: 7, category: "Watch", name: "Chrono Watch", price: "₹12,999", image: "/th (1).jpg" },
-    { id: 8, category: "Tablet", name: "TabMax 12", price: "₹24,999", image: "/th (2).jpg" },
-    {
-      id: 1,
-      brand: "Nike",
-      category: "Sports Shoes",
-      name: "Nike Air Zoom",
-      price: "₹5,999",
-      rating: 4.6,
-      image: "/footk.jpg",
-    },
-    {
-      id: 2,
-      brand: "Adidas",
-      category: "Running Shoes",
-      name: "Adidas Ultraboost",
-      price: "₹6,499",
-      rating: 4.7,
-      image: "/footm.jpg",
-    },
-    {
-      id: 3,
-      brand: "Puma",
-      category: "Casual Shoes",
-      name: "Puma Smash V2",
-      price: "₹3,299",
-      rating: 4.4,
-      image: "/footw.jpg",
-    },
-    {
-      id: 4,
-      brand: "Bata",
-      category: "Formal Shoes",
-      name: "Bata Office Wear",
-      price: "₹2,199",
-      rating: 4.2,
-      image: "/footk1.jpg",
-    },
-    {
-      id: 5,
-      brand: "Nike",
-      category: "Sneakers",
-      name: "Nike Revolution",
-      price: "₹4,899",
-      rating: 4.5,
-      image: "/footm1.jpg",
-       tag: "Premium",
-    },
-    {
-      id: 6,
-      brand: "Adidas",
-      category: "Sports Shoes",
-      name: "Adidas Duramo",
-      price: "₹3,999",
-      rating: 4.3,
-      image: "/footw1.jpg",
-    },
-    {
-      id: 6,
-      brand: "Adidas",
-      category: "Sports Shoes",
-      name: "Adidas Duramo",
-      price: "₹3,999",
-      rating: 4.3,
-      image: "/footk2.jpg",
-    },
-    {
-      id: 1,
-      category: "Dress",
-      name: "Kids Party Dress",
-      price: "₹1,299",
-      image: "/kid1.webp",
-      tag: "Premium",
-    },
-    {
-      id: 2,
-      category: "Shoes",
-      name: "Kids Sports Shoes",
-      price: "₹999",
-      image: "/kid.jpg",
-    },
-    {
-      id: 3,
-      category: "Innerwear",
-      name: "Kids Inner Set",
-      price: "₹399",
-      image: "/kid2.jpg",
-    },
-    {
-      id: 4,
-      category: "Glasses",
-      name: "Kids Sunglasses",
-      price: "₹499",
-      image: "/kid3.jpg",
-    },
-    {
-      id: 5,
-      category: "Dress",
-      name: "Kids Casual Wear",
-      price: "₹899",
-      image: "/kid4.jpg",
-       tag: "Premium"
-    },
-    {
-      id: 6,
-      category: "Shoes",
-      name: "Kids Sandals",
-      price: "₹699",
-      image: "/kid5.jpg",
-    },
-    {
-      id: 6,
-      category: "Shoes",
-      name: "Kids Sandals",
-      price: "₹699",
-      image: "/kid6.jpg",
-    },
-    {
-      id: 6,
-      category: "Shoes",
-      name: "Kids Sandals",
-      price: "₹699",
-      image: "/kid7.jpg",
-    },
-    {
-      id: 6,
-      category: "Shoes",
-      name: "Kids Sandals",
-      price: "₹699",
-      image: "/kid8.jpg",
-    },
-    {
-      id: 6,
-      category: "Shoes",
-      name: "Kids Sandals",
-      price: "₹699",
-      image: "/kid9.jpg",
-    },
-    {
-      id: 6,
-      category: "Shoes",
-      name: "Kids Sandals",
-      price: "₹699",
-      image: "/kid10.jpg",
-    },
-    {
-      id: 6,
-      category: "Shoes",
-      name: "Kids Sandals",
-      price: "₹699",
-      image: "/kid11.jpg",
-    },
-    {
-      id: 101,
-      type: "Pant",
-      name: "Classic Chino",
-      price: 999,
-      mrp: 1999,
-      image: "/chino.avif",
-      category: "Men Dresses",
-      rating: 4.5,
-      reviews: 234,
-      tag: "Bestseller",
-    },
-    {
-      id: 102,
-      type: "Shirt",
-      name: "Oxford Shirt",
-      price: 799,
-      mrp: 1499,
-      image: "/OIP.jpg",
-      category: "Men Dresses",
-      rating: 4.4,
-      reviews: 187,
-      tag: "Popular",
-    },
-    {
-      id: 103,
-      type: "T-Shirt",
-      name: "Comfort Tee",
-      price: 399,
-      mrp: 699,
-      image: "/OIP (7).webp",
-      category: "Men Dresses",
-      rating: 4.3,
-      reviews: 290,
-      tag: "Sale",
-    },
-    {
-      id: 104,
-      type: "Jacket",
-      name: "Denim Jacket",
-      price: 1999,
-      mrp: 3299,
-      image: "/denim.webp",
-      category: "Men Dresses",
-      rating: 4.6,
-      reviews: 156,
-      tag: "Trending",
-    },
-    {
-      id: 105,
-      type: "Shorts",
-      name: "Casual Shorts",
-      price: 449,
-      mrp: 899,
-      image: "/shorts.avif",
-      category: "Men Dresses",
-      rating: 4.2,
-      reviews: 145,
-      tag: "New",
-    },
-    {
-      id: 106,
-      type: "Sweater",
-      name: "Wool Sweater",
-      price: 1299,
-      mrp: 2199,
-      image: "/wool.webp",
-      category: "Men Dresses",
-      rating: 4.5,
-      reviews: 203,
-      tag: "Premium",
-    },
-    {
-      id: 107,
-      type: "Kurta",
-      name: "Men Kurta",
-      price: 1099,
-      mrp: 1899,
-      image: "/kurta.jpg",
-      category: "Men Dresses",
-      rating: 4.4,
-      reviews: 167,
-      tag: "Popular",
-    },
-    
-    
-
+  // Mock products data as fallback
+  const mockProducts = [
+    { id: 1, name: "Premium Double Door Fridge", price: 18999, mrp: 22999, image: "/doubledoorfringe.avif", rating: 4.4, reviews: 234, category: "home", brand: "Samsung", discount: 15 },
+    { id: 2, name: "Premium Cashew Nuts 500g", price: 699, mrp: 899, image: "/cashew.webp", rating: 4.2, reviews: 156, category: "food", brand: "NutriLife", discount: 22 },
+    { id: 3, name: "Luxury Blue Sofa Set", price: 14999, mrp: 18999, image: "/bluesofa.webp", rating: 4.5, reviews: 89, category: "home", brand: "Ikea", discount: 21 },
+    { id: 4, name: "Designer Red Kurta", price: 1299, mrp: 1799, image: "/dress1.webp", rating: 4.1, reviews: 67, category: "women", brand: "FabIndia", discount: 28 },
+    { id: 5, name: "Modern Sofa Chair", price: 9999, mrp: 12999, image: "/sofa.webp", rating: 4.3, reviews: 123, category: "home", brand: "Godrej", discount: 23 },
+    { id: 6, name: "iPhone 15 Pro Max", price: 12499, mrp: 13999, image: "/mobile.jpg", rating: 4.6, reviews: 445, category: "electronics", brand: "Apple", discount: 11 },
+    { id: 7, name: "Organic Dates 1kg", price: 399, mrp: 499, image: "/dates.jpg", rating: 4.0, reviews: 78, category: "food", brand: "Organic Farms", discount: 20 },
+    { id: 8, name: "Silk Wedding Saree", price: 1899, mrp: 2499, image: "/saree2.jpg", rating: 4.3, reviews: 156, category: "women", brand: "Kanchipuram", discount: 24 },
+    { id: 9, name: "Apple Watch Series 9", price: 2999, mrp: 3499, image: "/smartwatch.webp", rating: 4.7, reviews: 312, category: "electronics", brand: "Apple", discount: 14 },
+    { id: 10, name: "Cotton Kurta Set", price: 1599, mrp: 1999, image: "/dress3.webp", rating: 4.2, reviews: 98, category: "men", brand: "Raymond", discount: 20 },
+    { id: 11, name: "MacBook Pro 16\"", price: 199999, mrp: 229999, image: "/laptop.webp", rating: 4.8, reviews: 67, category: "electronics", brand: "Apple", discount: 13 },
+    { id: 12, name: "Nike Air Max Shoes", price: 8999, mrp: 11999, image: "/footk.jpg", rating: 4.5, reviews: 234, category: "men", brand: "Nike", discount: 25 },
+    { id: 13, name: "Samsung 4K TV 55\"", price: 45999, mrp: 54999, image: "/OIP (4).webp", rating: 4.6, reviews: 189, category: "electronics", brand: "Samsung", discount: 16 },
+    { id: 14, name: "Designer Kurta", price: 15999, mrp: 19999, image: "/blue.webp", rating: 4.7, reviews: 145, category: "women", brand: "Manish Malhotra", discount: 20 },
+    { id: 15, name: "Coffee Maker", price: 3499, mrp: 4499, image: "/OIP (5).webp", rating: 4.3, reviews: 87, category: "home", brand: "Philips", discount: 22 },
+    { id: 16, name: "Wireless Headphones", price: 4999, mrp: 6999, image: "/noicehead.jpg", rating: 4.4, reviews: 203, category: "electronics", brand: "Sony", discount: 28 },
+    { id: 17, name: "Wooden Dining Table", price: 12999, mrp: 16999, image: "/plates.jpg", rating: 4.6, reviews: 112, category: "home", brand: "Hometown", discount: 24 },
+    { id: 18, name: "Men's Formal Shirt", price: 899, mrp: 1299, image: "/sherwa.webp", rating: 4.2, reviews: 156, category: "men", brand: "Celio", discount: 31 },
+    { id: 19, name: "Women's Sports Shoes", price: 3499, mrp: 4999, image: "/footw.jpg", rating: 4.5, reviews: 178, category: "women", brand: "Puma", discount: 30 },
+    { id: 20, name: "Organic Spices Mix", price: 249, mrp: 399, image: "/masala.webp", rating: 4.3, reviews: 67, category: "food", brand: "NatureLeaf", discount: 38 },
+    { id: 21, name: "Kids Clothing Set", price: 699, mrp: 999, image: "/kid1.webp", rating: 4.4, reviews: 89, category: "kids", brand: "PlayKids", discount: 30 },
+    { id: 22, name: "Gold Bracelet", price: 2999, mrp: 4999, image: "/bracelet.webp", rating: 4.6, reviews: 234, category: "accessories", brand: "Tanishq", discount: 40 },
+    { id: 23, name: "Wall Clock", price: 599, mrp: 899, image: "/desklamp.jpg", rating: 4.2, reviews: 123, category: "home", brand: "Modern Decor", discount: 33 },
+    { id: 24, name: "Denim Jeans", price: 1199, mrp: 1799, image: "/denim.webp", rating: 4.3, reviews: 198, category: "men", brand: "Levi's", discount: 33 },
+    { id: 25, name: "Flower Pot Set", price: 799, mrp: 1199, image: "/flower.webp", rating: 4.5, reviews: 76, category: "home", brand: "GreenHome", discount: 33 },
+    { id: 26, name: "Keyboard & Mouse", price: 1599, mrp: 2499, image: "/keyboard.jpg", rating: 4.4, reviews: 145, category: "electronics", brand: "Logitech", discount: 36 },
+    { id: 27, name: "Red Saree", price: 2499, mrp: 3999, image: "/redsaree.jpg", rating: 4.6, reviews: 267, category: "women", brand: "Silk Saree", discount: 37 },
+    { id: 28, name: "Electric Fan", price: 1299, mrp: 1899, image: "/fan.jpg", rating: 4.3, reviews: 134, category: "home", brand: "Usha", discount: 31 },
+    { id: 29, name: "Hair Clip Set", price: 349, mrp: 599, image: "/hairclip.jpg", rating: 4.4, reviews: 87, category: "accessories", brand: "HairStyle", discount: 42 },
+    { id: 30, name: "Walnuts 250g", price: 299, mrp: 499, image: "/walnut.jpg", rating: 4.5, reviews: 156, category: "food", brand: "NutriLife", discount: 40 },
   ];
+
+  const [products, setProducts] = useState(mockProducts);
 
   const scrollRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
+  const heroSlides = [
+    {
+      title: "Discover Your Style",
+      subtitle: "Premium Collection of Fashion & Lifestyle",
+      description: "Explore our curated collection of trendy dresses, accessories, and home essentials with unbeatable prices and quality.",
+      image: "/banner.avif",
+      cta: "Shop Now",
+      // gradient: "from-purple-600 via-pink-600 to-red-600"
+    },
+    {
+      title: "New Arrivals Daily",
+      subtitle: "Fresh Fashion Every Day",
+      description: "Stay ahead of trends with our daily updated collection featuring the latest in fashion and lifestyle products.",
+      image: "/homeoffer.avif",
+      cta: "Explore New",
+      // gradient: "from-blue-600 via-cyan-600 to-teal-600"
+    },
+    {
+      title: "Exclusive Deals",
+      subtitle: "Up to 70% Off on Selected Items",
+      description: "Don't miss out on our limited-time offers. Premium quality products at prices you'll love.",
+      image: "/eleoffer1.avif",
+      cta: "View Deals",
+      // gradient: "from-orange-600 via-red-600 to-pink-600"
+    }
+  ];
+
+  // Fetch products from API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await apiCall(API_ENDPOINTS.PRODUCTS);
+        if (response.success && response.data && response.data.length > 0) {
+          const transformedProducts = response.data.map(product => ({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            mrp: product.mrp || product.price * 1.2,
+            image: product.image || "/placeholder.jpg",
+            rating: 4.5,
+            reviews: Math.floor(Math.random() * 200) + 50,
+            tag: product.stock_quantity > 10 ? "In Stock" : "Limited",
+            brand: product.brand || product.category || "Brand",
+            discount: Math.floor(Math.random() * 30) + 10,
+            colors: ["Default"],
+            sizeGuide: { S: {}, M: {}, L: {}, XL: {} }
+          }));
+          setProducts(transformedProducts);
+        }
+      } catch (err) {
+        console.error("Error fetching products from API, using mock data:", err);
+        // Keep using mock data
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // Auto-play slides
+  useEffect(() => {
+    if (!isAutoPlaying) return;
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [isAutoPlaying, heroSlides.length]);
+
+  // Check scroll position for category buttons
   useEffect(() => {
     const el = scrollRef.current;
-    if (!el) return;
-
-    const onScroll = () => {
+    const checkScroll = () => {
+      if (!el) return;
       setCanScrollLeft(el.scrollLeft > 0);
       setCanScrollRight(
-        el.scrollLeft + el.clientWidth < el.scrollWidth - 1
+        el.scrollLeft < el.scrollWidth - el.clientWidth
       );
     };
-
-    onScroll();
-    el.addEventListener("scroll", onScroll);
-    window.addEventListener("resize", onScroll);
-
-    return () => {
-      el.removeEventListener("scroll", onScroll);
-      window.removeEventListener("resize", onScroll);
-    };
+    checkScroll();
+    el?.addEventListener("scroll", checkScroll);
+    return () => el?.removeEventListener("scroll", checkScroll);
   }, []);
 
-  // Auto-slide for hero banner
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % 2);
-    }, 5000);
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    setIsAutoPlaying(false);
+  };
 
-    return () => clearInterval(timer);
-  }, []);
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + heroSlides.length) % heroSlides.length);
+    setIsAutoPlaying(false);
+  };
+
+  const toggleAutoPlay = () => {
+    setIsAutoPlaying(!isAutoPlaying);
+  };
 
   const scrollByAmount = (direction) => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const amount = el.clientWidth * 0.7;
-    el.scrollBy({
+    if (!scrollRef.current) return;
+    const amount = scrollRef.current.clientWidth * 0.7;
+    scrollRef.current.scrollBy({
       left: direction === "right" ? amount : -amount,
       behavior: "smooth",
     });
@@ -471,99 +195,132 @@ function HomePage() {
   };
 
   return (
+    <div className="min-h-screen bg-white">
     <div className="min-h-screen bg-gray-50 pt-20">
       <Navbar />
 
-      {/* Hero Section with Multiple Banners */}
-      <div className="relative overflow-hidden">
-        <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${currentSlide * 100}%)` }}>
-          <div className="w-full flex-shrink-0">
-            <div className="relative h-96 bg-gradient-to-r from-blue-600 to-purple-600">
-              <div className="absolute inset-0 bg-black bg-opacity-20"></div>
-              <div className="relative h-full flex items-center">
-                <div className="max-w-7xl mx-auto px-4 flex items-center justify-between w-full">
-                  <div className="text-white max-w-lg">
-                    <h1 className="text-5xl font-bold mb-4">Welcome to StyleNest</h1>
-                    <p className="text-xl mb-6 text-blue-100">Discover amazing products at unbeatable prices</p>
-                    <Link to="/women" className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors">
-                      Shop Now
-                    </Link>
-                  </div>
-                  <div className="hidden lg:block">
-                    <img src="/hero-shopping.png" alt="Shopping" className="h-80 object-contain" />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="w-full flex-shrink-0">
-            <div className="relative h-96 bg-gradient-to-r from-purple-600 to-pink-600">
-              <div className="absolute inset-0 bg-black bg-opacity-20"></div>
-              <div className="relative h-full flex items-center">
-                <div className="max-w-7xl mx-auto px-4 text-center text-white">
-                  <h2 className="text-4xl font-bold mb-4">Flash Sale!</h2>
-                  <p className="text-xl mb-6">Up to 70% off on selected items</p>
-                  <div className="flex justify-center gap-4 text-2xl font-bold">
-                    <div className="bg-white bg-opacity-20 px-4 py-2 rounded-lg">
-                      <div>23</div>
-                      <div className="text-sm">Hours</div>
-                    </div>
-                    <div className="bg-white bg-opacity-20 px-4 py-2 rounded-lg">
-                      <div>45</div>
-                      <div className="text-sm">Minutes</div>
-                    </div>
-                    <div className="bg-white bg-opacity-20 px-4 py-2 rounded-lg">
-                      <div>12</div>
-                      <div className="text-sm">Seconds</div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Navigation Dots */}
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
-          {[0, 1].map((index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentSlide(index)}
-              className={`w-3 h-3 rounded-full transition-colors ${
-                currentSlide === index ? 'bg-white' : 'bg-white bg-opacity-50'
-              }`}
+      {/* Enhanced Hero Section */}
+<div className="relative overflow-hidden  border-t-4 border-b-4 border-amber-400">
+  
+  {/* Hero Slides */}
+  <div
+    className="flex transition-transform duration-500 ease-in-out"
+    style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+  >
+    {heroSlides.map((slide, index) => (
+      <div key={index} className="w-full flex-shrink-0 relative">
+        <div className="relative h-[380px] bg-primary overflow-hidden">
+          
+          {/* Background Pattern */}
+          <div className="absolute inset-0 opacity-10">
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.12'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/svg%3E")`,
+              }}
             />
-          ))}
+          </div>
+
+          {/* Content */}
+          <div className="relative h-full flex items-center">
+            <div className="max-w-7xl mx-auto px-6 flex items-center justify-between w-full">
+              
+              {/* Text */}
+              <div className="text-white max-w-xl">
+                <h2 className="text-sm font-semibold mb-2 text-blue-100 uppercase tracking-wider">
+                  {slide.subtitle}
+                </h2>
+
+                <h1 className="text-4xl lg:text-5xl font-bold mb-4 leading-tight">
+                  {slide.title}
+                </h1>
+
+                <p className="text-base mb-6 text-blue-100 leading-relaxed">
+                  {slide.description}
+                </p>
+
+                <div className="flex gap-4">
+                  <Link
+                    to="/women"
+                    className="bg-secondary text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-secondary transition-all duration-300 shadow-lg"
+                  >
+                    {slide.cta}
+                  </Link>
+
+                  <Link
+                    to="/collection"
+                    className="border border-white text-white px-6 py-3 rounded-full font-semibold hover:bg-white hover:text-primary transition-all duration-300"
+                  >
+                    View Collection
+                  </Link>
+                </div>
+              </div>
+
+              {/* Image */}
+              <div className="hidden lg:block relative">
+                <img
+                  src={slide.image}
+                  alt={slide.title}
+                  className="h-64 object-contain"
+                />
+
+                <div className="absolute -top-3 -right-3 bg-secondary text-gray-900 px-3 py-1 rounded-full text-xs font-bold shadow-md">
+                  🔥 Hot Deal
+                </div>
+              </div>
+
+            </div>
+          </div>
         </div>
       </div>
+    ))}
+  </div>
 
-      {/* Search Bar */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <AdvancedSearch
-            onSearch={(searchData) => {
-              console.log("Search:", searchData);
-              // Implement search functionality here
-            }}
-            placeholder="Search for products, brands and more..."
-          />
-        </div>
-      </div>
+  {/* Navigation */}
+  <button
+    onClick={prevSlide}
+    className="absolute left-4 top-1/2 -translate-y-1/2 bg-primary/30 text-white p-2 rounded-full hover:bg-primary/40"
+  >
+    <ChevronLeft size={20} />
+  </button>
 
-      {/* Categories Section */}
-      <section className="py-12 bg-white">
+  <button
+    onClick={nextSlide}
+    className="absolute right-4 top-1/2 -translate-y-1/2 bg-primary/30 text-white p-2 rounded-full hover:bg-primary/40"
+  >
+    <ChevronRight size={20} />
+  </button>
+
+  {/* Indicators */}
+  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex space-x-2">
+    {heroSlides.map((_, index) => (
+      <button
+        key={index}
+        onClick={() => setCurrentSlide(index)}
+        className={`w-2.5 h-2.5 rounded-full ${
+          index === currentSlide
+            ? "bg-secondary"
+            : "bg-white/50"
+        }`}
+      />
+    ))}
+  </div>
+
+</div>
+
+
+    {/* Categories Section - SECOND */}
+      <section className="py-12 bg-white border-b-4 border-secondary">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-gray-800 mb-8 text-center">Shop by Category</h2>
+          <h2 className="text-3xl font-bold text-primary mb-8 text-center">Shop by Category</h2>
 
           <div className="relative">
             <button
               onClick={() => scrollByAmount("left")}
               disabled={!canScrollLeft}
-              className="absolute left-0 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-shadow z-10 disabled:opacity-50"
+              className="absolute left-0 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all z-10 disabled:opacity-50 hover:scale-110"
             >
-              <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
+              <ChevronLeft className="w-6 h-6 text-gray-600" />
             </button>
 
             <div
@@ -576,14 +333,22 @@ function HomePage() {
                   to={cat.route}
                   className="flex-shrink-0 group"
                 >
-                  <div className="bg-gradient-to-br from-blue-50 to-purple-50 p-6 rounded-2xl hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                    <img
-                      src={cat.image}
-                      alt={cat.name}
-                      className="w-20 h-20 mx-auto rounded-full border-4 border-white shadow-md object-cover group-hover:scale-110 transition-transform"
-                    />
-                    <p className="text-center mt-3 text-gray-800 font-semibold group-hover:text-blue-600 transition-colors">
+                  <div className="bg-white p-6 rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-blue-300 hover:border-secondary">
+                    <div className="relative">
+                      <img
+                        src={cat.image}
+                        alt={cat.name}
+                        className="w-24 h-24 mx-auto rounded-full border-4 border-white shadow-lg object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                      <div className="absolute -top-2 -right-2 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                        {cat.count}
+                      </div>
+                    </div>
+                    <p className="text-center mt-4 text-gray-800 font-semibold group-hover:text-primary transition-colors text-lg">
                       {cat.name}
+                    </p>
+                    <p className="text-center text-sm text-gray-500 mt-1">
+                      {cat.count} products
                     </p>
                   </div>
                 </Link>
@@ -593,64 +358,54 @@ function HomePage() {
             <button
               onClick={() => scrollByAmount("right")}
               disabled={!canScrollRight}
-              className="absolute right-0 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-shadow z-10 disabled:opacity-50"
+              className="absolute right-0 top-1/2 -translate-y-1/2 bg-white p-3 rounded-full shadow-lg hover:shadow-xl transition-all z-10 disabled:opacity-50 hover:scale-110"
             >
-              <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-              </svg>
+              <ChevronRight className="w-6 h-6 text-gray-600" />
             </button>
           </div>
         </div>
       </section>
 
-      {/* Deal of the Day */}
-      <section className="py-12 bg-gradient-to-r from-orange-400 to-red-500">
+      {/* Featured Products - FOURTH - AMAZON STYLE GRID */}
+      <section className="py-16 bg-white border-t-4 border-secondary">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center text-white mb-8">
-            <h2 className="text-3xl font-bold mb-2">Deal of the Day</h2>
-            <p className="text-orange-100">Limited time offers - Don't miss out!</p>
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-gray-800 mb-2">Recommended For You</h2>
+            <p className="text-gray-600">Based on your browsing history and preferences</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {dresses.slice(0, 3).map((product) => (
-              <div key={product.id} className="bg-white rounded-2xl p-6 shadow-lg">
-                <div className="relative">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-48 object-cover rounded-lg mb-4"
-                  />
-                  <span className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-                    -50%
-                  </span>
-                </div>
-                <h3 className="font-semibold text-gray-800 mb-2">{product.name}</h3>
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-2xl font-bold text-red-600">{product.price}</span>
-                  <span className="line-through text-gray-400">{product.mrp}</span>
-                </div>
-                <Link
-                  to={`/product/${product.id}`}
-                  state={{ product, related: dresses }}
-                  className="w-full bg-gradient-to-r from-red-500 to-orange-500 text-white py-2 rounded-lg font-semibold hover:from-red-600 hover:to-orange-600 transition-all text-center block"
-                >
-                  Grab Deal
-                </Link>
-              </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
+            {products.map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                products={products}
+                showRating={true}
+              />
             ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link
+              to="/collection"
+              className="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full font-semibold hover:bg-primary transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105"
+            >
+              View All {products.length} Products
+              <ChevronRight className="w-5 h-5" />
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Trending Products */}
-      <section className="py-12 bg-white">
+      {/* Best Sellers Section */}
+      <section className="py-16 bg-secondary/10 border-t-4 border-secondary">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
             <div>
-              <h2 className="text-3xl font-bold text-gray-800 mb-2">Trending Now</h2>
-              <p className="text-gray-600">Most popular products this week</p>
+              <h2 className="text-2xl font-bold text-primary mb-2">⭐ Best Sellers</h2>
+              <p className="text-gray-600">Most loved products by customers</p>
             </div>
-            <Link to="/women" className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-2">
+            <Link to="/collection" className="bg-secondary text-gray-900 hover:bg-secondary font-semibold flex items-center gap-2 px-4 py-2 rounded-full transition-all">
               View All
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -658,12 +413,158 @@ function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
-            {dresses.slice(0, 10).map((product) => (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
+            {products.slice(0, 24).map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}
-                products={dresses}
+                products={products}
+                showRating={true}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Deal of the Day */}
+<section className="py-12 bg-primary">
+  <div className="max-w-7xl mx-auto px-4">
+
+    {/* Heading */}
+    <div className="text-center text-white mb-8">
+      <h2 className="text-3xl font-bold mb-2 tracking-wide">
+        Lightning Deals ⚡
+      </h2>
+      <p className="text-blue-100">
+        Limited time offers — grab them before stocks run out!
+      </p>
+    </div>
+
+    {/* Products Grid */}
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
+      {products.slice(0, 18).map((product) => (
+        <ProductCard
+          key={product.id}
+          product={product}
+          products={products}
+          showRating={true}
+        />
+      ))}
+    </div>
+
+  </div>
+</section>
+
+
+      {/* Trending Products */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">Trending Now</h2>
+              <p className="text-gray-600">Most popular products this week</p>
+            </div>
+            <Link to="/collection" className="text-primary hover:text-primary font-semibold flex items-center gap-2">
+              View All
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
+            {products.slice(5, 29).map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                products={products}
+                showRating={true}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Recently Viewed Products */}
+      <section className="py-16 bg-primary/10">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">Recently Viewed</h2>
+              <p className="text-gray-600">Items you've looked at</p>
+            </div>
+            <Link to="/collection" className="text-primary hover:text-primary font-semibold flex items-center gap-2">
+              View All
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
+            {products.slice(10, 34).map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                products={products}
+                showRating={true}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Top Rated Products */}
+      <section className="py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">Top Rated Products</h2>
+              <p className="text-gray-600">Highest rated by customers</p>
+            </div>
+            <Link to="/collection" className="text-primary hover:text-primary font-semibold flex items-center gap-2">
+              View All
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
+            {products.slice(15, 39).map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                products={products}
+                showRating={true}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* New Arrivals */}
+      <section className="py-16 bg-primary/10">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">New Arrivals</h2>
+              <p className="text-gray-600">Just added to our store</p>
+            </div>
+            <Link to="/collection" className="text-primary hover:text-primary font-semibold flex items-center gap-2">
+              View All
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
+            {products.slice(20, 44).map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                products={products}
                 showRating={true}
               />
             ))}
@@ -677,7 +578,7 @@ function HomePage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center">
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
@@ -708,160 +609,175 @@ function HomePage() {
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="py-12 bg-gradient-to-r from-gray-50 to-blue-50">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4">What Our Customers Say</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
-              Don't just take our word for it - hear from our satisfied customers
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white p-6 rounded-2xl shadow-lg">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                  <span className="text-blue-600 font-bold text-lg">P</span>
-                </div>
-                <div className="ml-4">
-                  <h4 className="font-semibold text-gray-800">Priya Sharma</h4>
-                  <div className="flex text-yellow-400">
-                    {"★".repeat(5)}
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-600 italic">
-                "Amazing quality products at great prices. The delivery was super fast and the customer service is excellent!"
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl shadow-lg">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-                  <span className="text-green-600 font-bold text-lg">R</span>
-                </div>
-                <div className="ml-4">
-                  <h4 className="font-semibold text-gray-800">Rahul Kumar</h4>
-                  <div className="flex text-yellow-400">
-                    {"★".repeat(5)}
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-600 italic">
-                "StyleNest has become my go-to shopping destination. The variety is amazing and prices are unbeatable!"
-              </p>
-            </div>
-
-            <div className="bg-white p-6 rounded-2xl shadow-lg">
-              <div className="flex items-center mb-4">
-                <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                  <span className="text-purple-600 font-bold text-lg">A</span>
-                </div>
-                <div className="ml-4">
-                  <h4 className="font-semibold text-gray-800">Anjali Patel</h4>
-                  <div className="flex text-yellow-400">
-                    {"★".repeat(5)}
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-600 italic">
-                "Love the user-friendly interface and the quality of products. Highly recommend StyleNest to everyone!"
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
+      
       {/* Newsletter Section */}
-      <section className="py-12 bg-gradient-to-r from-blue-600 to-purple-600">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">Stay Updated</h2>
-          <p className="text-blue-100 mb-8 text-lg">
-            Subscribe to our newsletter and get exclusive deals, new product launches, and style tips delivered to your inbox.
-          </p>
+<section className="py-16 bg-primary relative overflow-hidden">
+  {/* Background Effects */}
+  <div className="absolute inset-0 bg-white/5"></div>
+  <div className="absolute -top-40 -right-40 w-80 h-80 bg-secondary/10 rounded-full"></div>
+  <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-400/10 rounded-full"></div>
 
-          <div className="max-w-md mx-auto flex gap-4">
-            <input
-              type="email"
-              placeholder="Enter your email address"
-              className="flex-1 px-4 py-3 rounded-lg border-0 focus:ring-2 focus:ring-white focus:ring-opacity-50"
-            />
-            <button className="px-6 py-3 bg-white text-blue-600 rounded-lg hover:bg-gray-100 transition-colors font-semibold">
-              Subscribe
-            </button>
-          </div>
-
-          <p className="text-blue-200 text-sm mt-4">
-            We respect your privacy. Unsubscribe at any time.
-          </p>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">StyleNest</h3>
-              <p className="text-gray-400 mb-4">Your one-stop destination for all your shopping needs.</p>
-              <div className="flex gap-4">
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
-                  </svg>
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.749.098.118.112.221.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.747-1.378 0 0-.599 2.282-.744 2.84-.282 1.084-1.064 2.456-1.549 3.235C9.584 23.815 10.77 24.001 12.017 24.001c6.624 0 11.99-5.367 11.99-11.987C24.007 5.367 18.641.001.012.017z"/>
-                  </svg>
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.749.098.118.112.221.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.747-1.378 0 0-.599 2.282-.744 2.84-.282 1.084-1.064 2.456-1.549 3.235C9.584 23.815 10.77 24.001 12.017 24.001c6.624 0 11.99-5.367 11.99-11.987C24.007 5.367 18.641.001.012.017z"/>
-                  </svg>
-                </a>
-              </div>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">About Us</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">FAQ</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Shipping Info</a></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Categories</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><Link to="/women" className="hover:text-white transition-colors">Women Fashion</Link></li>
-                <li><Link to="/men" className="hover:text-white transition-colors">Men Fashion</Link></li>
-                <li><Link to="/electro" className="hover:text-white transition-colors">Electronics</Link></li>
-                <li><Link to="/vegetables" className="hover:text-white transition-colors">Groceries</Link></li>
-              </ul>
-            </div>
-
-            <div>
-              <h4 className="font-semibold mb-4">Customer Service</h4>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Returns</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Size Guide</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Track Order</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2025 StyleNest. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+  <div className="relative max-w-4xl mx-auto px-4 text-center">
+    {/* Icon */}
+    <div className="mb-6">
+      <div className="inline-flex items-center justify-center p-4 bg-white/20 rounded-full backdrop-blur-sm">
+        <svg
+          className="w-12 h-12 text-secondary"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+          />
+        </svg>
+      </div>
     </div>
-  );
+
+    {/* Text */}
+    <h2 className="text-4xl font-bold text-white mb-4">
+      Stay Updated with StyleNest
+    </h2>
+    <p className="text-blue-100 mb-8 text-xl leading-relaxed max-w-2xl mx-auto">
+      Subscribe to our newsletter and get exclusive deals, new arrivals, and
+      style tips delivered straight to your inbox.
+    </p>
+
+    {/* Input + Button */}
+    <div className="max-w-lg mx-auto">
+      <div className="flex flex-col sm:flex-row gap-4 bg-white/15 backdrop-blur-sm rounded-2xl p-2">
+        <input
+          type="email"
+          placeholder="Enter your email address"
+          className="flex-1 px-6 py-4 rounded-xl border-0 
+                     bg-white/90 text-gray-800 placeholder-gray-500 text-lg
+                     focus:outline-none focus:ring-2 focus:ring-secondary"
+        />
+        <button
+          className="px-8 py-4 
+                     bg-secondary hover:bg-secondary 
+                     text-gray-900 
+                     rounded-xl 
+                     transition-all duration-300 
+                     font-bold text-lg 
+                     shadow-lg hover:shadow-xl 
+                     transform hover:scale-105
+                     focus:outline-none focus:ring-2 focus:ring-yellow-300"
+        >
+          Subscribe Now
+        </button>
+      </div>
+    </div>
+
+    {/* Privacy Note */}
+    <p className="text-blue-100 text-sm mt-6 flex items-center justify-center gap-2">
+      <Shield className="w-4 h-4 text-secondary" />
+      We respect your privacy. Unsubscribe at any time.
+    </p>
+  </div>
+</section>
+
+      {/* Home Page Footer */}
+<footer className="bg-primary text-white">
+  <div className="max-w-7xl mx-auto px-6 py-12">
+
+    <div className="grid md:grid-cols-4 gap-8">
+
+      {/* Brand Section */}
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <img
+            src="/logo5.jpg"
+            alt="StyleNest"
+            className="w-10 h-10 rounded-full"
+          />
+          <h3 className="text-2xl font-bold text-secondary">
+            StyleNest
+          </h3>
+        </div>
+
+        <p className="text-blue-100 text-sm leading-relaxed">
+          India’s trusted online fashion store delivering premium quality,
+          secure payments, and fast shipping.
+        </p>
+
+        {/* Social Icons */}
+        <div className="flex space-x-4">
+          <div className="w-10 h-10 bg-primary/40 hover:bg-secondary text-white hover:text-gray-900 rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer">
+            <Facebook className="w-5 h-5" />
+          </div>
+          <div className="w-10 h-10 bg-primary/40 hover:bg-secondary text-white hover:text-gray-900 rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer">
+            <Instagram className="w-5 h-5" />
+          </div>
+          <div className="w-10 h-10 bg-primary/40 hover:bg-secondary text-white hover:text-gray-900 rounded-lg flex items-center justify-center transition-all duration-300 cursor-pointer">
+            <Twitter className="w-5 h-5" />
+          </div>
+        </div>
+      </div>
+
+      {/* Shop */}
+      <div className="space-y-4">
+        <h4 className="text-lg font-semibold">Shop</h4>
+        <ul className="space-y-2 text-sm text-blue-100">
+          <li><a href="/collection" className="hover:text-secondary transition">All Collections</a></li>
+          <li><a href="/new" className="hover:text-secondary transition">New Arrivals</a></li>
+          <li><a href="/best-sellers" className="hover:text-secondary transition">Best Sellers</a></li>
+          <li><a href="/offers" className="hover:text-secondary transition">Offers</a></li>
+        </ul>
+      </div>
+
+      {/* Customer Care */}
+      <div className="space-y-4">
+        <h4 className="text-lg font-semibold">Customer Care</h4>
+        <ul className="space-y-2 text-sm text-blue-100">
+          <li><a href="/contact" className="hover:text-yellow-400 transition">Contact Us</a></li>
+          <li><a href="#" className="hover:text-yellow-400 transition">Shipping Info</a></li>
+          <li><a href="#" className="hover:text-yellow-400 transition">Returns & Refunds</a></li>
+          <li><a href="#" className="hover:text-yellow-400 transition">Size Guide</a></li>
+        </ul>
+      </div>
+
+      {/* Trust & Contact */}
+      <div className="space-y-4">
+        <h4 className="text-lg font-semibold">Trusted by Customers</h4>
+        <p className="text-sm text-blue-100">
+          Secure payments • 7-day easy returns • 24×7 support
+        </p>
+
+        <div className="space-y-3 text-sm text-blue-100">
+          <div className="flex items-center gap-3">
+            <MapPin className="w-4 h-4 text-secondary" />
+            <span>Chennai, India</span>
+          </div>
+          <div className="flex items-center gap-3">
+            <Mail className="w-4 h-4 text-secondary" />
+            <span>support@stylenest.com</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    {/* Bottom Bar */}
+    <div className="border-t border-blue-800/50 mt-10 pt-6">
+      <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+        <p className="text-blue-200 text-sm">
+          © 2025 StyleNest. All rights reserved. | Made with India
+        </p>
+        <div className="flex gap-6 text-sm text-blue-200">
+          <a href="#" className="hover:text-yellow-400 transition">Privacy Policy</a>
+          <a href="#" className="hover:text-yellow-400 transition">Terms</a>
+          <a href="#" className="hover:text-yellow-400 transition">Cookies</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</footer>
+</div> );
 }
 
 export default HomePage;

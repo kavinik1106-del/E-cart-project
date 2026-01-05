@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Package, Truck, CheckCircle, Clock, ChevronDown, RefreshCw } from "lucide-react";
 import AdminLayout from "./AdminLayout";
+import { apiCall, API_ENDPOINTS } from "../config/apiConfig.js";
 
 function AdminOrdersContent() {
   const [orders, setOrders] = useState([]);
@@ -80,7 +81,7 @@ function AdminOrdersContent() {
 
   const statusConfig = {
     pending: { color: "text-gray-600", bg: "bg-gray-100", icon: Clock },
-    processing: { color: "text-blue-600", bg: "bg-blue-100", icon: Package },
+    processing: { color: "text-primary", bg: "bg-primary/20", icon: Package },
     shipped: { color: "text-yellow-600", bg: "bg-yellow-100", icon: Truck },
     delivered: { color: "text-green-600", bg: "bg-green-100", icon: CheckCircle },
   };
@@ -92,17 +93,12 @@ function AdminOrdersContent() {
 
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/orders/${orderId}/status`, {
+      const result = await apiCall(`${API_ENDPOINTS.ORDER(orderId)}/status`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify({ status: newStatus })
       });
 
-      const result = await response.json();
-
-      if (result.success) {
+      if (result && result.success) {
         setOrders((prev) =>
           prev.map((o) => (o.id === orderId ? { ...o, status: newStatus } : o))
         );
@@ -135,7 +131,7 @@ function AdminOrdersContent() {
         </div>
         <button
           onClick={fetchOrders}
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary transition"
           disabled={loading}
         >
           <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
@@ -173,7 +169,7 @@ function AdminOrdersContent() {
             onClick={() => setFilter(status)}
             className={`px-4 py-2 rounded-lg font-medium transition ${
               filter === status
-                ? "bg-blue-600 text-white shadow-md"
+                ? "bg-primary text-white shadow-md"
                 : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-50"
             }`}
           >
@@ -249,7 +245,7 @@ function AdminOrdersContent() {
                             onClick={() => updateOrderStatus(order.id, status)}
                             className={`px-3 py-1 rounded text-sm font-medium transition ${
                               order.status === status
-                                ? "bg-blue-600 text-white"
+                                ? "bg-primary text-white"
                                 : "bg-gray-200 text-gray-700 hover:bg-gray-300"
                             }`}
                           >

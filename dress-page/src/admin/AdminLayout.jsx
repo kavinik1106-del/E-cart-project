@@ -1,6 +1,17 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { Menu, X, LogOut, BarChart3, Package, ShoppingCart, Settings, Users, Bell, Search } from "lucide-react";
+import {
+  Menu,
+  X,
+  LogOut,
+  BarChart3,
+  Package,
+  ShoppingCart,
+  Settings,
+  Users,
+  Bell,
+  Search,
+} from "lucide-react";
 
 function AdminLayout({ children }) {
   const navigate = useNavigate();
@@ -27,29 +38,50 @@ function AdminLayout({ children }) {
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Sidebar */}
-      <div className={`${sidebarOpen ? "w-64" : "w-20"} bg-gradient-to-b from-blue-900 to-purple-800 text-white transition-all duration-300 overflow-y-auto flex flex-col shadow-lg`}>
+      <div
+        className={`${
+          sidebarOpen ? "w-64" : "w-20"
+        } bg-primary text-white transition-all duration-300 flex flex-col shadow-xl`}
+      >
         {/* Logo */}
-        <div className="p-4 border-b border-blue-700 flex items-center justify-between">
-          <div className={`flex items-center gap-3 ${!sidebarOpen && "justify-center w-full"}`}>
-            <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-600 rounded-lg flex items-center justify-center font-bold text-lg">A</div>
-            {sidebarOpen && <span className="font-bold text-xl">StyleNest</span>}
+        <div className="p-4 border-b border-blue-500 flex items-center justify-between">
+          <div
+            className={`flex items-center gap-3 ${
+              !sidebarOpen && "justify-center w-full"
+            }`}
+          >
+            <div className="w-10 h-10 bg-secondary rounded-lg flex items-center justify-center font-bold text-primary">
+              A
+            </div>
+            {sidebarOpen && (
+              <span className="font-bold text-xl tracking-wide">
+                StyleNest
+              </span>
+            )}
           </div>
         </div>
 
-        {/* Menu Items */}
+        {/* Menu */}
         <nav className="flex-1 p-4 space-y-2">
           {menuItems.map((item) => {
             const Icon = item.icon;
+            const active = isActive(item.path);
+
             return (
               <button
                 key={item.path}
                 onClick={() => navigate(item.path)}
-                className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                  isActive(item.path)
-                    ? "bg-purple-500 shadow-lg"
-                    : "hover:bg-blue-700 text-blue-100"
+                className={`relative w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200
+                ${
+                  active
+                    ? "bg-secondary text-primary font-semibold shadow-md"
+                    : "text-primary hover:bg-primary/80"
                 }`}
               >
+                {/* Active indicator */}
+                {active && (
+                  <span className="absolute left-0 top-0 h-full w-1 bg-secondary rounded-r"></span>
+                )}
                 <Icon size={20} />
                 {sidebarOpen && <span>{item.label}</span>}
               </button>
@@ -61,7 +93,7 @@ function AdminLayout({ children }) {
         <div className="p-4 border-t border-blue-700">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-600 transition-all text-blue-100"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-blue-100 hover:bg-red-500 hover:text-white transition-all"
           >
             <LogOut size={20} />
             {sidebarOpen && <span>Logout</span>}
@@ -76,47 +108,49 @@ function AdminLayout({ children }) {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 hover:bg-gray-100 rounded-lg transition"
+              className="p-2 rounded-lg hover:bg-primary/10 transition"
             >
               {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
-            <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
+            <h1 className="text-2xl font-bold text-blue-700">
+              Admin Dashboard
+            </h1>
           </div>
 
           <div className="flex items-center gap-4">
-            {/* Search Bar */}
-            <div className="hidden md:flex items-center bg-gray-100 rounded-lg px-3 py-2">
-              <Search size={18} className="text-gray-500" />
+            {/* Search */}
+            <div className="hidden md:flex items-center bg-primary/10 border border-primary/20 rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-secondary">
+              <Search size={18} className="text-blue-500" />
               <input
                 type="text"
                 placeholder="Search..."
-                className="bg-transparent outline-none ml-2 w-48 text-sm"
+                className="bg-transparent outline-none ml-2 w-48 text-sm text-gray-700"
               />
             </div>
 
             {/* Notifications */}
-            <button className="relative p-2 hover:bg-gray-100 rounded-lg">
-              <Bell size={20} className="text-gray-600" />
-              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            <button className="relative p-2 rounded-lg hover:bg-primary/10">
+              <Bell size={20} className="text-blue-600" />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-secondary rounded-full"></span>
             </button>
 
-            {/* User Profile */}
+            {/* Profile */}
             <div className="flex items-center gap-3 pl-4 border-l border-gray-200">
               <div className="text-right">
-                <p className="font-semibold text-sm text-gray-800">Admin User</p>
+                <p className="font-semibold text-sm text-gray-800">
+                  Admin User
+                </p>
                 <p className="text-xs text-gray-500">Administrator</p>
               </div>
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+              <div className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-primary font-bold">
                 A
               </div>
             </div>
           </div>
         </div>
 
-        {/* Content Area */}
-        <div className="flex-1 overflow-auto p-6">
-          {children}
-        </div>
+        {/* Page Content */}
+        <div className="flex-1 overflow-auto p-6">{children}</div>
       </div>
     </div>
   );

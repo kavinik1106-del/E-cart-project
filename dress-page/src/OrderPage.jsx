@@ -12,6 +12,15 @@ function OrderPage() {
   const [loadingStates, setLoadingStates] = useState({});
   const [addedToCart, setAddedToCart] = useState({});
 
+  const formatPrice = (price) => {
+    return new Intl.NumberFormat('en-IN', {
+      style: 'currency',
+      currency: 'INR',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price);
+  };
+
   const products = [
     {
       id: 1,
@@ -57,9 +66,9 @@ function OrderPage() {
     },
   ];
 
-  const total = cart.reduce((sum, p) => sum + p.price * p.quantity, 0);
+  const total = cart.reduce((sum, p) => sum + (Number(p.price) || 0) * (Number(p.quantity) || 1), 0);
   const totalMRP = cart.reduce(
-    (sum, p) => sum + (p.mrp || p.price) * p.quantity,
+    (sum, p) => sum + (Number(p.mrp || p.price) || 0) * (Number(p.quantity) || 1),
     0
   );
   const discount = totalMRP - total;
@@ -206,10 +215,10 @@ function OrderPage() {
                     {/* Price */}
                     <div className="flex items-center gap-2 mb-3">
                       <span className="text-2xl font-bold text-gray-900">
-                        ₹{product.price.toLocaleString()}
+                        {formatPrice(product.price)}
                       </span>
                       <span className="text-sm text-gray-500 line-through">
-                        ₹{product.mrp.toLocaleString()}
+                        {formatPrice(product.mrp)}
                       </span>
                       <span className="text-sm text-green-600 font-medium">
                         {Math.round(((product.mrp - product.price) / product.mrp) * 100)}% off
@@ -234,7 +243,7 @@ function OrderPage() {
                       className={`w-full py-2 px-4 rounded-lg font-medium transition-all duration-300 flex items-center justify-center gap-2 ${
                         addedToCart[product.id]
                           ? "bg-green-600 hover:bg-green-700 text-white"
-                          : "bg-blue-600 hover:bg-blue-700 text-white"
+                          : "bg-primary hover:bg-primary text-white"
                       } disabled:opacity-50 disabled:cursor-not-allowed`}
                     >
                       {loadingStates[product.id] ? (
@@ -274,7 +283,7 @@ function OrderPage() {
                 <div className="p-6 text-center">
                   <ShoppingCart className="w-12 h-12 text-gray-300 mx-auto mb-4" />
                   <p className="text-gray-500 mb-4">Your cart is empty</p>
-                  <button className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors">
+                  <button className="bg-primary text-white px-6 py-2 rounded-lg font-medium hover:bg-primary transition-colors">
                     Continue Shopping
                   </button>
                 </div>
@@ -295,7 +304,7 @@ function OrderPage() {
                               {item.name}
                             </h4>
                             <p className="text-blue-600 font-semibold text-sm mb-2">
-                              ₹{item.price.toLocaleString()}
+                              {formatPrice(item.price)}
                             </p>
 
                             {/* Quantity Controls */}
@@ -333,20 +342,20 @@ function OrderPage() {
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
                         <span className="text-gray-600">Subtotal ({cart.length} items)</span>
-                        <span>₹{total.toLocaleString()}</span>
+                        <span>{formatPrice(total)}</span>
                       </div>
 
                       {discount > 0 && (
                         <div className="flex justify-between text-green-600">
                           <span>Discount</span>
-                          <span>-₹{discount.toLocaleString()}</span>
+                          <span>-{formatPrice(discount)}</span>
                         </div>
                       )}
 
                       <div className="flex justify-between">
                         <span className="text-gray-600">Delivery</span>
                         <span className={delivery === 0 ? "text-green-600" : ""}>
-                          {delivery === 0 ? "FREE" : `₹${delivery}`}
+                          {delivery === 0 ? "FREE" : formatPrice(delivery)}
                         </span>
                       </div>
 
@@ -354,12 +363,12 @@ function OrderPage() {
 
                       <div className="flex justify-between font-semibold text-base">
                         <span>Total</span>
-                        <span className="text-blue-600">₹{finalTotal.toLocaleString()}</span>
+                        <span className="text-blue-600">{formatPrice(finalTotal)}</span>
                       </div>
 
                       {savings > 0 && (
                         <p className="text-green-600 text-xs">
-                          You save ₹{savings.toLocaleString()} ({discountPercent}% off)
+                          You save {formatPrice(savings)} ({discountPercent}% off)
                         </p>
                       )}
                     </div>
@@ -378,11 +387,15 @@ function OrderPage() {
 
                     {/* Checkout Button */}
                     <button 
-                      onClick={() => navigate('/checkout')}
-                      className="w-full bg-orange-500 text-white py-3 rounded-lg font-semibold hover:bg-orange-600 transition-colors mt-4"
-                    >
-                      Proceed to Checkout
-                    </button>
+  onClick={() => navigate('/checkout')}
+  className="w-full bg-secondary hover:bg-secondary 
+             text-gray-900 py-3 rounded-lg font-semibold 
+             transition-colors mt-4"
+>
+  Proceed to Checkout
+</button>
+
+
 
                     <p className="text-xs text-gray-500 text-center mt-2">
                       By placing your order, you agree to our terms and conditions

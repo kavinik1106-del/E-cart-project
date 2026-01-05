@@ -149,11 +149,8 @@ export default function OrderPageAPI() {
 
       const { tax, shipping, total } = calculateTotals();
 
-      const response = await fetch('http://localhost:5000/api/orders', {
+      const data = await apiCall(API_ENDPOINTS.USER_ORDERS, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify({
           user_id: user.id,
           items: cartItems,
@@ -167,9 +164,7 @@ export default function OrderPageAPI() {
         })
       });
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (data && data.success) {
         setMessage(`Order placed successfully! Order #${data.data.orderNumber}`);
         setMessageType('success');
         
@@ -193,7 +188,7 @@ export default function OrderPageAPI() {
           setMessage('');
         }, 2000);
       } else {
-        setMessage(data.message || 'Failed to create order');
+        setMessage(data?.message || 'Failed to create order');
         setMessageType('error');
       }
     } catch (error) {
@@ -207,22 +202,17 @@ export default function OrderPageAPI() {
     if (!window.confirm('Are you sure you want to cancel this order?')) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/orders/${orderId}/cancel`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      const data = await apiCall(`${API_ENDPOINTS.USER_ORDERS}/${orderId}/cancel`, {
+        method: 'PUT'
       });
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (data && data.success) {
         setMessage('Order cancelled successfully');
         setMessageType('success');
         fetchOrders();
         setTimeout(() => setMessage(''), 2000);
       } else {
-        setMessage(data.message || 'Failed to cancel order');
+        setMessage(data?.message || 'Failed to cancel order');
         setMessageType('error');
       }
     } catch (error) {
@@ -234,14 +224,14 @@ export default function OrderPageAPI() {
   const { subtotal, tax, shipping, total } = calculateTotals();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-white">
       <Navbar />
 
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 text-white">
+      <div className="relative overflow-hidden bg-primary text-white">
         <div className="absolute inset-0 bg-black/10"></div>
         <div className="absolute top-0 left-0 w-full h-full">
-          <div className="absolute top-20 left-10 w-32 h-32 bg-yellow-400/20 rounded-full blur-3xl"></div>
+          <div className="absolute top-20 left-10 w-32 h-32 bg-secondary/20 rounded-full blur-3xl"></div>
           <div className="absolute bottom-20 right-10 w-40 h-40 bg-blue-300/20 rounded-full blur-3xl"></div>
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-indigo-400/10 rounded-full blur-3xl"></div>
         </div>
@@ -252,7 +242,7 @@ export default function OrderPageAPI() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-white to-yellow-200 bg-clip-text text-transparent"
+              className="text-5xl md:text-6xl font-bold mb-6 text-secondary"
             >
               My Orders
             </motion.h1>
@@ -268,7 +258,7 @@ export default function OrderPageAPI() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-gray-900 font-bold py-4 px-8 rounded-2xl text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
+              className="bg-secondary hover:bg-secondary text-gray-900 font-bold py-4 px-8 rounded-2xl text-lg transition-all duration-300 transform hover:scale-105 shadow-xl hover:shadow-2xl"
               onClick={() => setShowOrderForm(!showOrderForm)}
             >
               {showOrderForm ? 'View My Orders' : 'Place New Order'}
@@ -319,7 +309,7 @@ export default function OrderPageAPI() {
                   <motion.div
                     key={product.id}
                     whileHover={{ scale: 1.02 }}
-                    className="flex items-center justify-between p-4 bg-gradient-to-r from-gray-50 to-blue-50 rounded-2xl border border-gray-100 hover:border-blue-200 transition-all duration-300"
+                    className="flex items-center justify-between p-4 bg-primary rounded-2xl border border-gray-100 hover:border-primary transition-all duration-300"
                   >
                     <div className="flex-1">
                       <h3 className="font-semibold text-gray-900 mb-1">{product.name}</h3>
@@ -328,7 +318,7 @@ export default function OrderPageAPI() {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
+                      className="bg-primary hover:bg-primary text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl"
                       onClick={() => addToCart(product)}
                     >
                       Add to Cart
@@ -427,7 +417,7 @@ export default function OrderPageAPI() {
                 </div>
 
                 {/* Price Summary */}
-                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
+                <div className="bg-primary rounded-2xl p-6 border border-gray-100">
                   <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
                     <DollarSign className="w-5 h-5 text-blue-600" />
                     Price Breakdown
@@ -467,7 +457,7 @@ export default function OrderPageAPI() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   type="submit"
-                  className="w-full bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 text-gray-900 font-bold py-4 px-8 rounded-2xl text-lg transition-all duration-300 shadow-xl hover:shadow-2xl flex items-center justify-center gap-3"
+                  className="w-full bg-secondary hover:bg-secondary text-gray-900 font-bold py-4 px-8 rounded-2xl text-lg transition-all duration-300 shadow-xl hover:shadow-2xl flex items-center justify-center gap-3"
                 >
                   <Package className="w-6 h-6" />
                   Place Order
@@ -499,7 +489,7 @@ export default function OrderPageAPI() {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-bold py-4 px-8 rounded-2xl text-lg transition-all duration-300 shadow-xl hover:shadow-2xl"
+                  className="bg-primary hover:bg-primary text-white font-bold py-4 px-8 rounded-2xl text-lg transition-all duration-300 shadow-xl hover:shadow-2xl"
                   onClick={() => setShowOrderForm(true)}
                 >
                   Place Your First Order
@@ -515,7 +505,7 @@ export default function OrderPageAPI() {
                     className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden hover:shadow-2xl transition-all duration-300"
                   >
                     {/* Order Header */}
-                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 border-b border-gray-100">
+                    <div className="bg-primary p-6 border-b border-gray-100">
                       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div>
                           <h3 className="text-xl font-bold text-gray-900">Order #{order.order_number}</h3>
@@ -546,7 +536,7 @@ export default function OrderPageAPI() {
                     <div className="p-6">
                       <div className="grid md:grid-cols-3 gap-6 mb-6">
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center">
+                          <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
                             <DollarSign className="w-5 h-5 text-white" />
                           </div>
                           <div>
@@ -556,7 +546,7 @@ export default function OrderPageAPI() {
                         </div>
 
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
+                          <div className="w-10 h-10 bg-secondary rounded-xl flex items-center justify-center">
                             <CreditCard className="w-5 h-5 text-white" />
                           </div>
                           <div>
@@ -566,7 +556,7 @@ export default function OrderPageAPI() {
                         </div>
 
                         <div className="flex items-center gap-3">
-                          <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center">
+                          <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center">
                             <Package className="w-5 h-5 text-white" />
                           </div>
                           <div>
@@ -581,7 +571,7 @@ export default function OrderPageAPI() {
                         <motion.button
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
-                          className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl flex items-center gap-2"
+                          className="bg-primary hover:bg-primary text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl flex items-center gap-2"
                           onClick={() => setSelectedOrder(selectedOrder?.id === order.id ? null : order)}
                         >
                           <Eye className="w-4 h-4" />
@@ -592,7 +582,7 @@ export default function OrderPageAPI() {
                           <motion.button
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
-                            className="bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl flex items-center gap-2"
+                            className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 shadow-lg hover:shadow-xl flex items-center gap-2"
                             onClick={() => handleCancelOrder(order.id)}
                           >
                             <X className="w-4 h-4" />
@@ -647,24 +637,24 @@ export default function OrderPageAPI() {
       </div>
 
       {/* Professional Footer */}
-      <footer className="bg-gradient-to-br from-gray-900 via-blue-900 to-indigo-900 text-white">
+      <footer className="bg-primary text-white">
         <div className="max-w-7xl mx-auto px-6 py-12">
           <div className="grid md:grid-cols-4 gap-8">
             <div className="space-y-4">
-              <h3 className="text-xl font-bold bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+              <h3 className="text-xl font-bold text-secondary">
                 StyleNest
               </h3>
               <p className="text-gray-300 text-sm leading-relaxed">
                 Your trusted online shopping destination for fashion, lifestyle, and more. Quality products, exceptional service.
               </p>
               <div className="flex space-x-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-300 cursor-pointer">
+                <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-300 cursor-pointer">
                   <Facebook className="w-5 h-5" />
                 </div>
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-300 cursor-pointer">
+                <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-300 cursor-pointer">
                   <Instagram className="w-5 h-5" />
                 </div>
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-300 cursor-pointer">
+                <div className="w-10 h-10 bg-primary rounded-lg flex items-center justify-center hover:scale-110 transition-transform duration-300 cursor-pointer">
                   <Twitter className="w-5 h-5" />
                 </div>
               </div>

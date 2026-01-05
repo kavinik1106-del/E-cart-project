@@ -4,7 +4,7 @@ import { Heart, Star, ShoppingCart, Loader2 } from "lucide-react";
 import { useCart } from "./contexts/CartContext.jsx";
 
 function ProductCard({ product, products = [], showRating = false }) {
-  const { addToCart, toggleWishlist, isInWishlist } = useCart();
+  const { addToCart, toggleWishlist, isInWishlist, isInCart } = useCart();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -35,9 +35,8 @@ function ProductCard({ product, products = [], showRating = false }) {
       
       addToCart(product, quantity, size, "Default");
       
-      // Navigate to order page after adding to cart
+      // Do not navigate, stay on current page
       setTimeout(() => {
-        navigate("/order");
         setIsLoading(false);
       }, 500);
     } catch (error) {
@@ -60,11 +59,11 @@ function ProductCard({ product, products = [], showRating = false }) {
     <Link
       to={`/product/${product.id}`}
       state={{ product, related: products }}
-      className="group block transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+      className="group block h-full transform transition-all duration-300 hover:scale-105 hover:shadow-2xl"
     >
-      <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 border border-gray-100 group-hover:border-blue-200">
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 border border-gray-100 group-hover:border-blue-200 h-full flex flex-col">
         {/* Image Container */}
-        <div className="relative h-56 bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center overflow-hidden">
+        <div className="relative flex-none h-56 bg-gray-50 flex items-center justify-center overflow-hidden">
           {!imageLoaded && (
             <div className="absolute inset-0 bg-gray-200 animate-pulse flex items-center justify-center">
               <div className="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
@@ -85,7 +84,7 @@ function ProductCard({ product, products = [], showRating = false }) {
 
           {/* Enhanced Tag */}
           {product.tag && (
-            <span className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs px-3 py-1 rounded-full font-bold shadow-lg animate-pulse">
+            <span className="absolute top-3 left-3 bg-secondary text-white text-xs px-3 py-1 rounded-full font-bold shadow-lg animate-pulse">
               {product.tag}
             </span>
           )}
@@ -112,30 +111,19 @@ function ProductCard({ product, products = [], showRating = false }) {
 
           {/* Enhanced Discount Badge */}
           {product.discount && (
-            <span className="absolute bottom-3 right-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs px-3 py-1 rounded-full font-bold shadow-lg">
+            <span className="absolute bottom-3 right-3 bg-primary text-white text-xs px-3 py-1 rounded-full font-bold shadow-lg">
               {product.discount}% OFF
             </span>
           )}
 
           {/* Quick Add Overlay */}
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100">
-            <button
-              onClick={handleQuickAdd}
-              disabled={isLoading}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full font-semibold transition-all duration-300 transform translate-y-4 group-hover:translate-y-0 shadow-lg hover:shadow-xl disabled:opacity-50 flex items-center gap-2"
-            >
-              {isLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <ShoppingCart className="w-4 h-4" />
-              )}
-              {isLoading ? 'Adding...' : 'Quick Add'}
-            </button>
+            {/* Overlay removed - button now in info container */}
           </div>
         </div>
 
         {/* Info Container */}
-        <div className="p-3 sm:p-5 space-y-2 sm:space-y-3 bg-gradient-to-b from-white to-gray-50">
+        <div className="p-3 sm:p-5 space-y-2 sm:space-y-3 bg-white flex-1 flex flex-col">
           {/* Category/Type */}
           <div className="text-xs text-blue-600 font-bold uppercase tracking-wider bg-blue-50 px-2 py-1 rounded-full inline-block">
             {product.type || product.category || product.brand}
@@ -173,6 +161,24 @@ function ProductCard({ product, products = [], showRating = false }) {
               </>
             )}
           </div>
+
+          {/* Add to Cart Button */}
+          <button
+            onClick={handleQuickAdd}
+            disabled={isLoading}
+            className={`w-full mt-auto py-2 px-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
+              isInCart(product.id)
+                ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
+                : 'bg-primary hover:bg-primary text-white'
+            } disabled:opacity-50 disabled:cursor-not-allowed`}
+          >
+            {isLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              <ShoppingCart className="w-4 h-4" />
+            )}
+            {isLoading ? 'Adding...' : isInCart(product.id) ? 'Added to Cart' : 'Add to Cart'}
+          </button>
         </div>
       </div>
     </Link>
