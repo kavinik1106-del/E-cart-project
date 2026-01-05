@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "./contexts/CartContext";
-import { apiCall, API_ENDPOINTS } from './config/apiConfig.js';
-import { Heart, ShoppingCart, User, LogOut, Menu, X, Search } from "lucide-react";
+import { apiCall, API_ENDPOINTS } from "./config/apiConfig.js";
+import {
+  Heart,
+  ShoppingCart,
+  User,
+  LogOut,
+  Menu,
+  X,
+  Search,
+} from "lucide-react";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -15,14 +23,13 @@ function Navbar() {
 
   const { getCartCount, wishlist } = useCart();
 
-  // Update user state when other components update localStorage (e.g. after login/register)
   useEffect(() => {
     const onUserUpdated = () => {
-      const userData = localStorage.getItem('user');
+      const userData = localStorage.getItem("user");
       setUser(userData ? JSON.parse(userData) : null);
     };
-    window.addEventListener('userUpdated', onUserUpdated);
-    return () => window.removeEventListener('userUpdated', onUserUpdated);
+    window.addEventListener("userUpdated", onUserUpdated);
+    return () => window.removeEventListener("userUpdated", onUserUpdated);
   }, []);
 
   const handleSearch = (e) => {
@@ -30,6 +37,7 @@ function Navbar() {
     if (searchQuery.trim()) {
       navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery("");
+      setOpen(false);
     }
   };
 
@@ -37,7 +45,10 @@ function Navbar() {
     try {
       const token = localStorage.getItem("token");
       if (token) {
-        await apiCall(API_ENDPOINTS.LOGOUT, { method: 'POST', body: JSON.stringify({ token }) });
+        await apiCall(API_ENDPOINTS.LOGOUT, {
+          method: "POST",
+          body: JSON.stringify({ token }),
+        });
       }
     } catch (error) {
       console.error("Logout error:", error);
@@ -52,6 +63,7 @@ function Navbar() {
   return (
     <nav className="sticky top-0 z-50 bg-primary text-white px-4 py-4 shadow-md md:px-8 lg:px-16">
       <div className="flex items-center justify-between">
+
         {/* Logo */}
         <div
           className="flex items-center gap-2 cursor-pointer"
@@ -62,7 +74,7 @@ function Navbar() {
             alt="StyleNest Logo"
             className="w-10 h-10 rounded-full border-2 border-white"
           />
-          <span className="text-xl font-bold underline">StyleNest</span>
+          <span className="text-xl font-bold">StyleNest</span>
         </div>
 
         {/* Search Bar */}
@@ -73,11 +85,11 @@ function Navbar() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search for products, brands & more"
-              className="w-full px-4 py-3 pr-12 rounded-lg border border-primary/20 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-secondary shadow-sm"
+              className="w-full px-4 py-3 pr-12 rounded-lg bg-white text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-secondary"
             />
             <button
               type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary hover:bg-secondary hover:text-primary text-white p-2 rounded-md transition"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary hover:bg-secondary text-white p-2 rounded-md"
             >
               <Search className="w-4 h-4" />
             </button>
@@ -85,11 +97,13 @@ function Navbar() {
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex gap-8 items-center">
+        <div className="hidden md:flex gap-6 items-center">
           {["Home", "About", "Collection", "Contact", "Order"].map((item) => (
             <button
               key={item}
-              onClick={() => navigate(item === "Home" ? "/" : `/${item.toLowerCase()}`)}
+              onClick={() =>
+                navigate(item === "Home" ? "/" : `/${item.toLowerCase()}`)
+              }
               className="hover:text-secondary transition"
             >
               {item}
@@ -97,23 +111,17 @@ function Navbar() {
           ))}
 
           {/* Wishlist */}
-          <button
-            onClick={() => navigate("/wishlist")}
-            className="relative hover:text-red-300"
-          >
+          <button onClick={() => navigate("/wishlist")} className="relative">
             <Heart size={24} />
             {wishlist.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-red-500 text-xs w-5 h-5 rounded-full flex items-center justify-center">
                 {wishlist.length}
               </span>
             )}
           </button>
 
           {/* Cart */}
-          <button
-            onClick={() => navigate("/cart")}
-            className="relative hover:text-secondary"
-          >
+          <button onClick={() => navigate("/cart")} className="relative">
             <ShoppingCart size={24} />
             {getCartCount() > 0 && (
               <span className="absolute -top-2 -right-2 bg-secondary text-primary text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
@@ -125,12 +133,11 @@ function Navbar() {
           {/* Auth */}
           {user ? (
             <>
-              <div className="flex items-center gap-2 text-sm bg-white/10 px-4 py-2 rounded-lg">
-                <User size={18} />
-                <div>
-                  <div className="font-semibold">{user.first_name || user.email.split('@')[0]}</div>
-                  <div className="text-xs opacity-75">Profile</div>
-                </div>
+              <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-lg text-sm">
+                <User size={16} />
+                <span className="font-semibold">
+                  {user.first_name || user.email.split("@")[0]}
+                </span>
               </div>
               <button
                 onClick={handleLogout}
@@ -143,14 +150,14 @@ function Navbar() {
           ) : (
             <button
               onClick={() => navigate("/login")}
-              className="flex items-center gap-2 bg-white text-primary px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition"
+              className="flex items-center gap-2 bg-white text-primary px-6 py-2 rounded-lg font-semibold hover:bg-gray-100"
             >
               <User size={18} />
-              <span>Login</span>
+              Login
             </button>
           )}
 
-          {/* Admin */}
+          {/* Admin Button */}
           <button
             onClick={() =>
               navigate(
@@ -159,7 +166,7 @@ function Navbar() {
                   : "/admin/login"
               )
             }
-            className="bg-secondary text-primary px-4 py-2 rounded-lg font-semibold hover:opacity-90 shadow"
+            className="bg-orange-500 text-white px-5 py-2 rounded-full font-semibold hover:bg-orange-600 transition shadow-md"
           >
             Admin
           </button>
@@ -180,11 +187,11 @@ function Navbar() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search products..."
-              className="w-full px-4 py-3 pr-12 rounded-lg border border-primary/20 focus:ring-2 focus:ring-secondary"
+              className="w-full px-4 py-3 pr-12 rounded-lg border focus:ring-2 focus:ring-secondary"
             />
             <button
               type="submit"
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary hover:bg-secondary text-white p-2 rounded-md"
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary text-white p-2 rounded-md"
             >
               <Search className="w-4 h-4" />
             </button>
@@ -197,12 +204,13 @@ function Navbar() {
                 navigate(item === "Home" ? "/" : `/${item.toLowerCase()}`);
                 setOpen(false);
               }}
-              className="block w-full text-left hover:text-primary font-medium"
+              className="block w-full text-left font-medium hover:text-primary"
             >
               {item}
             </button>
           ))}
 
+          {/* Mobile Admin */}
           <button
             onClick={() => {
               navigate(
@@ -212,7 +220,7 @@ function Navbar() {
               );
               setOpen(false);
             }}
-            className="bg-secondary text-primary font-semibold py-2 rounded-lg w-full"
+            className="w-full bg-orange-500 text-white px-5 py-3 rounded-full font-semibold hover:bg-orange-600"
           >
             Admin
           </button>

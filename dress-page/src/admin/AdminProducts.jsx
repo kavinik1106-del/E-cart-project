@@ -245,7 +245,7 @@ function AdminProductsContent() {
                 <tbody className="divide-y">
                   {paginatedProducts.map((product) => (
                     <tr key={product.id} className="hover:bg-gray-50">
-                      <td className="px-4 py-3 text-sm text-gray-900">
+                      <td className="px-4 py-3 text-sm text-gray-900 max-w-0 truncate" title={product.name}>
                         {product.name}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-600">

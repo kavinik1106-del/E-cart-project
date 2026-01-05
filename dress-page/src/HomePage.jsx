@@ -204,7 +204,7 @@ function HomePage() {
       <Navbar />
 
       {/* Enhanced Hero Section */}
-<div className="relative overflow-hidden  border-t-4 border-b-4 border-amber-400">
+<div className="relative overflow-hidden   border-amber-400">
   
   {/* Hero Slides */}
   <div
@@ -337,14 +337,14 @@ function HomePage() {
                   to={cat.route}
                   className="flex-shrink-0 group"
                 >
-                  <div className="bg-white p-6 rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-primary/30 hover:border-secondary">
+                  <div className="bg-white p-6 rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-primary/30 hover:border-secondary hover:bg-secondary/5">
                     <div className="relative">
                       <img
                         src={cat.image}
                         alt={cat.name}
                         className="w-24 h-24 mx-auto rounded-full border-4 border-white shadow-lg object-cover group-hover:scale-110 transition-transform duration-300"
                       />
-                      <div className="absolute -top-2 -right-2 bg-primary text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
+                      <div className="absolute -top-2 -right-2 bg-secondary text-white text-xs font-bold px-3 py-1 rounded-full shadow-lg">
                         {cat.count}
                       </div>
                     </div>

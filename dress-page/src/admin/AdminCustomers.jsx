@@ -98,7 +98,7 @@ function AdminCustomersContent() {
 
               {/* Name & Joined */}
               <div className="mb-4">
-                <h3 className="font-bold text-gray-800 text-lg">{customer.name}</h3>
+                <h3 className="font-bold text-gray-800 text-lg truncate" title={customer.name}>{customer.name}</h3>
                 <p className="text-sm text-gray-500 mt-1">Since {customer.joined}</p>
               </div>
 

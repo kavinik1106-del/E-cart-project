@@ -21,7 +21,7 @@ function AdminLogin() {
       const response = await apiCall(API_ENDPOINTS.ADMIN_LOGIN, {
         method: "POST",
         body: JSON.stringify({
-          username: username,
+          email: username,
           password: password,
         }),
       });
@@ -66,7 +66,7 @@ function AdminLogin() {
             </label>
             <input
               type="text"
-              placeholder="Use: admin or admin@example.com"
+              placeholder="Use: admin@example.com"
               className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
               value={username}
               onChange={(e) => setUsername(e.target.value)}

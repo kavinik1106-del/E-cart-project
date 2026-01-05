@@ -3,7 +3,7 @@ export const USER_API_BASE_URL =
   import.meta.env.VITE_USER_API_URL || "http://localhost:5000/api";
 
 export const ADMIN_API_BASE_URL =
-  import.meta.env.VITE_ADMIN_API_URL || "http://localhost:5001/api";
+  import.meta.env.VITE_ADMIN_API_URL || "http://localhost:5000/api";
 
 // ================= API ENDPOINTS =================
 export const API_ENDPOINTS = {

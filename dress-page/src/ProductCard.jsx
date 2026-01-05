@@ -168,7 +168,7 @@ function ProductCard({ product, products = [], showRating = false }) {
             disabled={isLoading}
             className={`w-full mt-auto py-2 px-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
               isInCart(product.id)
-                ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
+                ? 'bg-secondary hover:bg-secondary text-white'
                 : 'bg-primary hover:bg-primary text-white'
             } disabled:opacity-50 disabled:cursor-not-allowed`}
           >
