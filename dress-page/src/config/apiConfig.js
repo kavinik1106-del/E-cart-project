@@ -1,9 +1,13 @@
-// API Configuration
-export const USER_API_BASE_URL = import.meta.env.VITE_USER_API_URL || 'http://localhost:5000/api';
-export const ADMIN_API_BASE_URL = import.meta.env.VITE_ADMIN_API_URL || 'http://localhost:5001/api';
+// ================= API BASE URLS =================
+export const USER_API_BASE_URL =
+  import.meta.env.VITE_USER_API_URL || "http://localhost:5000/api";
 
+export const ADMIN_API_BASE_URL =
+  import.meta.env.VITE_ADMIN_API_URL || "http://localhost:5001/api";
+
+// ================= API ENDPOINTS =================
 export const API_ENDPOINTS = {
-  // User endpoints (main backend - port 5000)
+  // USER
   LOGIN: `${USER_API_BASE_URL}/auth/login`,
   REGISTER: `${USER_API_BASE_URL}/auth/register`,
   CONTACT: `${USER_API_BASE_URL}/contact`,
@@ -11,8 +15,9 @@ export const API_ENDPOINTS = {
   USER_ORDER: (id) => `${USER_API_BASE_URL}/orders/${id}`,
   CART: `${USER_API_BASE_URL}/cart`,
   WISHLIST: `${USER_API_BASE_URL}/wishlist`,
+  LOGOUT: `${USER_API_BASE_URL}/auth/logout`,
 
-  // Admin endpoints (admin backend - port 5001)
+  // ADMIN
   ADMIN_LOGIN: `${ADMIN_API_BASE_URL}/auth/login`,
   ADMIN_VERIFY: `${ADMIN_API_BASE_URL}/auth/verify`,
   PRODUCTS: `${ADMIN_API_BASE_URL}/products`,
@@ -23,58 +28,61 @@ export const API_ENDPOINTS = {
   CUSTOMER: (id) => `${ADMIN_API_BASE_URL}/customers/${id}`,
   SETTINGS: `${ADMIN_API_BASE_URL}/settings`,
   DASHBOARD_STATS: `${ADMIN_API_BASE_URL}/dashboard/stats`,
-  HEALTH: `${ADMIN_API_BASE_URL}/health`
+  HEALTH: `${ADMIN_API_BASE_URL}/health`,
 };
 
-// API Request Helper
+// ================= API CALL HELPER =================
 export const apiCall = async (url, options = {}) => {
-  const defaultOptions = {
-    method: 'GET',
+  const config = {
+    method: "GET",
     headers: {
-      'Content-Type': 'application/json'
-    }
+      "Content-Type": "application/json",
+    },
+    ...options,
   };
 
-  const config = { ...defaultOptions, ...options };
-
-  // Add admin token if available and URL is admin endpoint
-  const adminToken = localStorage.getItem('adminToken');
-  if (adminToken && url.includes(ADMIN_API_BASE_URL)) {
-    config.headers['Authorization'] = `Bearer ${adminToken}`;
+  // Attach admin token
+  const adminToken = localStorage.getItem("adminToken");
+  if (adminToken && url.startsWith(ADMIN_API_BASE_URL)) {
+    config.headers.Authorization = `Bearer ${adminToken}`;
   }
 
-  // Add user token if available and URL is user endpoint
-  const userToken = localStorage.getItem('token');
-  if (userToken && url.includes(USER_API_BASE_URL)) {
-    config.headers['Authorization'] = `Bearer ${userToken}`;
+  // Attach user token
+  const userToken = localStorage.getItem("token");
+  if (userToken && url.startsWith(USER_API_BASE_URL)) {
+    config.headers.Authorization = `Bearer ${userToken}`;
   }
 
   try {
     const response = await fetch(url, config);
 
-    if (!response.ok) {
-      throw new Error(`API Error: ${response.status}`);
+    let data = null;
+    const contentType = response.headers.get("content-type");
+
+    // Parse JSON ONLY if response is JSON
+    if (contentType && contentType.includes("application/json")) {
+      data = await response.json();
     }
 
-    return await response.json();
+    // Always return a consistent object
+    if (!response.ok) {
+      return {
+        success: false,
+        message: data?.message || `Request failed (${response.status})`,
+      };
+    }
+
+    return (
+      data || {
+        success: true,
+        message: "Request successful",
+      }
+    );
   } catch (error) {
-    console.error('API Call Error:', error);
-    throw error;
+    console.error("API Call Error:", error);
+    return {
+      success: false,
+      message: "Server not reachable. Please try again later.",
+    };
   }
 };
-
-
-// export const USER_API_BASE_URL =
-//   "http://localhost:5000/api";
-
-// export const ADMIN_API_BASE_URL =
-//   "http://localhost:5001/api";
-
-// export const API_ENDPOINTS = {
-//   // USER
-//   PRODUCTS: `${USER_API_BASE_URL}/products`,
-//   PRODUCT: (id) => `${USER_API_BASE_URL}/products/${id}`,
-
-//   // ADMIN (use later)
-//   ADMIN_PRODUCTS: `${ADMIN_API_BASE_URL}/products`,
-// };

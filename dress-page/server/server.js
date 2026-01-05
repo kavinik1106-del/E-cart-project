@@ -14,10 +14,10 @@ import Customer from './customer/models/Customer.model.js';
 import customerAuthRoutes from './customer/routes/customerAuth.routes.js';
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 // Middleware
-app.use(cors());
+app.use(cors({ origin: ['http://localhost:5173', 'http://localhost:5000', 'http://localhost:5001'], credentials: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/api/admin/customers", adminCustomerRoutes);

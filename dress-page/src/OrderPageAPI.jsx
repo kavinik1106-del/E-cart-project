@@ -149,11 +149,8 @@ export default function OrderPageAPI() {
 
       const { tax, shipping, total } = calculateTotals();
 
-      const response = await fetch('http://localhost:5000/api/orders', {
+      const data = await apiCall(API_ENDPOINTS.USER_ORDERS, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
         body: JSON.stringify({
           user_id: user.id,
           items: cartItems,
@@ -167,9 +164,7 @@ export default function OrderPageAPI() {
         })
       });
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (data && data.success) {
         setMessage(`Order placed successfully! Order #${data.data.orderNumber}`);
         setMessageType('success');
         
@@ -193,7 +188,7 @@ export default function OrderPageAPI() {
           setMessage('');
         }, 2000);
       } else {
-        setMessage(data.message || 'Failed to create order');
+        setMessage(data?.message || 'Failed to create order');
         setMessageType('error');
       }
     } catch (error) {
@@ -207,22 +202,17 @@ export default function OrderPageAPI() {
     if (!window.confirm('Are you sure you want to cancel this order?')) return;
 
     try {
-      const response = await fetch(`http://localhost:5000/api/orders/${orderId}/cancel`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        }
+      const data = await apiCall(`${API_ENDPOINTS.USER_ORDERS}/${orderId}/cancel`, {
+        method: 'PUT'
       });
 
-      const data = await response.json();
-
-      if (data.success) {
+      if (data && data.success) {
         setMessage('Order cancelled successfully');
         setMessageType('success');
         fetchOrders();
         setTimeout(() => setMessage(''), 2000);
       } else {
-        setMessage(data.message || 'Failed to cancel order');
+        setMessage(data?.message || 'Failed to cancel order');
         setMessageType('error');
       }
     } catch (error) {

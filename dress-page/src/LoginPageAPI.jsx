@@ -35,8 +35,25 @@ export default function LoginPage() {
       ? "Enter a valid email"
       : "";
 
-  const validatePassword = (v) =>
-    !v ? "Password is required" : v.length < 6 ? "Min 6 characters" : "";
+  // Handle register input change (was missing)
+  const handleRegisterChange = (e) => {
+    const { name, value } = e.target;
+    setRegisterData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  // Password strength checker
+  const getPasswordStrength = (password) => {
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[a-z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[^A-Za-z0-9]/.test(password)) strength++;
+    return strength;
+  };
 
   const validateMobile = (v) =>
     !/^[6-9]\d{9}$/.test(v) ? "Enter valid 10-digit number" : "";
@@ -61,32 +78,45 @@ export default function LoginPage() {
     setMessage("");
 
     try {
-      const res = await apiCall(API_ENDPOINTS.LOGIN, {
-        method: "POST",
-        body: JSON.stringify(loginData),
+      const data = await apiCall(API_ENDPOINTS.LOGIN, {
+        method: 'POST',
+        body: JSON.stringify({
+          email: loginData.email,
+          password: loginData.password
+        })
       });
 
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || "Invalid credentials");
-      }
+      if (data && data.success) {
+        setMessageType('success');
+        setMessage('Login successful! Redirecting...');
 
       localStorage.setItem("token", data.data.token);
       localStorage.setItem("user", JSON.stringify(data.data.user));
 
-      setMessageType("success");
-      setMessage("Login successful! Redirecting...");
-      setTimeout(() => navigate("/"), 1000);
-    } catch (err) {
-      setMessageType("error");
-      setMessage(err.message || "Unable to login");
+        // Notify navbar (and other listeners) that user changed
+        window.dispatchEvent(new Event('userUpdated'));
+
+        setTimeout(() => {
+          navigate('/');
+        }, 1000);
+      } else {
+        setMessageType('error');
+        setMessage(data?.message || 'Login failed');
+      }
+    } catch (error) {
+      setMessageType('error');
+      // Network / parsing errors
+      const friendly = error.message && error.message.includes('Failed to fetch')
+        ? 'Network error: cannot reach the server. Is the backend running?'
+        : 'Unexpected error: ' + (error.message || 'Please try again');
+      setMessage(friendly);
+      console.error('Login error:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  // ===== REGISTER =====
+  // Register handler (now attempts auto-login on success)
   const handleRegister = async (e) => {
     e.preventDefault();
     if (loading) return;
@@ -112,15 +142,80 @@ export default function LoginPage() {
     setMessage("");
 
     try {
-      const res = await apiCall(API_ENDPOINTS.REGISTER, {
-        method: "POST",
-        body: JSON.stringify(registerData),
+      const data = await apiCall(API_ENDPOINTS.REGISTER, {
+        method: 'POST',
+        body: JSON.stringify({
+          email: registerData.email,
+          password: registerData.password,
+          confirmPassword: registerData.confirmPassword,
+          first_name: registerData.first_name,
+          last_name: registerData.last_name,
+          phone: registerData.phone
+        })
       });
 
-      const data = await res.json();
+      if (data && data.success) {
+        // Try to auto-login the new user so they appear in the navbar immediately
+        try {
+          const loginResult = await apiCall(API_ENDPOINTS.LOGIN, {
+            method: 'POST',
+            body: JSON.stringify({
+              email: registerData.email,
+              password: registerData.password
+            })
+          });
 
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || "Registration failed");
+          if (loginResult && loginResult.success) {
+            // Save user + token and notify Navbar
+            localStorage.setItem('user', JSON.stringify(loginResult.data.user));
+            localStorage.setItem('token', loginResult.data.token);
+            window.dispatchEvent(new Event('userUpdated'));
+
+            setMessageType('success');
+            setMessage('Registration successful — logged in! Redirecting...');
+
+            // Reset register form
+            setRegisterData({
+              email: '',
+              password: '',
+              confirmPassword: '',
+              first_name: '',
+              last_name: '',
+              phone: ''
+            });
+
+            setTimeout(() => {
+              navigate('/');
+            }, 1000);
+
+            return;
+          }
+        } catch (err) {
+          console.error('Auto-login error after registration:', err);
+        }
+
+        // If auto-login didn't succeed, fall back to prompting user to sign in
+        setMessageType('success');
+        setMessage('Registration successful! Please login.');
+
+        // Reset form
+        setRegisterData({
+          email: '',
+          password: '',
+          confirmPassword: '',
+          first_name: '',
+          last_name: '',
+          phone: ''
+        });
+
+        // Switch to login tab after 2 seconds
+        setTimeout(() => {
+          setActiveTab('login');
+          setMessage('');
+        }, 2000);
+      } else {
+        setMessageType('error');
+        setMessage(data?.message || 'Registration failed');
       }
 
       setMessageType("success");

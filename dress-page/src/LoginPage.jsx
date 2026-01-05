@@ -5,12 +5,10 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 import React, { useState } from "react";
 import Navbar from "./Navbar.jsx";
-import axios from "axios";
-import { useCustomers } from "./contexts/useCustomers";
-
+import { apiCall, API_ENDPOINTS } from './config/apiConfig.js';
 
 function LoginPage() {
-  const { fetchCustomers } = useCustomers(); // access context function
+
 
   const [tab, setTab] = useState("login"); // login or register
 
@@ -38,16 +36,30 @@ function LoginPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post(
-        "http://localhost:5000/api/customer/auth/login",
-        { email, password }
-      );
-      localStorage.setItem("token", res.data.token);
-      setMessage("Login successful!");
-      setMessageType("success");
-    } catch (err) {
-      setMessage(err.response?.data?.message || "Login failed");
+      if (method === "email") {
+        const data = await apiCall(API_ENDPOINTS.LOGIN, {
+          method: "POST",
+          body: JSON.stringify({ email, password })
+        });
+
+        if (data && data.success) {
+          localStorage.setItem("user", JSON.stringify(data.data.user));
+          localStorage.setItem("token", data.data.token);
+          setMessage("Login successful! Redirecting...");
+          setMessageType("success");
+          window.dispatchEvent(new Event('userUpdated'));
+          setTimeout(() => { window.location.href = "/"; }, 800);
+        } else {
+          setMessage(data?.message || "Login failed");
+          setMessageType("error");
+        }
+      } else {
+        alert("OTP login not implemented yet. Use email login.");
+      }
+    } catch (error) {
+      setMessage("Network error. Please try again.");
       setMessageType("error");
+      console.error("Login error:", error);
     } finally {
       setLoading(false);
     }
@@ -56,16 +68,26 @@ function LoginPage() {
   /* ---------- REGISTER ---------- */
   const handleRegister = async (e) => {
   e.preventDefault();
+  setLoading(true);
   try {
-    await axios.post("http://localhost:5000/api/customer/auth/register", {
-      name, email: regEmail, mobile: regMobile, password: regPassword
+    const res = await apiCall(API_ENDPOINTS.REGISTER, {
+      method: 'POST',
+      body: JSON.stringify({ name, email: regEmail, mobile: regMobile, password: regPassword })
     });
 
-    alert("Registered successfully!");
-
-    fetchCustomers(); // ✅ refresh the admin panel customers list
+    if (res && res.success) {
+      setMessage('Registered successfully! Please login.');
+      setMessageType('success');
+      setTab('login');
+    } else {
+      setMessage(res?.message || 'Registration failed');
+      setMessageType('error');
+    }
   } catch (err) {
-    alert(err.response?.data?.error || "Registration failed");
+    setMessage('Network error. Please try again.');
+    setMessageType('error');
+  } finally {
+    setLoading(false);
   }
 };
 

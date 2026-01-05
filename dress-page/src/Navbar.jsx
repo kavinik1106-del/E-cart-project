@@ -1,14 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "./contexts/CartContext";
-import {
-  Heart,
-  ShoppingCart,
-  LogOut,
-  Menu,
-  X,
-  Search,
-} from "lucide-react";
+import { apiCall, API_ENDPOINTS } from './config/apiConfig.js';
+import { Heart, ShoppingCart, User, LogOut, Menu, X, Search } from "lucide-react";
 
 function Navbar() {
   const navigate = useNavigate();
@@ -20,6 +14,16 @@ function Navbar() {
   });
 
   const { getCartCount, wishlist } = useCart();
+
+  // Update user state when other components update localStorage (e.g. after login/register)
+  useEffect(() => {
+    const onUserUpdated = () => {
+      const userData = localStorage.getItem('user');
+      setUser(userData ? JSON.parse(userData) : null);
+    };
+    window.addEventListener('userUpdated', onUserUpdated);
+    return () => window.removeEventListener('userUpdated', onUserUpdated);
+  }, []);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -33,14 +37,7 @@ function Navbar() {
     try {
       const token = localStorage.getItem("token");
       if (token) {
-        await fetch("http://localhost:5000/api/auth/logout", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: token,
-          },
-          body: JSON.stringify({ token }),
-        });
+        await apiCall(API_ENDPOINTS.LOGOUT, { method: 'POST', body: JSON.stringify({ token }) });
       }
     } catch (error) {
       console.error("Logout error:", error);

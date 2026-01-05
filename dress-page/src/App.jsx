@@ -35,11 +35,11 @@ import AdminOrders from "./admin/AdminOrders.jsx";
 import AdminCustomers from "./admin/AdminCustomers.jsx";
 import AdminSettings from "./admin/AdminSettings.jsx";
 import ProtectedRoute from "./admin/ProtectedRoute.jsx";
-
 /* ✅ Toast Component */
 import Toast from "./components/Toast.jsx";
 
 function AppContent() {
+  const { toast } = useCart();
   return (
     <Routes>
       {/* Public Routes */}
@@ -60,6 +60,30 @@ function AppContent() {
       <Route path="/appliances" element={<HomeAppliances />} />
       <Route path="/bicycles" element={<Bicycles />} />
       <Route path="/login" element={<LoginPage />} />
+    <>
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<HomePage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/contact" element={<ContactPage />} />
+        <Route path="/collection" element={<CollectionPage />} />
+        <Route path="/kidswear" element={<KidsWear />} />
+        <Route path="/product/:id" element={<ProductDetailPage />} />
+
+        <Route path="/order" element={<OrderPage />} />
+        <Route path="/electro" element={<Electro />} />
+        <Route path="/women" element={<WomenDress />} />
+        <Route path="/men" element={<MenDress />} />
+        <Route path="/footwear" element={<Footwear />} />
+        <Route path="/accessories" element={<Accessories />} />
+        <Route path="/vegetables" element={<Vegetables />} />
+        <Route path="/appliances" element={<HomeAppliances />} />
+        <Route path="/bicycles" element={<Bicycles />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/admin/customers" element={<AdminCustomers />} />
+        
+        <Route path="/product/:id" element={<ProductDetailPage />} />
+        
 
       {/* Cart */}
       <Route path="/cart" element={<CartPage />} />
@@ -132,3 +156,18 @@ function App() {
 }
 
 export default App;
+    </>
+  );
+}
+
+function App() {
+  return (
+    <CartProvider>
+      <CustomerProvider>
+        <AppContent />
+      </CustomerProvider>
+    </CartProvider>
+  );
+}
+
+export default App;    
