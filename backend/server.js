@@ -7,6 +7,7 @@ import contactRoutes from './routes/contactRoutes.js';
 import authRoutes from './routes/authRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
+import productRoutes from './routes/productRoutes.js';
 import { errorHandler, notFoundHandler, requestLogger } from './middleware/middleware.js';
 import logger from './utils/logger.js';
 
@@ -61,6 +62,7 @@ app.get('/api/health', (req, res) => {
 app.use('/api/contact', contactRoutes);
 app.use('/api/contacts', contactRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
 
@@ -74,6 +76,13 @@ const server = app.listen(PORT, () => {
   logger.info('Available endpoints:');
   logger.info('  GET    /api/health');
   logger.info('  POST   /api/contact');
+  logger.info('  GET    /api/products');
+  logger.info('  GET    /api/products/:id');
+  logger.info('  GET    /api/products/category/:category');
+  logger.info('  GET    /api/products/featured');
+  logger.info('  POST   /api/products');
+  logger.info('  PUT    /api/products/:id');
+  logger.info('  DELETE /api/products/:id');
   logger.info('  GET    /api/contacts');
   logger.info('  GET    /api/contacts/:id');
   logger.info('  PUT    /api/contacts/:id');

@@ -17,11 +17,17 @@ export const API_ENDPOINTS = {
   WISHLIST: `${USER_API_BASE_URL}/wishlist`,
   LOGOUT: `${USER_API_BASE_URL}/auth/logout`,
 
+  // PRODUCTS (from main backend database)
+  PRODUCTS: `${USER_API_BASE_URL}/products`,
+  PRODUCT: (id) => `${USER_API_BASE_URL}/products/${id}`,
+  PRODUCTS_BY_CATEGORY: (category) => `${USER_API_BASE_URL}/products/category/${category}`,
+  FEATURED_PRODUCTS: `${USER_API_BASE_URL}/products/featured`,
+
   // ADMIN
   ADMIN_LOGIN: `${ADMIN_API_BASE_URL}/auth/login`,
   ADMIN_VERIFY: `${ADMIN_API_BASE_URL}/auth/verify`,
-  PRODUCTS: `${ADMIN_API_BASE_URL}/products`,
-  PRODUCT: (id) => `${ADMIN_API_BASE_URL}/products/${id}`,
+  ADMIN_PRODUCTS: `${ADMIN_API_BASE_URL}/products`,
+  ADMIN_PRODUCT: (id) => `${ADMIN_API_BASE_URL}/products/${id}`,
   ORDERS: `${ADMIN_API_BASE_URL}/orders`,
   ORDER: (id) => `${ADMIN_API_BASE_URL}/orders/${id}`,
   CUSTOMERS: `${ADMIN_API_BASE_URL}/customers`,

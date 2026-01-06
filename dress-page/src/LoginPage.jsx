@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Eye, EyeOff, ArrowLeft, CheckCircle } from "lucide-react";
+import { Eye, EyeOff, ArrowLeft, CheckCircle, AlertCircle, Lock, Mail, Phone, User } from "lucide-react";
 import { apiCall, API_ENDPOINTS } from './config/apiConfig.js';
 
 // Email validation regex
@@ -34,6 +34,7 @@ export default function LoginPage() {
   const [regPassword, setRegPassword] = useState("");
   const [regConfirmPassword, setRegConfirmPassword] = useState("");
   const [showRegPassword, setShowRegPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("");
@@ -200,77 +201,50 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
-      <div className="bg-primary text-white py-4 px-4 flex items-center gap-4 shadow-md">
-        <button onClick={() => navigate("/")} className="flex items-center gap-2 hover:opacity-80 p-2 rounded">
+      <div className="bg-primary text-white py-3 px-4 flex items-center gap-3 shadow-lg">
+        <button onClick={() => navigate("/")} className="flex items-center gap-2 hover:opacity-80 p-1 rounded transition hover:bg-white/10">
           <ArrowLeft size={20} />
-          <span>Back</span>
+          <span className="font-semibold text-sm">Back</span>
         </button>
-        <h1 className="text-2xl font-bold">StyleNest</h1>
+        <h1 className="text-xl font-bold">StyleNest</h1>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* LEFT SIDE - BENEFITS */}
-          <div className="hidden md:flex flex-col justify-center space-y-6 bg-gradient-to-br from-primary via-primary to-primary text-white p-8 rounded-lg shadow-lg">
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold">Your StyleNest Account</h2>
-              <p className="text-white/80">Sign in to manage your shopping experience</p>
+      <div className="flex-1 flex items-center justify-center px-4 py-8">
+        <div className="w-full max-w-md">
+          {/* FORM CARD */}
+          <div className="bg-white rounded-3xl shadow-2xl p-6 sm:p-8">
+            {/* WELCOME MESSAGE */}
+            <div className="mb-8 text-center">
+              <h2 className="text-3xl font-bold text-primary mb-2">
+                {tab === "login" ? "Welcome Back!" : "Join StyleNest"}
+              </h2>
+              <p className="text-gray-500 text-sm">
+                {tab === "login" 
+                  ? "Sign in to continue shopping" 
+                  : "Create an account to get started"}
+              </p>
             </div>
-            
-            <div className="space-y-4">
-              <div className="flex gap-3">
-                <CheckCircle size={24} className="flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-semibold">Track Your Orders</h3>
-                  <p className="text-sm text-white/80">Get real-time updates on your purchases</p>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <CheckCircle size={24} className="flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-semibold">Easy Returns</h3>
-                  <p className="text-sm text-white/80">Hassle-free return process</p>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <CheckCircle size={24} className="flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-semibold">Wishlist & Saved Items</h3>
-                  <p className="text-sm text-white/80">Keep your favorite products in one place</p>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <CheckCircle size={24} className="flex-shrink-0 mt-1" />
-                <div>
-                  <h3 className="font-semibold">Exclusive Deals</h3>
-                  <p className="text-sm text-white/80">Get personalized offers</p>
-                </div>
-              </div>
-            </div>
-          </div>
 
-          {/* RIGHT SIDE - FORM */}
-          <div className="bg-white rounded-lg shadow-lg p-8">
             {/* TAB SWITCH */}
-            <div className="flex gap-4 mb-8 border-b">
+            <div className="flex gap-2 mb-8 bg-gray-100 p-1.5 rounded-xl">
               <button
                 onClick={() => { setTab("login"); setMessage(""); setOtpSent(false); }}
-                className={`pb-4 font-semibold text-lg transition ${
+                className={`flex-1 py-2.5 px-4 rounded-lg font-bold text-sm transition duration-300 ${
                   tab === "login"
-                    ? "border-b-2 border-primary text-primary"
-                    : "text-gray-400 hover:text-gray-600"
+                    ? "bg-primary text-white shadow-lg"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-200"
                 }`}
               >
                 Login
               </button>
               <button
                 onClick={() => { setTab("register"); setMessage(""); }}
-                className={`pb-4 font-semibold text-lg transition ${
+                className={`flex-1 py-2.5 px-4 rounded-lg font-bold text-sm transition duration-300 ${
                   tab === "register"
-                    ? "border-b-2 border-primary text-primary"
-                    : "text-gray-400 hover:text-gray-600"
+                    ? "bg-primary text-white shadow-lg"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-200"
                 }`}
               >
                 Register
@@ -279,41 +253,46 @@ export default function LoginPage() {
 
             {/* MESSAGE DISPLAY */}
             {message && (
-              <div className={`mb-4 p-4 rounded-lg ${
+              <div className={`mb-5 p-4 rounded-xl flex items-start gap-3 text-sm font-medium ${
                 messageType === "success"
-                  ? "bg-green-100 text-green-800 border border-green-300"
-                  : "bg-red-100 text-red-800 border border-red-300"
+                  ? "bg-green-50 text-green-800 border-l-4 border-green-500"
+                  : "bg-red-50 text-red-800 border-l-4 border-red-500"
               }`}>
-                {message}
+                {messageType === "success" ? (
+                  <CheckCircle size={18} className="flex-shrink-0 mt-0.5 text-green-600" />
+                ) : (
+                  <AlertCircle size={18} className="flex-shrink-0 mt-0.5 text-red-600" />
+                )}
+                <p>{message}</p>
               </div>
             )}
 
             {/* LOGIN FORM */}
             {tab === "login" ? (
-              <form onSubmit={handleLogin} className="space-y-4">
+              <form onSubmit={handleLogin} className="space-y-5">
                 {/* METHOD SWITCH */}
-                <div className="flex gap-4 mb-6">
+                <div className="flex gap-2 mb-5 bg-gray-100 p-1.5 rounded-xl">
                   <button
                     type="button"
                     onClick={() => { setMethod("email"); setOtpSent(false); }}
-                    className={`flex-1 py-3 rounded-lg font-semibold transition ${
+                    className={`flex-1 py-2 px-3 rounded-lg font-semibold text-xs transition duration-300 ${
                       method === "email"
-                        ? "bg-primary text-white"
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        ? "bg-primary text-white shadow-md"
+                        : "bg-transparent text-gray-600 hover:text-gray-900"
                     }`}
                   >
-                    Email & Password
+                    Email
                   </button>
                   <button
                     type="button"
                     onClick={() => setMethod("otp")}
-                    className={`flex-1 py-3 rounded-lg font-semibold transition ${
+                    className={`flex-1 py-2 px-3 rounded-lg font-semibold text-xs transition duration-300 ${
                       method === "otp"
-                        ? "bg-primary text-white"
-                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        ? "bg-primary text-white shadow-md"
+                        : "bg-transparent text-gray-600 hover:text-gray-900"
                     }`}
                   >
-                    Mobile OTP
+                    Mobile
                   </button>
                 </div>
 
@@ -321,38 +300,57 @@ export default function LoginPage() {
                 {method === "email" && (
                   <>
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">
                         Email Address
                       </label>
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="Enter your email"
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-                      />
+                      <div className="relative">
+                        <Mail size={16} className="absolute left-3 top-3 text-gray-400" />
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="your@email.com"
+                          className="w-full pl-10 pr-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition"
+                        />
+                      </div>
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">
                         Password
                       </label>
                       <div className="relative">
+                        <Lock size={16} className="absolute left-3 top-3 text-gray-400" />
                         <input
                           type={showPassword ? "text" : "password"}
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          placeholder="Enter password (min 8 characters)"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                          placeholder="••••••••"
+                          className="w-full pl-10 pr-10 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition"
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-3 top-3 text-gray-500 hover:text-gray-700"
+                          className="absolute right-3 top-3 text-gray-500 hover:text-gray-700 transition"
                         >
-                          {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                          {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                         </button>
                       </div>
+                    </div>
+
+                    <div className="flex items-center justify-between">
+                      <label className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={rememberMe}
+                          onChange={(e) => setRememberMe(e.target.checked)}
+                          className="w-4 h-4 text-primary rounded border-gray-300 focus:ring-secondary cursor-pointer"
+                        />
+                        <span className="text-xs text-gray-600 font-medium">Remember me</span>
+                      </label>
+                      <a href="#" className="text-xs text-primary font-semibold hover:text-primary/80 transition">
+                        Forgot password?
+                      </a>
                     </div>
                   </>
                 )}
@@ -361,34 +359,37 @@ export default function LoginPage() {
                 {method === "otp" && (
                   <>
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">
                         Mobile Number
                       </label>
-                      <input
-                        type="tel"
-                        value={mobile}
-                        onChange={(e) => setMobile(e.target.value)}
-                        placeholder="Enter 10-digit mobile number"
-                        maxLength="10"
-                        disabled={otpSent}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-100"
-                      />
+                      <div className="relative">
+                        <Phone size={16} className="absolute left-3 top-3 text-gray-400" />
+                        <input
+                          type="tel"
+                          value={mobile}
+                          onChange={(e) => setMobile(e.target.value)}
+                          placeholder="10-digit number"
+                          maxLength="10"
+                          disabled={otpSent}
+                          className="w-full pl-10 pr-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition disabled:bg-gray-100 disabled:cursor-not-allowed"
+                        />
+                      </div>
                     </div>
 
                     {otpSent && (
                       <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">
+                        <label className="block text-xs font-bold text-gray-700 mb-2 uppercase tracking-wide">
                           Enter OTP
                         </label>
                         <input
                           type="text"
                           value={otp}
                           onChange={(e) => setOtp(e.target.value)}
-                          placeholder="6-digit OTP"
+                          placeholder="6-digit"
                           maxLength="6"
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-center text-lg tracking-widest"
+                          className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-center tracking-widest transition"
                         />
-                        <p className="text-xs text-gray-500 mt-2">OTP valid for 10 minutes</p>
+                        <p className="text-xs text-gray-500 mt-1.5 text-center">OTP valid for 10 minutes</p>
                       </div>
                     )}
                   </>
@@ -397,78 +398,78 @@ export default function LoginPage() {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`w-full py-3 rounded-lg font-semibold text-white transition ${
+                  className={`w-full py-3 rounded-lg font-bold text-white text-sm transition duration-300 transform hover:scale-105 ${
                     loading
                       ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-primary hover:opacity-90"
+                      : "bg-secondary hover:bg-secondary/90 shadow-lg hover:shadow-xl"
                   }`}
                 >
                   {loading ? "Processing..." : otpSent ? "Verify OTP" : method === "otp" ? "Send OTP" : "Login"}
                 </button>
 
-                <p className="text-xs text-gray-500 text-center">
-                  By signing in, you agree to our Terms & Conditions and Privacy Policy
+                <p className="text-xs text-gray-600 text-center mt-4">
+                  By signing in, you agree to our <span className="text-primary font-semibold">Terms</span> and <span className="text-primary font-semibold">Privacy</span>
                 </p>
               </form>
             ) : (
               /* REGISTER FORM */
-              <form onSubmit={handleRegister} className="space-y-4">
-                <div className="grid grid-cols-2 gap-3">
+              <form onSubmit={handleRegister} className="space-y-3">
+                <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">
                       First Name *
                     </label>
                     <input
                       type="text"
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
-                      placeholder="First name"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      placeholder="First"
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition"
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                    <label className="block text-xs font-semibold text-gray-700 mb-1">
                       Last Name
                     </label>
                     <input
                       type="text"
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
-                      placeholder="Last name"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      placeholder="Last"
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Email Address *
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">
+                    Email *
                   </label>
                   <input
                     type="email"
                     value={regEmail}
                     onChange={(e) => setRegEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    placeholder="your@email.com"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Mobile Number *
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">
+                    Mobile *
                   </label>
                   <input
                     type="tel"
                     value={regMobile}
                     onChange={(e) => setRegMobile(e.target.value)}
-                    placeholder="10-digit mobile number"
+                    placeholder="10-digit"
                     maxLength="10"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">
                     Password *
                   </label>
                   <div className="relative">
@@ -477,45 +478,45 @@ export default function LoginPage() {
                       value={regPassword}
                       onChange={(e) => setRegPassword(e.target.value)}
                       placeholder="Min 8 characters"
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                      className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition"
                     />
                     <button
                       type="button"
                       onClick={() => setShowRegPassword(!showRegPassword)}
-                      className="absolute right-3 top-3 text-gray-500 hover:text-gray-700"
+                      className="absolute right-2 top-2 text-gray-500 hover:text-gray-700 transition"
                     >
-                      {showRegPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                      {showRegPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                     </button>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">
                     Confirm Password *
                   </label>
                   <input
                     type="password"
                     value={regConfirmPassword}
                     onChange={(e) => setRegConfirmPassword(e.target.value)}
-                    placeholder="Re-enter password"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+                    placeholder="Re-enter"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent transition"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`w-full py-3 rounded-lg font-semibold text-white transition ${
+                  className={`w-full py-2 rounded-lg font-semibold text-white text-sm transition ${
                     loading
                       ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-primary hover:opacity-90"
+                      : "bg-secondary hover:opacity-90"
                   }`}
                 >
-                  {loading ? "Creating Account..." : "Register"}
+                  {loading ? "Creating..." : "Register"}
                 </button>
 
-                <p className="text-xs text-gray-500 text-center">
-                  By registering, you agree to our Terms & Conditions and Privacy Policy
+                <p className="text-xs text-gray-600 text-center mt-3">
+                  By registering, you agree to our <span className="text-primary font-semibold">Terms</span> and <span className="text-primary font-semibold">Privacy</span>
                 </p>
               </form>
             )}

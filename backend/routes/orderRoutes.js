@@ -12,16 +12,20 @@ import {
 
 const router = express.Router();
 
-// Order routes
-router.post('/', createOrder);
-router.get('/:id', getOrder);
+// Admin routes - get all orders
+router.get('/', getAllOrders);
+
+// Order routes with specific paths
 router.get('/number/:orderNumber', getOrderByNumber);
 router.get('/user/:userId', getUserOrders);
+
+// Individual order routes (must be after specific paths)
+router.get('/:id', getOrder);
 router.put('/:id/status', updateOrderStatus);
 router.put('/:id/payment-status', updatePaymentStatus);
 router.put('/:id/cancel', cancelOrder);
 
-// Admin routes
-router.get('/', getAllOrders);
+// Create order
+router.post('/', createOrder);
 
 export default router;

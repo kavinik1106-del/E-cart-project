@@ -100,25 +100,38 @@ function HomePage() {
       try {
         const response = await apiCall(API_ENDPOINTS.PRODUCTS);
         if (response.success && response.data && response.data.length > 0) {
-          const transformedProducts = response.data.map(product => ({
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            mrp: product.mrp || product.price * 1.2,
-            image: product.image || "/placeholder.jpg",
-            rating: 4.5,
-            reviews: Math.floor(Math.random() * 200) + 50,
-            tag: product.stock_quantity > 10 ? "In Stock" : "Limited",
-            brand: product.brand || product.category || "Brand",
-            discount: Math.floor(Math.random() * 30) + 10,
-            colors: ["Default"],
-            sizeGuide: { S: {}, M: {}, L: {}, XL: {} }
-          }));
+          const transformedProducts = response.data.map(product => {
+            const price = parseFloat(product.price) || 0;
+            const mrp = product.mrp ? parseFloat(product.mrp) : price * 1.2;
+            const discount = product.discount || Math.floor(((mrp - price) / mrp) * 100);
+            
+            return {
+              id: product.id,
+              name: product.name || 'Product',
+              price: price,
+              mrp: mrp,
+              image: product.image || '/placeholder.jpg',
+              rating: product.rating || 4.5,
+              reviews: product.reviews || 0,
+              tag: product.tag || (product.stock > 10 ? 'In Stock' : 'Limited'),
+              brand: product.brand || product.category || 'Brand',
+              category: product.category || product.type || 'General',
+              type: product.type || 'Product',
+              discount: discount,
+              colors: product.colors || ['Default'],
+              sizeGuide: product.sizeGuide || { S: {}, M: {}, L: {}, XL: {} },
+              description: product.description || '',
+              stock: product.stock || 0,
+            };
+          });
           setProducts(transformedProducts);
+          console.log('✅ Products loaded from API:', transformedProducts);
+        } else {
+          console.warn('No products received from API, using mock data');
         }
       } catch (err) {
-        console.error("Error fetching products from API, using mock data:", err);
-        // Keep using mock data
+        console.error('❌ Error fetching products from API:', err);
+        console.log('Using mock data as fallback');
       }
     };
 
@@ -204,7 +217,7 @@ function HomePage() {
       <Navbar />
 
       {/* Enhanced Hero Section */}
-<div className="relative overflow-hidden  border-t-4 border-b-4 border-amber-400">
+<div className="relative overflow-hidden   border-amber-400">
   
   {/* Hero Slides */}
   <div

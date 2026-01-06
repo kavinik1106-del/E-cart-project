@@ -1,14 +1,48 @@
 import React, { useState, useEffect } from "react";
-import { Mail, Phone, MapPin, Search } from "lucide-react";
+import { Mail, Phone, MapPin, Search, RefreshCw } from "lucide-react";
 import AdminLayout from "./AdminLayout";
-import { useCustomers } from "../contexts/useCustomers";
+import { apiCall, API_ENDPOINTS } from "../config/apiConfig.js";
 
 function AdminCustomersContent() {
-  const { customers, fetchCustomers, loading, error } = useCustomers();
+  const [customers, setCustomers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   
+  const fetchCustomers = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      const response = await apiCall(API_ENDPOINTS.CUSTOMERS, {
+        method: 'GET'
+      });
+      
+      if (response.success && response.data) {
+        const customersData = Array.isArray(response.data) ? response.data : [];
+        setCustomers(customersData.map(customer => ({
+          id: customer.id,
+          name: customer.name,
+          email: customer.email,
+          phone: customer.phone || 'N/A',
+          location: customer.location || 'N/A',
+          orders: customer.orders || 0,
+          spent: parseFloat(customer.spent) || 0,
+          joined: customer.createdAt ? new Date(customer.createdAt).toLocaleDateString() : 'N/A'
+        })));
+      } else {
+        setError('Failed to load customers');
+      }
+    } catch (err) {
+      console.error('Error fetching customers:', err);
+      setError('Failed to load customers');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
   useEffect(() => {
-    fetchCustomers(); // fetch customers when component mounts
+    fetchCustomers();
   }, []);
 
   const filteredCustomers = customers.filter(
@@ -20,7 +54,6 @@ function AdminCustomersContent() {
   const totalSpent = customers.reduce((sum, c) => sum + c.spent, 0);
   const avgOrderValue = customers.length > 0 ? totalSpent / customers.length : 0;
   const totalOrders = customers.reduce((sum, c) => sum + c.orders, 0);
-  console.log(customers)
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
@@ -35,9 +68,19 @@ function AdminCustomersContent() {
   return (
     <div className="space-y-6">
       {/* HEADER */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-800">Customers</h1>
-        <p className="text-gray-500 text-sm mt-1">Manage and view customer information</p>
+      <div className="flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800">Customers</h1>
+          <p className="text-gray-500 text-sm mt-1">Manage and view customer information</p>
+        </div>
+        <button
+          onClick={fetchCustomers}
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          disabled={loading}
+        >
+          <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
+          Refresh
+        </button>
       </div>
 
       {/* ERROR */}

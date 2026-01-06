@@ -98,7 +98,7 @@ export default function AboutPage() {
 
             <button
               onClick={() => navigate("/collection")}
-              className="border-2 border-secondary text-secondary px-8 py-4 rounded-full font-bold hover:bg-secondary hover:text-gray-900 transition"
+              className="border-2 border-white text-white px-8 py-4 rounded-full font-bold hover:bg-secondary hover:text-gray-900 transition"
             >
               <PlayCircle className="inline mr-1" />
               Explore Collection

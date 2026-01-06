@@ -8,7 +8,7 @@ function CartPage() {
   const { cart, removeFromCart, updateQuantity, getCartTotal, getCartCount, toggleWishlist } = useCart();
 
   return (
-    <div className="bg-gray-100 min-h-screen pt-20">
+    <div className="bg-gray-100 min-h-screen ">
       <Navbar />
 
       <div className="max-w-6xl mx-auto p-6">

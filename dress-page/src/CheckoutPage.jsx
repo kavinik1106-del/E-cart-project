@@ -103,36 +103,48 @@ function CheckoutPage() {
         return;
       }
 
-      // Prepare order data
-      const shippingAddress = `${formData.firstName} ${formData.lastName}, ${formData.address}, ${formData.city}, ${formData.state} - ${formData.pincode}`;
-
+      // Prepare order data with proper format for API
       const orderData = {
-        user_id: user.id,
-        items: cart.map(item => ({
+        customer: `${formData.firstName} ${formData.lastName}`,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        city: formData.city,
+        state: formData.state,
+        pincode: formData.pincode,
+        amount: total,
+        items_count: cart.length,
+        items_details: cart.map(item => ({
           product_id: item.id,
           product_name: item.name,
-          price: parseFloat(item.price.replace("₹", "").replace(",", "")),
-          quantity: item.quantity
+          price: parseFloat(item.price.toString().replace("₹", "").replace(",", "")),
+          quantity: item.quantity,
+          size: item.size || "N/A",
+          color: item.color || "N/A",
+          image: item.image
         })),
-        total_amount: total,
-        tax_amount: tax,
-        shipping_amount: shipping,
-        shipping_address: shippingAddress,
-        payment_method: formData.paymentMethod
+        payment_method: formData.paymentMethod,
+        payment_status: formData.paymentMethod === 'cod' ? 'unpaid' : 'pending',
+        status: 'pending',
+        notes: `Tax: ₹${tax}, Shipping: ₹${shipping}`
       };
 
-      // Place order
-      const response = await apiCall(API_ENDPOINTS.USER_ORDERS, {
+      // Place order via API
+      const response = await apiCall(`${API_ENDPOINTS.ORDERS}`, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify(orderData)
       });
 
       if (response.success) {
         setOrderPlaced(true);
-        setOrderNumber(response.data?.order_number || `ORD-${Date.now()}`);
+        setOrderNumber(response.data?.order_id || response.data?.id || `ORD-${Date.now()}`);
         clearCart();
         setMessage("Order placed successfully! 🎉");
         setMessageType("success");
+        setTimeout(() => navigate("/"), 2000);
       } else {
         setMessage(response.message || "Failed to place order");
         setMessageType("error");

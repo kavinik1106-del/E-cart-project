@@ -16,20 +16,22 @@ function AdminProductsContent() {
 
   const [form, setForm] = useState({
     name: "",
-    type: "",
-    price: "",
-    image: "",
     description: "",
-    stock: "",
+    price: "",
+    mrp: "",
+    category: "",
+    image: "",
+    stock_quantity: "",
   });
 
   const initialFormState = {
     name: "",
-    type: "",
-    price: "",
-    image: "",
     description: "",
-    stock: "",
+    price: "",
+    mrp: "",
+    category: "",
+    image: "",
+    stock_quantity: "",
   };
 
   // Fetch products from API or use fallback
@@ -42,26 +44,25 @@ function AdminProductsContent() {
       setLoading(true);
       setError(null);
 
-      const response = await apiCall(API_ENDPOINTS.PRODUCTS);
-      if (response.success) {
-        setProducts(response.data);
+      console.log('🔵 Fetching products from:', API_ENDPOINTS.ADMIN_PRODUCTS);
+      const response = await apiCall(API_ENDPOINTS.ADMIN_PRODUCTS);
+      
+      console.log('🟢 Response received:', response);
+
+      if (response.success && response.data) {
+        const productList = Array.isArray(response.data) ? response.data : [];
+        console.log('✅ Products loaded successfully:', productList.length, 'items');
+        setProducts(productList);
       } else {
-        throw new Error(response.error || 'Failed to fetch products');
+        const errorMsg = response.message || response.error || 'Failed to fetch products';
+        console.error('❌ API returned error:', errorMsg);
+        throw new Error(errorMsg);
       }
     } catch (err) {
-      console.error('Error fetching products:', err);
-      setError('Failed to load products. Using demo data.');
-
-      // Fallback demo products
-      const demoProducts = [
-        { id: 1, name: "iPhone 15 Pro Max", type: "Electronics", price: 124999, image: "https://via.placeholder.com/200?text=iPhone", description: "Premium smartphone", stock: 50 },
-        { id: 2, name: "Designer Saree", type: "Women Dresses", price: 5999, image: "https://via.placeholder.com/200?text=Saree", description: "Elegant saree", stock: 30 },
-        { id: 3, name: "Men's Formal Suit", type: "Men Dresses", price: 8999, image: "https://via.placeholder.com/200?text=Suit", description: "Professional suit", stock: 25 },
-        { id: 4, name: "Fresh Tomatoes", type: "Vegetables", price: 45, image: "https://via.placeholder.com/200?text=Tomato", description: "Fresh organic tomatoes", stock: 200 },
-        { id: 5, name: "Electric Kettle", type: "Home Appliances", price: 2499, image: "https://via.placeholder.com/200?text=Kettle", description: "1.5L capacity", stock: 40 }
-      ];
-
-      setProducts(demoProducts);
+      console.error('❌ Error fetching products:', err);
+      const errorMessage = err.message || 'Failed to load products. Make sure the backend server is running on port 5001.';
+      setError(errorMessage);
+      setProducts([]);
     } finally {
       setLoading(false);
     }
@@ -87,11 +88,12 @@ function AdminProductsContent() {
     setEditingId(product.id);
     setForm({
       name: product.name,
-      type: product.type,
-      price: product.price,
-      image: product.image,
       description: product.description,
-      stock: product.stock,
+      price: product.price,
+      mrp: product.mrp,
+      category: product.category,
+      image: product.image,
+      stock_quantity: product.stock_quantity,
     });
     setShowModal(true);
   };
@@ -115,20 +117,21 @@ function AdminProductsContent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!form.name || !form.type || !form.price || !form.stock) {
-      alert("Please fill in all fields");
+    if (!form.name || !form.category || !form.price || !form.stock_quantity) {
+      alert("Please fill in all required fields (Name, Category, Price, Stock)");
       return;
     }
 
     try {
       if (editingId) {
         // Update existing product
-        const response = await apiCall(API_ENDPOINTS.PRODUCT(editingId), {
+        const response = await apiCall(API_ENDPOINTS.ADMIN_PRODUCT(editingId), {
           method: "PUT",
           body: JSON.stringify({
             ...form,
             price: parseFloat(form.price),
-            stock: parseInt(form.stock),
+            mrp: form.mrp ? parseFloat(form.mrp) : null,
+            stock_quantity: parseInt(form.stock_quantity),
           }),
         });
         if (response.success) {
@@ -138,12 +141,13 @@ function AdminProductsContent() {
         }
       } else {
         // Create new product
-        const response = await apiCall(API_ENDPOINTS.PRODUCTS, {
+        const response = await apiCall(API_ENDPOINTS.ADMIN_PRODUCTS, {
           method: "POST",
           body: JSON.stringify({
             ...form,
             price: parseFloat(form.price),
-            stock: parseInt(form.stock),
+            mrp: form.mrp ? parseFloat(form.mrp) : null,
+            stock_quantity: parseInt(form.stock_quantity),
           }),
         });
         if (response.success) {
@@ -198,7 +202,23 @@ function AdminProductsContent() {
 
       {error && (
         <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-          {error}
+          <p className="font-bold mb-2">⚠️ Error loading products:</p>
+          <p className="mb-3">{error}</p>
+          <div className="text-sm bg-red-50 p-3 rounded mt-2">
+            <p className="font-semibold mb-2">💡 Troubleshooting:</p>
+            <ul className="list-disc list-inside space-y-1">
+              <li>Ensure backend server is running: <code className="bg-red-200 px-1">npm start</code> in <code className="bg-red-200 px-1">dress-page/server</code></li>
+              <li>Check that server is running on port <strong>5001</strong></li>
+              <li>Check browser console (F12) for detailed error logs</li>
+              <li>API endpoint: <code className="bg-red-200 px-1">{API_ENDPOINTS.PRODUCTS}</code></li>
+            </ul>
+          </div>
+          <button
+            onClick={() => fetchProducts()}
+            className="mt-3 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition"
+          >
+            🔄 Retry Loading
+          </button>
         </div>
       )}
 
@@ -223,13 +243,19 @@ function AdminProductsContent() {
                 <thead className="bg-gray-50 border-b">
                   <tr>
                     <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                      Image
+                    </th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
                       Name
                     </th>
                     <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                      Type
+                      Category
                     </th>
                     <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
                       Price
+                    </th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                      MRP
                     </th>
                     <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
                       Stock
@@ -246,26 +272,45 @@ function AdminProductsContent() {
                   {paginatedProducts.map((product) => (
                     <tr key={product.id} className="hover:bg-gray-50">
                       <td className="px-4 py-3 text-sm text-gray-900">
+                        {product.image ? (
+                          <img 
+                            src={product.image} 
+                            alt={product.name}
+                            className="h-10 w-10 object-cover rounded"
+                            onError={(e) => e.target.src = '/placeholder.png'}
+                          />
+                        ) : (
+                          <div className="h-10 w-10 bg-gray-200 rounded flex items-center justify-center">
+                            📦
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-900 font-medium max-w-xs truncate">
                         {product.name}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-600">
-                        {product.type}
+                        {product.category}
                       </td>
                       <td className="px-4 py-3 text-sm font-semibold text-gray-900">
-                        ${product.price}
+                        ₹{parseFloat(product.price).toFixed(2)}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-600">
+                        {product.mrp ? `₹${parseFloat(product.mrp).toFixed(2)}` : '-'}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-900">
-                        {product.stock}
+                        {product.stock_quantity}
                       </td>
                       <td className="px-4 py-3 text-sm">
                         <span
                           className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            product.stock > 20
+                            product.stock_quantity > 20
                               ? "bg-green-100 text-green-800"
-                              : "bg-yellow-100 text-yellow-800"
+                              : product.stock_quantity > 0
+                              ? "bg-yellow-100 text-yellow-800"
+                              : "bg-red-100 text-red-800"
                           }`}
                         >
-                          {product.stock > 20 ? "In Stock" : "Low Stock"}
+                          {product.stock_quantity > 20 ? "In Stock" : product.stock_quantity > 0 ? "Low Stock" : "Out of Stock"}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-sm flex gap-2">
@@ -307,8 +352,16 @@ function AdminProductsContent() {
             )}
           </>
         ) : (
-          <div className="text-center py-8 text-gray-500">
-            No products found
+          <div className="text-center py-12 text-gray-500">
+            <p className="text-lg mb-4">📦 No products found</p>
+            {products.length === 0 ? (
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 inline-block">
+                <p className="text-sm mb-2">The database is empty. Click "Add Product" to create your first product.</p>
+                <p className="text-xs text-gray-600">Or products may be loading from the database...</p>
+              </div>
+            ) : (
+              <p className="text-sm text-gray-600">No products match your search criteria.</p>
+            )}
           </div>
         )}
       </div>
@@ -328,7 +381,7 @@ function AdminProductsContent() {
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4 max-h-96 overflow-y-auto">
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
                   Product Name *
@@ -345,28 +398,29 @@ function AdminProductsContent() {
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Type *
+                  Category *
                 </label>
                 <input
                   type="text"
-                  name="type"
-                  value={form.type}
+                  name="category"
+                  value={form.category}
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-                  placeholder="e.g., shirts, pants"
+                  placeholder="e.g., Furniture, Electronics, Clothing"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1">
-                    Price *
+                    Price (₹) *
                   </label>
                   <input
                     type="number"
                     name="price"
                     value={form.price}
                     onChange={handleChange}
+                    step="0.01"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
                     placeholder="0.00"
                   />
@@ -374,17 +428,46 @@ function AdminProductsContent() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-1">
-                    Stock *
+                    MRP (₹)
                   </label>
                   <input
                     type="number"
-                    name="stock"
-                    value={form.stock}
+                    name="mrp"
+                    value={form.mrp}
                     onChange={handleChange}
+                    step="0.01"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-                    placeholder="0"
+                    placeholder="0.00"
                   />
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  Stock Quantity *
+                </label>
+                <input
+                  type="number"
+                  name="stock_quantity"
+                  value={form.stock_quantity}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+                  placeholder="0"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  Product Description
+                </label>
+                <textarea
+                  name="description"
+                  value={form.description}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+                  placeholder="Enter product description"
+                  rows="3"
+                />
               </div>
 
               <div>

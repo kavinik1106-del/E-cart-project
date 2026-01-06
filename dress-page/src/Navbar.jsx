@@ -159,7 +159,7 @@ function Navbar() {
                   : "/admin/login"
               )
             }
-            className="bg-secondary text-primary px-4 py-2 rounded-lg font-semibold hover:opacity-90 shadow"
+            className="bg-secondary text-white px-4 py-2 rounded-lg font-semibold hover:opacity-90 shadow"
           >
             Admin
           </button>

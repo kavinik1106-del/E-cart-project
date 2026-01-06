@@ -29,11 +29,12 @@ function AdminLogin() {
       if (response.success) {
         // Store the real JWT token
         localStorage.setItem("isAdmin", "true");
-        localStorage.setItem("adminToken", response.data.token);
+        localStorage.setItem("adminToken", response.data?.token || "");
         localStorage.setItem("adminEmail", username);
+        localStorage.setItem("adminRole", response.data?.role || "admin");
         navigate("/admin");
       } else {
-        setError(response.error || "Invalid credentials");
+        setError(response.message || response.error || "Invalid credentials. Use admin/admin123");
       }
     } catch (err) {
       setError("Login failed. Please try again.");

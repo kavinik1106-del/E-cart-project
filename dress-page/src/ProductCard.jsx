@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Heart, Star, ShoppingCart, Loader2 } from "lucide-react";
+import { Heart, Star, ShoppingCart, Loader2, X } from "lucide-react";
 import { useCart } from "./contexts/CartContext.jsx";
 
 function ProductCard({ product, products = [], showRating = false }) {
-  const { addToCart, toggleWishlist, isInWishlist, isInCart } = useCart();
+  const { addToCart, removeFromCart, toggleWishlist, isInWishlist, isInCart } = useCart();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
@@ -16,24 +16,29 @@ function ProductCard({ product, products = [], showRating = false }) {
     
     setIsLoading(true);
     try {
-      // Get default size/quantity
-      let size = "M";
-      let quantity = 1;
-      
-      // For shoe products
-      if (product.shoeGuide) {
-        size = Object.keys(product.shoeGuide)[0];
+      // Toggle: Remove if already in cart, add if not
+      if (isInCart(product.id)) {
+        removeFromCart(product.id);
+      } else {
+        // Get default size/quantity
+        let size = "M";
+        let quantity = 1;
+        
+        // For shoe products
+        if (product.shoeGuide) {
+          size = Object.keys(product.shoeGuide)[0];
+        }
+        // For clothing products
+        else if (product.sizeGuide) {
+          size = Object.keys(product.sizeGuide)[0];
+        }
+        // For vegetables/spices
+        else if (product.quantityGuide) {
+          size = Object.keys(product.quantityGuide)[0];
+        }
+        
+        addToCart(product, quantity, size, "Default");
       }
-      // For clothing products
-      else if (product.sizeGuide) {
-        size = Object.keys(product.sizeGuide)[0];
-      }
-      // For vegetables/spices
-      else if (product.quantityGuide) {
-        size = Object.keys(product.quantityGuide)[0];
-      }
-      
-      addToCart(product, quantity, size, "Default");
       
       // Do not navigate, stay on current page
       setTimeout(() => {
@@ -42,8 +47,6 @@ function ProductCard({ product, products = [], showRating = false }) {
     } catch (error) {
       console.error("Error adding to cart:", error);
       setIsLoading(false);
-      // Still navigate to order page even if error
-      navigate("/order");
     }
   };
 
@@ -168,16 +171,18 @@ function ProductCard({ product, products = [], showRating = false }) {
             disabled={isLoading}
             className={`w-full mt-auto py-2 px-4 rounded-lg font-semibold transition-all duration-300 flex items-center justify-center gap-2 ${
               isInCart(product.id)
-                ? 'bg-yellow-500 hover:bg-yellow-600 text-white'
-                : 'bg-primary hover:bg-primary text-white'
+                ? 'bg-secondary hover:bg-secondary/90 text-white'
+                : 'bg-primary hover:bg-primary/90 text-white'
             } disabled:opacity-50 disabled:cursor-not-allowed`}
           >
             {isLoading ? (
               <Loader2 className="w-4 h-4 animate-spin" />
+            ) : isInCart(product.id) ? (
+              <X className="w-4 h-4" />
             ) : (
               <ShoppingCart className="w-4 h-4" />
             )}
-            {isLoading ? 'Adding...' : isInCart(product.id) ? 'Added to Cart' : 'Add to Cart'}
+            {isLoading ? 'Processing...' : isInCart(product.id) ? 'Added to Cart' : 'Add to Cart'}
           </button>
         </div>
       </div>

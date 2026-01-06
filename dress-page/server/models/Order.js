@@ -17,6 +17,26 @@ export default (sequelize) => {
         isEmail: true,
       },
     },
+    phone: {
+      type: DataTypes.STRING(20),
+      defaultValue: '',
+    },
+    address: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+    },
+    city: {
+      type: DataTypes.STRING(100),
+      defaultValue: '',
+    },
+    state: {
+      type: DataTypes.STRING(100),
+      defaultValue: '',
+    },
+    pincode: {
+      type: DataTypes.STRING(10),
+      defaultValue: '',
+    },
     amount: {
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
@@ -24,24 +44,36 @@ export default (sequelize) => {
         min: 0,
       },
     },
-    status: {
-      type: DataTypes.ENUM('pending', 'processing', 'shipped', 'delivered'),
-      defaultValue: 'pending',
-    },
-    date: {
-      type: DataTypes.DATE,
-      defaultValue: DataTypes.NOW,
-    },
-    items: {
+    items_count: {
       type: DataTypes.INTEGER,
       defaultValue: 1,
       validate: {
         min: 1,
       },
     },
-    address: {
+    items_details: {
+      type: DataTypes.JSON,
+      defaultValue: [],
+    },
+    status: {
+      type: DataTypes.ENUM('pending', 'processing', 'shipped', 'delivered', 'cancelled'),
+      defaultValue: 'pending',
+    },
+    payment_status: {
+      type: DataTypes.ENUM('unpaid', 'paid', 'refunded'),
+      defaultValue: 'unpaid',
+    },
+    payment_method: {
+      type: DataTypes.STRING(50),
+      defaultValue: 'cod',
+    },
+    notes: {
       type: DataTypes.TEXT,
-      allowNull: false,
+      defaultValue: '',
+    },
+    order_date: {
+      type: DataTypes.DATE,
+      defaultValue: DataTypes.NOW,
     },
   }, {
     timestamps: true,
