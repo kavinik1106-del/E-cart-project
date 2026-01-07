@@ -16,22 +16,26 @@ function AdminProductsContent() {
 
   const [form, setForm] = useState({
     name: "",
+    type: "",
     description: "",
     price: "",
     mrp: "",
     category: "",
+    brand: "",
     image: "",
-    stock_quantity: "",
+    stock: "",
   });
 
   const initialFormState = {
     name: "",
+    type: "",
     description: "",
     price: "",
     mrp: "",
     category: "",
+    brand: "",
     image: "",
-    stock_quantity: "",
+    stock: "",
   };
 
   // Fetch products from API or use fallback
@@ -88,12 +92,14 @@ function AdminProductsContent() {
     setEditingId(product.id);
     setForm({
       name: product.name,
+      type: product.type || "",
       description: product.description,
       price: product.price,
       mrp: product.mrp,
       category: product.category,
+      brand: product.brand || "",
       image: product.image,
-      stock_quantity: product.stock_quantity,
+      stock: product.stock,
     });
     setShowModal(true);
   };
@@ -117,49 +123,58 @@ function AdminProductsContent() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!form.name || !form.category || !form.price || !form.stock_quantity) {
-      alert("Please fill in all required fields (Name, Category, Price, Stock)");
+    if (!form.name || !form.type || !form.category || !form.price || !form.stock) {
+      alert("Please fill in all required fields (Name, Type, Category, Price, Stock)");
       return;
     }
 
     try {
+      const payload = {
+        name: form.name,
+        type: form.type,
+        category: form.category,
+        brand: form.brand,
+        price: parseFloat(form.price),
+        mrp: form.mrp ? parseFloat(form.mrp) : null,
+        stock: parseInt(form.stock),
+        image: form.image,
+        description: form.description,
+      };
+
       if (editingId) {
         // Update existing product
         const response = await apiCall(API_ENDPOINTS.ADMIN_PRODUCT(editingId), {
           method: "PUT",
-          body: JSON.stringify({
-            ...form,
-            price: parseFloat(form.price),
-            mrp: form.mrp ? parseFloat(form.mrp) : null,
-            stock_quantity: parseInt(form.stock_quantity),
-          }),
+          body: JSON.stringify(payload),
         });
         if (response.success) {
           setProducts(
             products.map((p) => (p.id === editingId ? response.data : p))
           );
+          setShowModal(false);
+          setForm(initialFormState);
+          alert("✅ Product updated successfully!");
+        } else {
+          alert("❌ Failed to update product: " + (response.error || response.message));
         }
       } else {
         // Create new product
         const response = await apiCall(API_ENDPOINTS.ADMIN_PRODUCTS, {
           method: "POST",
-          body: JSON.stringify({
-            ...form,
-            price: parseFloat(form.price),
-            mrp: form.mrp ? parseFloat(form.mrp) : null,
-            stock_quantity: parseInt(form.stock_quantity),
-          }),
+          body: JSON.stringify(payload),
         });
         if (response.success) {
           setProducts([...products, response.data]);
+          setShowModal(false);
+          setForm(initialFormState);
+          alert("✅ Product added successfully!");
+        } else {
+          alert("❌ Failed to add product: " + (response.error || response.message));
         }
       }
-
-      setShowModal(false);
-      setForm(initialFormState);
     } catch (err) {
-      setError("Failed to save product");
-      console.error(err);
+      console.error("Error saving product:", err);
+      alert("❌ Error: " + err.message);
     }
   };
 
@@ -298,19 +313,19 @@ function AdminProductsContent() {
                         {product.mrp ? `₹${parseFloat(product.mrp).toFixed(2)}` : '-'}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-900">
-                        {product.stock_quantity}
+                        {product.stock}
                       </td>
                       <td className="px-4 py-3 text-sm">
                         <span
                           className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            product.stock_quantity > 20
+                            product.stock > 20
                               ? "bg-green-100 text-green-800"
-                              : product.stock_quantity > 0
+                              : product.stock > 0
                               ? "bg-yellow-100 text-yellow-800"
                               : "bg-red-100 text-red-800"
                           }`}
                         >
-                          {product.stock_quantity > 20 ? "In Stock" : product.stock_quantity > 0 ? "Low Stock" : "Out of Stock"}
+                          {product.stock > 20 ? "In Stock" : product.stock > 0 ? "Low Stock" : "Out of Stock"}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-sm flex gap-2">
@@ -398,6 +413,20 @@ function AdminProductsContent() {
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  Product Type *
+                </label>
+                <input
+                  type="text"
+                  name="type"
+                  value={form.type}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+                  placeholder="e.g., Dress, Shirt, Pants"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
                   Category *
                 </label>
                 <input
@@ -407,6 +436,20 @@ function AdminProductsContent() {
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
                   placeholder="e.g., Furniture, Electronics, Clothing"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-gray-700 mb-1">
+                  Brand
+                </label>
+                <input
+                  type="text"
+                  name="brand"
+                  value={form.brand}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
+                  placeholder="e.g., Nike, Adidas"
                 />
               </div>
 
@@ -448,25 +491,11 @@ function AdminProductsContent() {
                 </label>
                 <input
                   type="number"
-                  name="stock_quantity"
-                  value={form.stock_quantity}
+                  name="stock"
+                  value={form.stock}
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
                   placeholder="0"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Product Description
-                </label>
-                <textarea
-                  name="description"
-                  value={form.description}
-                  onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-                  placeholder="Enter product description"
-                  rows="3"
                 />
               </div>
 
@@ -480,7 +509,7 @@ function AdminProductsContent() {
                   value={form.image}
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-                  placeholder="image.avif"
+                  placeholder="https://example.com/image.jpg"
                 />
               </div>
 

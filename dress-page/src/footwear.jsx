@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "./Navbar.jsx";
-import { Link } from "react-router-dom";
+import ProductCard from "./ProductCard.jsx";
 
 function Footwear() {
   const products = [
@@ -9,204 +9,166 @@ function Footwear() {
       brand: "Nike",
       category: "Sports Shoes",
       name: "Nike Air Zoom",
-      price: "₹5,999",
+      price: 5999,
+      mrp: 7999,
       rating: 4.6,
+      reviews: 145,
       image: "/footk.jpg",
+      discount: 25
     },
     {
       id: 2,
       brand: "Adidas",
       category: "Running Shoes",
       name: "Adidas Ultraboost",
-      price: "₹6,499",
+      price: 6499,
+      mrp: 8999,
       rating: 4.7,
+      reviews: 162,
       image: "/footm.jpg",
+      discount: 28
     },
     {
       id: 3,
       brand: "Puma",
       category: "Casual Shoes",
       name: "Puma Smash V2",
-      price: "₹3,299",
+      price: 3299,
+      mrp: 4999,
       rating: 4.4,
+      reviews: 98,
       image: "/footw.jpg",
+      discount: 34
     },
     {
       id: 4,
       brand: "Bata",
       category: "Formal Shoes",
       name: "Bata Office Wear",
-      price: "₹2,199",
+      price: 2199,
+      mrp: 3499,
       rating: 4.2,
+      reviews: 76,
       image: "/footk1.jpg",
+      discount: 37
     },
     {
       id: 5,
       brand: "Nike",
       category: "Sneakers",
       name: "Nike Revolution",
-      price: "₹4,899",
+      price: 4899,
+      mrp: 6499,
       rating: 4.5,
+      reviews: 123,
       image: "/footm1.jpg",
+      discount: 25
     },
     {
       id: 6,
       brand: "Adidas",
       category: "Sports Shoes",
       name: "Adidas Duramo",
-      price: "₹3,999",
+      price: 3999,
+      mrp: 5999,
       rating: 4.3,
+      reviews: 112,
       image: "/footw1.jpg",
+      discount: 33
     },
     {
-      id: 6,
-      brand: "Adidas",
-      category: "Sports Shoes",
-      name: "Adidas Duramo",
-      price: "₹3,999",
-      rating: 4.3,
+      id: 7,
+      brand: "Puma",
+      category: "Casual Shoes",
+      name: "Puma Court Flex",
+      price: 2799,
+      mrp: 4299,
+      rating: 4.4,
+      reviews: 87,
       image: "/footk2.jpg",
+      discount: 35
     },
     {
-      id: 6,
+      id: 8,
       brand: "Adidas",
-      category: "Sports Shoes",
-      name: "Adidas Duramo",
-      price: "₹3,999",
-      rating: 4.3,
+      category: "Formal Shoes",
+      name: "Adidas Stan Smith",
+      price: 4499,
+      mrp: 6499,
+      rating: 4.5,
+      reviews: 134,
       image: "/footw2.jpg",
+      discount: 31
     },
     {
-      id: 6,
-      brand: "Adidas",
-      category: "Sports Shoes",
-      name: "Adidas Duramo",
-      price: "₹3,999",
-      rating: 4.3,
+      id: 9,
+      brand: "Nike",
+      category: "Running Shoes",
+      name: "Nike React",
+      price: 6999,
+      mrp: 9499,
+      rating: 4.6,
+      reviews: 156,
       image: "/footm2.jpg",
+      discount: 26
     },
     {
-      id: 6,
-      brand: "Adidas",
-      category: "Sports Shoes",
-      name: "Adidas Duramo",
-      price: "₹3,999",
+      id: 10,
+      brand: "Skechers",
+      category: "Comfort Shoes",
+      name: "Skechers Go Walk",
+      price: 3499,
+      mrp: 5299,
       rating: 4.3,
+      reviews: 95,
       image: "/footk3.jpg",
+      discount: 34
     },
     {
-      id: 6,
+      id: 11,
       brand: "Adidas",
       category: "Sports Shoes",
-      name: "Adidas Duramo",
-      price: "₹3,999",
-      rating: 4.3,
+      name: "Adidas NMD",
+      price: 5499,
+      mrp: 7999,
+      rating: 4.5,
+      reviews: 128,
       image: "/footw3.jpg",
+      discount: 31
     },
     {
-      id: 6,
-      brand: "Adidas",
-      category: "Sports Shoes",
-      name: "Adidas Duramo",
-      price: "₹3,999",
-      rating: 4.3,
+      id: 12,
+      brand: "New Balance",
+      category: "Running Shoes",
+      name: "New Balance 574",
+      price: 5299,
+      mrp: 7499,
+      rating: 4.4,
+      reviews: 111,
       image: "/footm3.jpg",
-    },
-    {
-      id: 6,
-      brand: "Adidas",
-      category: "Sports Shoes",
-      name: "Adidas Duramo",
-      price: "₹3,999",
-      rating: 4.3,
-      image: "/footk4.jpg",
-    },
-    {
-      id: 6,
-      brand: "Adidas",
-      category: "Sports Shoes",
-      name: "Adidas Duramo",
-      price: "₹3,999",
-      rating: 4.3,
-      image: "/footw4.jpg",
-    },
-    {
-      id: 6,
-      brand: "Adidas",
-      category: "Sports Shoes",
-      name: "Adidas Duramo",
-      price: "₹3,999",
-      rating: 4.3,
-      image: "/footm4.jpg",
-    },
-    {
-      id: 6,
-      brand: "Adidas",
-      category: "Sports Shoes",
-      name: "Adidas Duramo",
-      price: "₹3,999",
-      rating: 4.3,
-      image: "/footw1.jpg",
+      discount: 29
     },
   ];
 
   return (
-    <div className="min-h-screen bg-blue-50">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       <Navbar />
 
-      {/* Header Card */}
+      {/* Header Card with Primary Color */}
       <div className="max-w-3xl mx-auto mt-6 px-4">
-        <div className="bg-blue-600 text-white rounded-2xl p-5 text-center shadow-md">
-          <h1 className="text-2xl font-bold">Footwear</h1>
-          <p className="text-sm mt-1">
+        <div className="bg-primary text-white rounded-2xl p-6 text-center shadow-lg">
+          <h1 className="text-3xl font-bold">Footwear</h1>
+          <p className="text-sm mt-2 opacity-90">
             Nike, Adidas, Puma & Bata Shoes
           </p>
         </div>
       </div>
 
-      {/* Products */}
+      {/* Products Grid */}
       <main className="max-w-7xl mx-auto px-4 py-8">
-        <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {products.map((p) => (
-            <div
-              key={p.id}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition"
-            >
-              <div className="h-40 bg-gray-100 flex items-center justify-center">
-                <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="w-full h-full flex items-center justify-center">
-                  <img
-                    src={p.image}
-                    alt={p.name}
-                    className="h-full object-contain p-3"
-                  />
-                </Link>
-              </div>
-
-              <div className="p-4">
-                <div className="text-xs text-blue-600 font-semibold">
-                  {p.brand} • {p.category}
-                </div>
-
-                <h3 className="mt-1 font-semibold text-sm">
-                  <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="hover:underline">{p.name}</Link>
-                </h3>
-
-                {/* Rating */}
-                <div className="flex items-center text-xs mt-1">
-                  ⭐ {p.rating} / 5
-                </div>
-
-                <div className="mt-2 flex items-center justify-between">
-                  <div className="text-blue-600 font-bold">
-                    {p.price}
-                  </div>
-
-                  <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-xs">
-                    Details
-                  </Link>
-                </div>
-              </div>
-            </div>
+            <ProductCard key={p.id} product={p} products={products} showRating={true} />
           ))}
         </section>
       </main>
