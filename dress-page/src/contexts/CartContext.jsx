@@ -75,12 +75,15 @@ export const CartProvider = ({ children }) => {
   };
 
   const toggleWishlist = (product) => {
+    console.log("❤️ Toggle Wishlist - Product:", product);
     setWishlist((prev) => {
       const existing = prev.find((item) => item.id === product.id);
       if (existing) {
+        console.log("❌ Removing from wishlist");
         showToast(`${product.name} removed from wishlist`, "warning");
         return prev.filter((item) => item.id !== product.id);
       }
+      console.log("✅ Adding to wishlist - New wishlist length:", prev.length + 1);
       showToast(`${product.name} added to wishlist`, "success");
       return [...prev, product];
     });

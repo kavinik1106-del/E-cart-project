@@ -26,6 +26,7 @@ import { CustomerProvider } from "./contexts/CustomerContext";
 import CartPage from "./CartPage.jsx";
 import WishlistPage from "./WishlistPage.jsx";
 import CheckoutPage from "./CheckoutPage.jsx";
+import TestWishlist from "./TestWishlist.jsx";
 import { useCart } from "./contexts/CartContext.jsx";
 
 /* Admin */
@@ -65,6 +66,7 @@ function AppContent() {
       {/* Cart */}
       <Route path="/cart" element={<CartPage />} />
       <Route path="/wishlist" element={<WishlistPage />} />
+      <Route path="/test-wishlist" element={<TestWishlist />} />
       <Route path="/checkout" element={<CheckoutPage />} />
 
       {/* Admin */}

@@ -5,8 +5,8 @@ import { useCart } from "../contexts/CartContext";
 
 function ProductCard({ product, products = [], showRating = false }) {
   const navigate = useNavigate();
-  const { addToCart } = useCart();
-  const [isWishlisted, setIsWishlisted] = React.useState(false);
+  const { addToCart, toggleWishlist, isInWishlist } = useCart();
+  const [isWishlisted, setIsWishlisted] = React.useState(() => isInWishlist(product.id));
 
   const handleQuickAdd = (e) => {
     e.preventDefault();
@@ -40,7 +40,8 @@ function ProductCard({ product, products = [], showRating = false }) {
           <button
             onClick={(e) => {
               e.preventDefault();
-              setIsWishlisted(!isWishlisted);
+              toggleWishlist(product);
+              setIsWishlisted(prev => !prev);
             }}
             className="absolute top-2 right-2 bg-white p-2 rounded-full shadow hover:shadow-md transition"
           >

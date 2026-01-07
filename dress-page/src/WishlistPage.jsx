@@ -10,6 +10,9 @@ function WishlistPage() {
   const [sortBy, setSortBy] = useState("date");
   const [selectedItems, setSelectedItems] = useState([]);
 
+  // Debug wishlist
+  console.log("🛍️ Wishlist Page - Current wishlist:", wishlist);
+
   const handleAddToCart = (item) => {
     addToCart(item);
     // Optional: Remove from wishlist after adding to cart
