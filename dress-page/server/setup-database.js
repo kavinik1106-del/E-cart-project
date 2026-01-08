@@ -24,6 +24,11 @@ const createDatabaseAndTables = async () => {
       await connection.execute(`CREATE DATABASE IF NOT EXISTS ${dbName}`);
       console.log(`✅ Database '${dbName}' created successfully`);
       
+      // Also ensure customer database exists (used by customer auth / orders)
+      const customerDbName = process.env.CUSTOMER_DB_NAME || 'customer_db';
+      await connection.execute(`CREATE DATABASE IF NOT EXISTS ${customerDbName}`);
+      console.log(`✅ Database '${customerDbName}' created successfully`);
+      
       await connection.end();
     } catch (err) {
       if (err.code === 'PROTOCOL_CONNECTION_LOST') {
