@@ -51,7 +51,20 @@ class OrderModel {
       ORDER BY o.created_at DESC
     `;
     const [rows] = await pool.query(query, [userId]);
-    return rows;
+    
+    // Fetch items for each order
+    const itemsQuery = 'SELECT * FROM order_items WHERE order_id = ?';
+    const ordersWithItems = await Promise.all(
+      rows.map(async (order) => {
+        const [items] = await pool.query(itemsQuery, [order.id]);
+        return {
+          ...order,
+          items
+        };
+      })
+    );
+    
+    return ordersWithItems;
   }
 
   // Get all orders (admin)

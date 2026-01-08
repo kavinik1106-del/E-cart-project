@@ -47,14 +47,13 @@ export const createOrder = async (req, res, next) => {
 
     logger.info(`New order created: ${orderNumber} for user ${user_id}`);
 
+    // Fetch the complete order with items
+    const completeOrder = await OrderModel.getById(orderId);
+
     res.status(201).json({
       success: true,
       message: 'Order created successfully',
-      data: {
-        orderId,
-        orderNumber,
-        totalAmount: total_amount
-      }
+      data: completeOrder
     });
   } catch (error) {
     logger.error('Create order error:', error);

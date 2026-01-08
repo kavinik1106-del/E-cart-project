@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import './OrderPage.css';
 import { apiCall, API_ENDPOINTS } from './config/apiConfig.js';
 import Navbar from './Navbar.jsx';
+import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Package,
@@ -21,10 +22,14 @@ import {
   ChevronDown,
   ChevronUp,
   Eye,
-  X
+  X,
+  Facebook,
+  Instagram,
+  Twitter
 } from 'lucide-react';
 
 export default function OrderPageAPI() {
+  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
@@ -116,6 +121,11 @@ export default function OrderPageAPI() {
   const removeFromCart = (productId) => {
     setCartItems(cartItems.filter(item => item.product_id !== productId));
   };
+
+  // Calculate order totals
+  const calculateTotals = () => {
+    const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    const tax = subtotal * 0.05; // 5% tax
     const shipping = subtotal > 500 ? 0 : 99; // Free shipping for orders > 500
     const discount = orderForm.discount_amount;
     const total = subtotal + tax + shipping - discount;
@@ -182,11 +192,12 @@ export default function OrderPageAPI() {
         });
         setShowOrderForm(false);
 
-        // Refresh orders
+        // Navigate to confirmation page
         setTimeout(() => {
-          fetchOrders();
-          setMessage('');
-        }, 2000);
+          navigate('/order-confirmation', { 
+            state: { order: data.data } 
+          });
+        }, 1500);
       } else {
         setMessage(data?.message || 'Failed to create order');
         setMessageType('error');
@@ -220,8 +231,6 @@ export default function OrderPageAPI() {
       setMessageType('error');
     }
   };
-
-  const { subtotal, tax, shipping, total } = calculateTotals();
 
   return (
     <div className="min-h-screen bg-white">
@@ -597,8 +606,40 @@ export default function OrderPageAPI() {
                           initial={{ opacity: 0, height: 0 }}
                           animate={{ opacity: 1, height: 'auto' }}
                           exit={{ opacity: 0, height: 0 }}
-                          className="mt-6 pt-6 border-t border-gray-200 space-y-4"
+                          className="mt-6 pt-6 border-t border-gray-200 space-y-6"
                         >
+                          {/* Order Items */}
+                          {order.items && order.items.length > 0 && (
+                            <div>
+                              <h4 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                                <ShoppingBag className="w-4 h-4 text-blue-600" />
+                                Order Items ({order.items.length})
+                              </h4>
+                              <div className="bg-gray-50 rounded-xl overflow-hidden">
+                                <table className="w-full text-sm">
+                                  <thead>
+                                    <tr className="bg-gray-100 border-b">
+                                      <th className="px-4 py-3 text-left font-semibold text-gray-700">Product</th>
+                                      <th className="px-4 py-3 text-center font-semibold text-gray-700">Quantity</th>
+                                      <th className="px-4 py-3 text-right font-semibold text-gray-700">Price</th>
+                                      <th className="px-4 py-3 text-right font-semibold text-gray-700">Total</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {order.items.map((item, idx) => (
+                                      <tr key={idx} className="border-b hover:bg-gray-100 transition-colors">
+                                        <td className="px-4 py-3 text-gray-900 font-medium">{item.product_name}</td>
+                                        <td className="px-4 py-3 text-center text-gray-600">{item.quantity}</td>
+                                        <td className="px-4 py-3 text-right text-gray-600">₹{item.price.toLocaleString()}</td>
+                                        <td className="px-4 py-3 text-right font-semibold text-blue-600">₹{(item.price * item.quantity).toLocaleString()}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          )}
+
                           <div className="grid md:grid-cols-2 gap-6">
                             <div>
                               <h4 className="font-semibold text-gray-900 mb-2 flex items-center gap-2">
@@ -623,6 +664,38 @@ export default function OrderPageAPI() {
                                   <p className="text-gray-600 text-sm">{order.coupon_code}</p>
                                 </div>
                               )}
+                            </div>
+                          </div>
+
+                          {/* Order Summary */}
+                          <div className="bg-blue-50 rounded-xl p-4 border border-blue-200">
+                            <div className="space-y-2">
+                              <div className="flex justify-between text-sm">
+                                <span className="text-gray-600">Subtotal</span>
+                                <span className="font-medium text-gray-900">₹{(order.total_amount - order.tax_amount - order.shipping_amount + (order.discount_amount || 0)).toLocaleString()}</span>
+                              </div>
+                              {order.discount_amount > 0 && (
+                                <div className="flex justify-between text-sm">
+                                  <span className="text-gray-600">Discount</span>
+                                  <span className="font-medium text-green-600">-₹{order.discount_amount.toLocaleString()}</span>
+                                </div>
+                              )}
+                              {order.tax_amount > 0 && (
+                                <div className="flex justify-between text-sm">
+                                  <span className="text-gray-600">Tax</span>
+                                  <span className="font-medium text-gray-900">₹{order.tax_amount.toLocaleString()}</span>
+                                </div>
+                              )}
+                              {order.shipping_amount > 0 && (
+                                <div className="flex justify-between text-sm">
+                                  <span className="text-gray-600">Shipping</span>
+                                  <span className="font-medium text-gray-900">₹{order.shipping_amount.toLocaleString()}</span>
+                                </div>
+                              )}
+                              <div className="border-t border-blue-200 pt-2 flex justify-between">
+                                <span className="font-semibold text-gray-900">Total Amount</span>
+                                <span className="font-bold text-lg text-blue-600">₹{order.total_amount.toLocaleString()}</span>
+                              </div>
                             </div>
                           </div>
                         </motion.div>

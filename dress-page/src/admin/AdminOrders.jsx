@@ -14,8 +14,8 @@ function AdminOrdersContent() {
       setLoading(true);
       setError(null);
       
-      // Fetch from main backend, not admin API
-      const response = await apiCall(`${API_ENDPOINTS.USER_ORDERS}`, {
+      // Fetch from admin API
+      const response = await apiCall(`${API_ENDPOINTS.ORDERS}`, {
         method: 'GET'
       });
       
@@ -76,7 +76,7 @@ function AdminOrdersContent() {
 
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
-      const result = await apiCall(`${API_ENDPOINTS.USER_ORDERS}/${orderId}/status`, {
+      const result = await apiCall(`${API_ENDPOINTS.ORDERS}/${orderId}`, {
         method: 'PUT',
         body: JSON.stringify({ status: newStatus })
       });
