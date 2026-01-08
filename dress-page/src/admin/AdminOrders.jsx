@@ -14,34 +14,36 @@ function AdminOrdersContent() {
       setLoading(true);
       setError(null);
       
-      const response = await apiCall(API_ENDPOINTS.ORDERS, {
+      // Fetch from main backend, not admin API
+      const response = await apiCall(`${API_ENDPOINTS.USER_ORDERS}`, {
         method: 'GET'
       });
+      
+      console.log('📦 Admin Orders Response:', response);
       
       if (response.success && response.data) {
         const ordersData = Array.isArray(response.data) ? response.data : [];
         setOrders(ordersData.map(order => ({
           id: order.id,
-          order_number: order.id,
-          customer: order.customer,
-          email: order.email,
-          amount: parseFloat(order.amount),
+          order_number: order.order_number || order.id,
+          customer: order.customer || `User ${order.user_id}`,
+          email: order.email || 'N/A',
+          amount: parseFloat(order.total_amount || order.amount || 0),
           status: order.status || 'pending',
           payment_status: order.payment_status || 'unpaid',
-          date: order.order_date ? order.order_date.split('T')[0] : new Date().toISOString().split('T')[0],
-          items: order.items_count || 0,
-          address: order.address,
-          phone: order.phone,
-          city: order.city,
-          state: order.state,
-          pincode: order.pincode,
-          items_details: order.items_details || []
+          date: order.created_at ? order.created_at.split('T')[0] : new Date().toISOString().split('T')[0],
+          items: order.total_items || 0,
+          address: order.shipping_address || 'N/A',
+          phone: order.phone || 'N/A',
+          city: order.city || 'N/A',
+          state: order.state || 'N/A',
+          pincode: order.pincode || 'N/A'
         })));
       } else {
-        throw new Error(response.error || 'Failed to fetch orders');
+        throw new Error(response.message || 'Failed to fetch orders');
       }
     } catch (err) {
-      console.error('Error fetching orders:', err);
+      console.error('❌ Error fetching orders:', err);
       setError(err.message || 'Failed to load orders');
       setOrders([]);
     } finally {
@@ -74,7 +76,7 @@ function AdminOrdersContent() {
 
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
-      const result = await apiCall(`${API_ENDPOINTS.ORDERS}/${orderId}`, {
+      const result = await apiCall(`${API_ENDPOINTS.USER_ORDERS}/${orderId}/status`, {
         method: 'PUT',
         body: JSON.stringify({ status: newStatus })
       });

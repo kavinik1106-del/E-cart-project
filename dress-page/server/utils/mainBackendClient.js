@@ -19,7 +19,13 @@ export async function makeRequest(method, endpoint, data = null) {
       options.body = JSON.stringify(data);
     }
 
-    const response = await fetch(url, options);
+    // Use global fetch if available (Node 18+), otherwise dynamically import node-fetch
+    let fetchFn = globalThis.fetch;
+    if (!fetchFn) {
+      const nodeFetch = await import('node-fetch').then(m => m.default || m);
+      fetchFn = nodeFetch;
+    }
+    const response = await fetchFn(url, options);
     const jsonData = await response.json();
 
     if (!response.ok) {
@@ -28,7 +34,7 @@ export async function makeRequest(method, endpoint, data = null) {
 
     return jsonData;
   } catch (error) {
-    console.error(`API Request Error (${method} ${endpoint}):`, error.message);
+    console.error(`API Request Error (${method} ${endpoint}):`, error.message || error);
     throw error;
   }
 }
@@ -49,9 +55,24 @@ export const mainBackendAPI = {
 
   getProduct: (id) => makeRequest('GET', `/products/${id}`),
 
-  createProduct: (data) => makeRequest('POST', '/products', data),
+  // Normalize admin payload to main backend expected fields
+  createProduct: (data) => {
+    const payload = { ...data };
+    if (payload.stock !== undefined && payload.stock_quantity === undefined) {
+      payload.stock_quantity = payload.stock;
+      delete payload.stock;
+    }
+    return makeRequest('POST', '/products', payload);
+  },
 
-  updateProduct: (id, data) => makeRequest('PUT', `/products/${id}`, data),
+  updateProduct: (id, data) => {
+    const payload = { ...data };
+    if (payload.stock !== undefined && payload.stock_quantity === undefined) {
+      payload.stock_quantity = payload.stock;
+      delete payload.stock;
+    }
+    return makeRequest('PUT', `/products/${id}`, payload);
+  },
 
   deleteProduct: (id) => makeRequest('DELETE', `/products/${id}`),
 

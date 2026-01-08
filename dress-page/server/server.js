@@ -185,6 +185,21 @@ const startServer = async () => {
           });
         }
 
+        // Try to create product in main backend first so it's permanently stored
+        try {
+          console.log('🔁 Forwarding product create to main backend');
+          const backendResponse = await mainBackendAPI.createProduct(req.body);
+          // If main backend responded with success, return that response
+          if (backendResponse && backendResponse.success) {
+            return res.status(201).json(backendResponse);
+          }
+          // If main backend returned but indicated failure, fallback to local DB
+          console.warn('Main backend create returned non-success, falling back to local DB');
+        } catch (mainErr) {
+          console.warn('⚠️ Main backend create failed, falling back to admin DB:', mainErr.message || mainErr);
+        }
+
+        // Fallback: create in admin panel local DB
         const product = await Product.create({
           name,
           type,
@@ -203,7 +218,7 @@ const startServer = async () => {
           tag: tag || 'In Stock',
         });
 
-        res.status(201).json({ success: true, data: product });
+        res.status(201).json({ success: true, data: product, createdIn: 'admin_db' });
       } catch (error) {
         console.error('Error creating product:', error);
         res.status(500).json({ success: false, error: error.message });

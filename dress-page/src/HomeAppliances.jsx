@@ -1,52 +1,116 @@
 import React from "react";
 import Navbar from "./Navbar.jsx";
-import { Link } from "react-router-dom";
+import ProductCard from "./ProductCard.jsx";
 
 function HomeAppliances() {
   const products = [
-    { id: 1, type: "Kitchen", name: "Plates Set", price: "₹499", image: "/plates.jpg" },
-    { id: 2, type: "Glassware", name: "Glass Set", price: "₹299", image: "/glasss.jpg" },
-    { id: 3, type: "Bottle", name: "Water Bottle", price: "₹249", image: "/th.jpg" },
-    { id: 4, type: "Electronics", name: "Ceiling Fan", price: "₹2,499", image: "/fan.jpg" },
-    { id: 5, type: "Lighting", name: "Tube Light", price: "₹349", image: "/tubelight.webp" },
-    { id: 6, type: "Accessory", name: "Spice Box", price: "₹199", image: "/box.jpg" },
-    { id: 7, type: "Bottle opener", name: "Bottle Opener", price: "₹99", image: "/OIP (8).webp" },
-    { id: 8, type: "Iron", name: "Iron Box", price: "₹999", image: "/R.jpg" },
+    { 
+      id: 1, 
+      type: "Kitchen", 
+      name: "Plates Set", 
+      price: 499, 
+      mrp: 699,
+      image: "/plates.jpg",
+      rating: 4.3,
+      reviews: 45,
+      discount: 28
+    },
+    { 
+      id: 2, 
+      type: "Glassware", 
+      name: "Glass Set", 
+      price: 299, 
+      mrp: 499,
+      image: "/glasss.jpg",
+      rating: 4.2,
+      reviews: 32,
+      discount: 40
+    },
+    { 
+      id: 3, 
+      type: "Bottle", 
+      name: "Water Bottle", 
+      price: 249, 
+      mrp: 399,
+      image: "/th.jpg",
+      rating: 4.4,
+      reviews: 67,
+      discount: 38
+    },
+    { 
+      id: 4, 
+      type: "Electronics", 
+      name: "Ceiling Fan", 
+      price: 2499, 
+      mrp: 3299,
+      image: "/fan.jpg",
+      rating: 4.5,
+      reviews: 128,
+      discount: 24
+    },
+    { 
+      id: 5, 
+      type: "Lighting", 
+      name: "Tube Light", 
+      price: 349, 
+      mrp: 599,
+      image: "/tubelight.webp",
+      rating: 4.1,
+      reviews: 54,
+      discount: 42
+    },
+    { 
+      id: 6, 
+      type: "Accessory", 
+      name: "Spice Box", 
+      price: 199, 
+      mrp: 349,
+      image: "/box.jpg",
+      rating: 4.2,
+      reviews: 38,
+      discount: 43
+    },
+    { 
+      id: 7, 
+      type: "Bottle opener", 
+      name: "Bottle Opener", 
+      price: 99, 
+      mrp: 199,
+      image: "/OIP (8).webp",
+      rating: 4.0,
+      reviews: 22,
+      discount: 50
+    },
+    { 
+      id: 8, 
+      type: "Iron", 
+      name: "Iron Box", 
+      price: 999, 
+      mrp: 1499,
+      image: "/R.jpg",
+      rating: 4.4,
+      reviews: 89,
+      discount: 33
+    },
   ];
 
   return (
-    <div className="min-h-screen bg-blue-50">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white">
       <Navbar />
 
-      {/* Rounded pink header card separated from navbar */}
+      {/* Header Card with Primary Color */}
       <div className="max-w-3xl mx-auto mt-6 px-4">
-        <div className="bg-blue-600 text-white rounded-2xl p-5 text-center shadow-md">
-          <h1 className="text-2xl font-bold">Home Appliances & Goods</h1>
-          <p className="text-sm mt-1">Plates, Glass, Water Bottles, Fans, Tube Lights & More</p>
+        <div className="bg-primary text-white rounded-2xl p-6 text-center shadow-lg">
+          <h1 className="text-3xl font-bold">Home Appliances & Goods</h1>
+          <p className="text-sm mt-2 opacity-90">Plates, Glass, Water Bottles, Fans, Tube Lights & More</p>
         </div>
       </div>
 
+      {/* Products Grid */}
       <main className="max-w-7xl mx-auto px-4 py-8">
-        <section className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {products.map((p) => (
-            <div key={p.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="h-40 bg-gray-100 flex items-center justify-center">
-                <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="w-full h-full flex items-center justify-center">
-                  <img src={p.image} alt={p.name} className="h-full object-contain p-3" />
-                </Link>
-              </div>
-
-              <div className="p-4">
-                <div className="text-xs text-blue-600 font-semibold">{p.type}</div>
-                <h3 className="mt-1 font-semibold text-sm">
-                  <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="hover:underline">{p.name}</Link>
-                </h3>
-                <div className="mt-2 flex items-center justify-between">
-                  <div className="text-blue-600 font-bold">{p.price}</div>
-                  <Link to={`/product/${p.id}`} state={{ product: p, related: products }} className="bg-blue-600 text-white px-3 py-1 rounded hover:bg-blue-700 text-xs">Details</Link>
-                </div>
-              </div>
-            </div>
+            <ProductCard key={p.id} product={p} products={products} showRating={true} />
           ))}
         </section>
       </main>

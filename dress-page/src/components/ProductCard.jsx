@@ -5,13 +5,18 @@ import { useCart } from "../contexts/CartContext";
 
 function ProductCard({ product, products = [], showRating = false }) {
   const navigate = useNavigate();
-  const { addToCart } = useCart();
-  const [isWishlisted, setIsWishlisted] = React.useState(false);
+  const { addToCart, toggleWishlist, isInWishlist } = useCart();
 
   const handleQuickAdd = (e) => {
     e.preventDefault();
     addToCart(product, 1);
     navigate('/order');
+  };
+
+  const handleWishlist = (e) => {
+    e.preventDefault();
+    console.log('❤️ Wishlist button clicked for product:', product.id, product.name);
+    toggleWishlist(product);
   };
 
   return (
@@ -38,15 +43,12 @@ function ProductCard({ product, products = [], showRating = false }) {
 
           {/* Wishlist Button */}
           <button
-            onClick={(e) => {
-              e.preventDefault();
-              setIsWishlisted(!isWishlisted);
-            }}
+            onClick={handleWishlist}
             className="absolute top-2 right-2 bg-white p-2 rounded-full shadow hover:shadow-md transition"
           >
             <Heart
               size={18}
-              className={isWishlisted ? "text-red-600 fill-red-600" : "text-gray-400"}
+              className={isInWishlist(product.id) ? "text-red-600 fill-red-600" : "text-gray-400"}
             />
           </button>
 

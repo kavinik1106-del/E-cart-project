@@ -25,6 +25,11 @@ function Navbar() {
     return () => window.removeEventListener('userUpdated', onUserUpdated);
   }, []);
 
+  // Debug: Log wishlist changes
+  useEffect(() => {
+    console.log('🔔 Navbar wishlist updated:', wishlist, 'Count:', wishlist.length);
+  }, [wishlist]);
+
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -73,7 +78,7 @@ function Navbar() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search for products, brands & more"
-              className="w-full px-4 py-3 pr-12 rounded-lg border border-primary/20 bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-secondary shadow-sm"
+              className="w-full px-4 py-3 pr-12 rounded-lg border border-primary bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-secondary shadow-sm"
             />
             <button
               type="submit"

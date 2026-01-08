@@ -103,34 +103,37 @@ function CheckoutPage() {
         return;
       }
 
-      // Prepare order data with proper format for API
+      // Prepare order data matching backend expectations
+      const shippingAddress = `${formData.address}, ${formData.city}, ${formData.state} - ${formData.pincode}`;
+      
+      // Calculate discount (if any)
+      const cartTotal = cart.reduce((sum, item) => {
+        const itemMRP = item.mrp || item.price;
+        return sum + (itemMRP * item.quantity);
+      }, 0);
+      const discountAmount = Math.max(0, cartTotal - subtotal);
+
       const orderData = {
-        customer: `${formData.firstName} ${formData.lastName}`,
-        email: formData.email,
-        phone: formData.phone,
-        address: formData.address,
-        city: formData.city,
-        state: formData.state,
-        pincode: formData.pincode,
-        amount: total,
-        items_count: cart.length,
-        items_details: cart.map(item => ({
+        user_id: user?.id,
+        items: cart.map(item => ({
           product_id: item.id,
           product_name: item.name,
-          price: parseFloat(item.price.toString().replace("₹", "").replace(",", "")),
-          quantity: item.quantity,
-          size: item.size || "N/A",
-          color: item.color || "N/A",
-          image: item.image
+          price: parseFloat((item.price || 0).toString().replace(/[^0-9.]/g, '')),
+          quantity: Number(item.quantity) || 1
         })),
+        total_amount: total,
+        tax_amount: tax,
+        shipping_amount: shipping,
+        shipping_address: shippingAddress,
         payment_method: formData.paymentMethod,
-        payment_status: formData.paymentMethod === 'cod' ? 'unpaid' : 'pending',
-        status: 'pending',
-        notes: `Tax: ₹${tax}, Shipping: ₹${shipping}`
+        coupon_code: null,
+        discount_amount: discountAmount
       };
 
-      // Place order via API
-      const response = await apiCall(`${API_ENDPOINTS.ORDERS}`, {
+      console.log('📦 Placing Order:', orderData);
+
+      // Place order via API (use USER orders endpoint)
+      const response = await apiCall(`${API_ENDPOINTS.USER_ORDERS}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -138,9 +141,11 @@ function CheckoutPage() {
         body: JSON.stringify(orderData)
       });
 
+      console.log('📨 Order Response:', response);
+
       if (response.success) {
         setOrderPlaced(true);
-        setOrderNumber(response.data?.order_id || response.data?.id || `ORD-${Date.now()}`);
+        setOrderNumber(response.data?.orderNumber || response.data?.order_id || response.data?.id || `ORD-${Date.now()}`);
         clearCart();
         setMessage("Order placed successfully! 🎉");
         setMessageType("success");
@@ -148,9 +153,11 @@ function CheckoutPage() {
       } else {
         setMessage(response.message || "Failed to place order");
         setMessageType("error");
+        console.error('❌ Order Error:', response);
       }
-    } catch {
-      setMessage("Error placing order. Please try again.");
+    } catch (error) {
+      console.error('❌ Order Exception:', error);
+      setMessage(error.message || "Error placing order. Please try again.");
       setMessageType("error");
     } finally {
       setLoading(false);
