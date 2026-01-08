@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import { useCart } from "./contexts/CartContext";
 import { Link } from "react-router-dom";
@@ -10,8 +10,14 @@ function WishlistPage() {
   const [sortBy, setSortBy] = useState("date");
   const [selectedItems, setSelectedItems] = useState([]);
 
-  // Debug wishlist
-  console.log("🛍️ Wishlist Page - Current wishlist:", wishlist);
+  // Debug: Log wishlist changes
+  useEffect(() => {
+    console.log('📄 WishlistPage - Wishlist Data:', wishlist);
+    console.log('📄 WishlistPage - Wishlist Length:', wishlist?.length || 0);
+    wishlist?.forEach(item => {
+      console.log('  - Product:', item.id, item.name, item.price);
+    });
+  }, [wishlist]);
 
   const handleAddToCart = (item) => {
     addToCart(item);

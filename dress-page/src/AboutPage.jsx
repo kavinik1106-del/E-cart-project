@@ -29,7 +29,7 @@ export default function AboutPage() {
   const stats = [
     { value: "10K+", label: "Happy Customers", icon: Users },
     { value: "500+", label: "Premium Products", icon: ShoppingBag },
-    { value: "4.8★", label: "Customer Rating", icon: Star },
+    { value: "5★", label: "Customer Rating", icon: Star },
     { value: "24/7", label: "Customer Support", icon: HeadphonesIcon },
   ];
 
@@ -78,7 +78,7 @@ export default function AboutPage() {
 
           <h1 className="text-5xl lg:text-6xl font-bold mb-6">
             About{" "}
-            <span className="text-secondary">
+            <span className="text-white">
               StyleNest
             </span>
           </h1>
@@ -91,14 +91,14 @@ export default function AboutPage() {
           <div className="flex justify-center gap-4 flex-wrap">
             <button
               onClick={() => navigate("/")}
-              className="bg-secondary text-gray-900 px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-xl transition"
+              className="bg-secondary text-white px-8 py-4 rounded-full font-bold shadow-lg hover:shadow-xl transition"
             >
               Start Shopping <ArrowRight className="inline ml-1" />
             </button>
 
             <button
               onClick={() => navigate("/collection")}
-              className="border-2 border-white text-white px-8 py-4 rounded-full font-bold hover:bg-secondary hover:text-gray-900 transition"
+              className="border-2 border-white text-white px-8 py-4 rounded-full font-bold hover:bg-secondary hover:text-white transition"
             >
               <PlayCircle className="inline mr-1" />
               Explore Collection
@@ -213,7 +213,7 @@ export default function AboutPage() {
         </p>
         <button
           onClick={() => navigate("/contact")}
-          className="bg-secondary text-gray-900 px-10 py-4 rounded-full font-bold shadow-xl hover:shadow-2xl transition"
+          className="bg-secondary text-white px-10 py-4 rounded-full font-bold shadow-xl hover:shadow-2xl transition"
         >
           Get in Touch
         </button>

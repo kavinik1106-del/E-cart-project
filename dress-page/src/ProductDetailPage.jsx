@@ -7,14 +7,13 @@ import { useCart } from "./contexts/CartContext.jsx";
 function ProductDetailPage() {
   const location = useLocation();
   const navigate = useNavigate();
-  const { addToCart, isInCart } = useCart();
+  const { addToCart, isInCart, toggleWishlist, isInWishlist } = useCart();
   const product = location.state?.product;
   
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState("");
   const [activeTab, setActiveTab] = useState("description");
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [imageGallery] = useState([
     product?.image || "/default.jpg",
     product?.image || "/default.jpg",
@@ -318,13 +317,16 @@ function ProductDetailPage() {
                   <p className="text-sm text-gray-600 mt-2">Brand: <span className="font-medium">{product.brand || "Premium Brand"}</span></p>
                 </div>
                 <button
-                  onClick={() => setIsWishlisted(!isWishlisted)}
+                  onClick={() => {
+                    console.log('❤️ Product detail page: Wishlist clicked for product:', product.id, product.name);
+                    toggleWishlist(product);
+                  }}
                   className="p-3 rounded-full bg-gray-100 hover:bg-red-50 transition-all duration-200 group"
                 >
                   <Heart
                     size={24}
                     className={`transition-colors ${
-                      isWishlisted
+                      isInWishlist(product.id)
                         ? "fill-red-600 text-red-600"
                         : "text-gray-400 group-hover:text-red-500"
                     }`}

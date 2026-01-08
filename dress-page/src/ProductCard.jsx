@@ -53,7 +53,7 @@ function ProductCard({ product, products = [], showRating = false }) {
   const handleWishlist = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log("🖤 Handle Wishlist clicked - Product ID:", product.id, "Product:", product);
+    console.log('❤️ Wishlist button clicked for product:', product.id, product.name);
     setIsWishlisting(true);
     toggleWishlist(product);
     setTimeout(() => setIsWishlisting(false), 500);

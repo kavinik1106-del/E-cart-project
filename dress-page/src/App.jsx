@@ -26,7 +26,6 @@ import { CustomerProvider } from "./contexts/CustomerContext";
 import CartPage from "./CartPage.jsx";
 import WishlistPage from "./WishlistPage.jsx";
 import CheckoutPage from "./CheckoutPage.jsx";
-import TestWishlist from "./TestWishlist.jsx";
 import { useCart } from "./contexts/CartContext.jsx";
 
 /* Admin */
@@ -40,10 +39,12 @@ import ProtectedRoute from "./admin/ProtectedRoute.jsx";
 /* ✅ Toast Component */
 import Toast from "./components/Toast.jsx";
 
+// App component - Cart Provider is here
 function AppContent() {
-  const { toast: _toast } = useCart();
+  const { toast } = useCart();
   return (
-    <Routes>
+    <>
+      <Routes>
       {/* Public Routes */}
       <Route path="/" element={<HomePage />} />
       <Route path="/about" element={<AboutPage />} />
@@ -66,7 +67,6 @@ function AppContent() {
       {/* Cart */}
       <Route path="/cart" element={<CartPage />} />
       <Route path="/wishlist" element={<WishlistPage />} />
-      <Route path="/test-wishlist" element={<TestWishlist />} />
       <Route path="/checkout" element={<CheckoutPage />} />
 
       {/* Admin */}
@@ -112,25 +112,24 @@ function AppContent() {
         }
       />
     </Routes>
+
+    {/* Toast Notification (provided by CartContext) */}
+    {toast && (
+      <Toast
+        message={toast.message}
+        type={toast.type}
+        onClose={() => {}}
+      />
+    )}
+    </>
   );
 }
 
 function App() {
-  const { toast } = useCart();
-
   return (
     <CartProvider>
       <CustomerProvider>
         <AppContent />
-
-        {/* Toast Notification (provided by CartContext) */}
-        {toast && (
-          <Toast
-            message={toast.message}
-            type={toast.type}
-            onClose={() => {}}
-          />
-        )}
       </CustomerProvider>
     </CartProvider>
   );

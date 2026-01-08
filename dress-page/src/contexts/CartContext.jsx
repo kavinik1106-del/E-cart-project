@@ -75,17 +75,31 @@ export const CartProvider = ({ children }) => {
   };
 
   const toggleWishlist = (product) => {
-    console.log("❤️ Toggle Wishlist - Product:", product);
     setWishlist((prev) => {
       const existing = prev.find((item) => item.id === product.id);
       if (existing) {
-        console.log("❌ Removing from wishlist");
+        console.log('❌ Removing from wishlist:', product.name, product.id);
         showToast(`${product.name} removed from wishlist`, "warning");
         return prev.filter((item) => item.id !== product.id);
       }
-      console.log("✅ Adding to wishlist - New wishlist length:", prev.length + 1);
+      console.log('✅ Adding to wishlist:', product.name, product.id);
+      const fullProduct = {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        mrp: product.mrp,
+        image: product.image,
+        rating: product.rating,
+        reviews: product.reviews,
+        category: product.category,
+        brand: product.brand,
+        discount: product.discount,
+        tag: product.tag,
+        type: product.type,
+        ...product // Include any other properties
+      };
       showToast(`${product.name} added to wishlist`, "success");
-      return [...prev, product];
+      return [...prev, fullProduct];
     });
   };
 

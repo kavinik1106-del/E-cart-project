@@ -259,7 +259,7 @@ function HomePage() {
                 <div className="flex gap-4">
                   <Link
                     to="/women"
-                    className="bg-secondary text-gray-900 px-6 py-3 rounded-full font-semibold hover:bg-secondary transition-all duration-300 shadow-lg"
+                    className="bg-secondary text-white px-6 py-3 rounded-full font-semibold hover:bg-secondary transition-all duration-300 shadow-lg"
                   >
                     {slide.cta}
                   </Link>
@@ -281,7 +281,7 @@ function HomePage() {
                   className="h-64 object-contain"
                 />
 
-                <div className="absolute -top-3 -right-3 bg-secondary text-gray-900 px-3 py-1 rounded-full text-xs font-bold shadow-md">
+                <div className="absolute -top-3 -right-3 bg-secondary text-white px-3 py-1 rounded-full text-xs font-bold shadow-md">
                   🔥 Hot Deal
                 </div>
               </div>
@@ -327,7 +327,7 @@ function HomePage() {
 
 
     {/* Categories Section - SECOND */}
-      <section className="py-12 bg-white border-b-4 border-secondary">
+      <section className="py-12 bg-white border-b-4 border-white">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-primary mb-8 text-center">Shop by Category</h2>
 
@@ -350,7 +350,7 @@ function HomePage() {
                   to={cat.route}
                   className="flex-shrink-0 group"
                 >
-                  <div className="bg-white p-6 rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-primary/30 hover:border-secondary">
+                  <div className="bg-white p-6 rounded-2xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 border-2 border-primary hover:border-secondary">
                     <div className="relative">
                       <img
                         src={cat.image}
@@ -676,7 +676,7 @@ function HomePage() {
         <button
           className="px-8 py-4 
                      bg-secondary hover:bg-secondary 
-                     text-gray-900 
+                     text-white
                      rounded-xl 
                      transition-all duration-300 
                      font-bold text-lg 
@@ -711,7 +711,7 @@ function HomePage() {
             alt="StyleNest"
             className="w-10 h-10 rounded-full"
           />
-          <h3 className="text-2xl font-bold text-secondary">
+          <h3 className="text-2xl font-bold text-white">
             StyleNest
           </h3>
         </div>

@@ -43,23 +43,39 @@ function AdminLayout({ children }) {
           sidebarOpen ? "w-64" : "w-20"
         } bg-primary text-white transition-all duration-300 flex flex-col shadow-xl`}
       >
-        {/* Logo */}
+        {/* ===== FIXED SIDEBAR HEADER ===== */}
         <div className="p-4 border-b border-primary flex items-center justify-between">
-          <div
-            className={`flex items-center gap-3 ${
-              !sidebarOpen && "justify-center w-full"
-            }`}
-          >
-            <div className="w-10 h-10 bg-secondary rounded-lg flex items-center justify-center font-bold text-primary">
+          {/* Logo + Brand */}
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-secondary rounded-lg flex items-center justify-center font-bold text-white">
               A
             </div>
+
             {sidebarOpen && (
               <span className="font-bold text-xl tracking-wide">
                 StyleNest
               </span>
             )}
           </div>
+
+          {/* Toggle Button */}
+          {sidebarOpen ? (
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="p-2 rounded-lg hover:bg-white/10 transition"
+            >
+              <X size={22} />
+            </button>
+          ) : (
+            <button
+              onClick={() => setSidebarOpen(true)}
+              className="p-2 rounded-lg hover:bg-white/10 transition"
+            >
+              <Menu size={22} />
+            </button>
+          )}
         </div>
+        {/* ===== END HEADER ===== */}
 
         {/* Menu */}
         <nav className="flex-1 p-4 space-y-2">
@@ -71,14 +87,13 @@ function AdminLayout({ children }) {
               <button
                 key={item.path}
                 onClick={() => navigate(item.path)}
-                className={`relative w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200
-                ${
-                  active
-                    ? "bg-secondary text-white font-semibold shadow-md"
-                    : "text-white hover:bg-primary/80"
-                }`}
+                className={`relative w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all
+                  ${
+                    active
+                      ? "bg-secondary text-white font-semibold shadow-md"
+                      : "text-white hover:bg-primary/80"
+                  }`}
               >
-                {/* Active indicator */}
                 {active && (
                   <span className="absolute left-0 top-0 h-full w-1 bg-secondary rounded-r"></span>
                 )}
@@ -93,7 +108,7 @@ function AdminLayout({ children }) {
         <div className="p-4 border-t border-primary/30">
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-white/80 hover:bg-red-500 hover:text-white transition-all"
+            className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-white/80 hover:bg-red-500 hover:text-white transition"
           >
             <LogOut size={20} />
             {sidebarOpen && <span>Logout</span>}
@@ -105,44 +120,34 @@ function AdminLayout({ children }) {
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Top Bar */}
         <div className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between shadow-sm">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 rounded-lg hover:bg-primary/10 transition"
-            >
-              {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
-            </button>
-            <h1 className="text-2xl font-bold text-gray-800">
-              Admin Dashboard
-            </h1>
-          </div>
+          <h1 className="text-2xl font-bold text-gray-800">
+            Admin Dashboard
+          </h1>
 
           <div className="flex items-center gap-4">
             {/* Search */}
-            <div className="hidden md:flex items-center bg-primary/10 border border-primary/20 rounded-lg px-3 py-2 focus-within:ring-2 focus-within:ring-secondary">
+            <div className="hidden md:flex items-center bg-primary/10 border border-primary/20 rounded-lg px-3 py-2">
               <Search size={18} className="text-blue-500" />
               <input
                 type="text"
                 placeholder="Search..."
-                className="bg-transparent outline-none ml-2 w-48 text-sm text-gray-700"
+                className="bg-transparent outline-none ml-2 w-48 text-sm"
               />
             </div>
 
-            {/* Notifications */}
+            {/* Notification */}
             <button className="relative p-2 rounded-lg hover:bg-primary/10">
               <Bell size={20} className="text-blue-600" />
               <span className="absolute top-1 right-1 w-2 h-2 bg-secondary rounded-full"></span>
             </button>
 
             {/* Profile */}
-            <div className="flex items-center gap-3 pl-4 border-l border-gray-200">
+            <div className="flex items-center gap-3 pl-4 border-l">
               <div className="text-right">
-                <p className="font-semibold text-sm text-gray-800">
-                  Admin User
-                </p>
+                <p className="font-semibold text-sm">Admin User</p>
                 <p className="text-xs text-gray-500">Administrator</p>
               </div>
-              <div className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-primary font-bold">
+              <div className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-white font-bold">
                 A
               </div>
             </div>
