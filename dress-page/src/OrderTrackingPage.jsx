@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { apiCall, API_ENDPOINTS } from './config/apiConfig.js';
 import Navbar from './Navbar.jsx';
 import {
@@ -26,6 +27,7 @@ export default function OrderTrackingPage() {
   const { orderId } = useParams();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const statusSteps = [
     { id: 1, name: 'Order Placed', icon: ShoppingBag, color: 'blue' },
@@ -44,24 +46,30 @@ export default function OrderTrackingPage() {
     'cancelled': 0
   };
 
-  useEffect(() => {
-    fetchOrderDetails();
-  }, [orderId, fetchOrderDetails]);
-
   const fetchOrderDetails = useCallback(async () => {
     try {
       setLoading(true);
+      setError(null);
       const response = await apiCall(`${API_ENDPOINTS.USER_ORDERS}/${orderId}`);
       
       if (response.success) {
         setOrder(response.data);
+      } else {
+        setError(response.message || 'Failed to load order');
       }
     } catch (error) {
       console.error('Error loading order:', error);
+      setError(error.message || 'Error loading order details');
     } finally {
       setLoading(false);
     }
   }, [orderId]);
+
+  useEffect(() => {
+    if (orderId) {
+      fetchOrderDetails();
+    }
+  }, [orderId, fetchOrderDetails]);
 
   const getStatusColor = (status) => {
     switch(status?.toLowerCase()) {
@@ -103,7 +111,7 @@ export default function OrderTrackingPage() {
     );
   }
 
-  if (!order) {
+  if (error || !order) {
     return (
       <div className="min-h-screen bg-white">
         <Navbar />
@@ -115,15 +123,15 @@ export default function OrderTrackingPage() {
           >
             <AlertCircle className="w-20 h-20 text-red-500 mx-auto mb-6" />
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Order Not Found</h2>
-            <p className="text-gray-600 mb-8">We couldn't find the order you're looking for.</p>
+            <p className="text-gray-600 mb-8">{error || 'We couldn\'t find the order you\'re looking for.'}</p>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={() => navigate('/order')}
-              className="bg-primary hover:bg-primary text-white font-bold py-4 px-8 rounded-2xl text-lg transition-all duration-300 shadow-xl hover:shadow-2xl inline-flex items-center gap-2"
+              onClick={() => navigate('/my-orders')}
+              className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-8 rounded-2xl text-lg transition-all duration-300 shadow-xl hover:shadow-2xl inline-flex items-center gap-2"
             >
               <ArrowLeft className="w-5 h-5" />
-              Back to Orders
+              Back to My Orders
             </motion.button>
           </motion.div>
         </div>

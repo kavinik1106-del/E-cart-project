@@ -100,16 +100,7 @@ function Navbar() {
               {item}
             </button>
           ))}
-          {/* Orders Link - Points to /my-orders with My Orders page */}
-          {user && (
-            <button
-              onClick={() => navigate("/my-orders")}
-              className="hover:text-secondary transition"
-            >
-              My Orders
-            </button>
-          )}
-          {/* Orders Link - Points to /orders with My Orders buttons */}
+          {/* Orders Link */}
           <button
             onClick={() => navigate("/orders")}
             className="hover:text-secondary transition"

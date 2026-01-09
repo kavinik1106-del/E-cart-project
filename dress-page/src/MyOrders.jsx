@@ -100,10 +100,11 @@ export default function MyOrders() {
     return iconMap[status?.toLowerCase()] || <Package className="w-5 h-5" />;
   };
 
-  // Filter orders by status
+  // Filter orders by status and exclude cancelled orders from main display
+  const activeOrders = orders.filter(order => order.status?.toLowerCase() !== 'cancelled');
   const filteredOrders = filterStatus === 'all' 
-    ? orders 
-    : orders.filter(order => order.status?.toLowerCase() === filterStatus.toLowerCase());
+    ? activeOrders 
+    : activeOrders.filter(order => order.status?.toLowerCase() === filterStatus.toLowerCase());
 
   // Cancel order
   const handleCancelOrder = async (orderId) => {
@@ -170,7 +171,7 @@ export default function MyOrders() {
         )}
 
         {/* Filter Section */}
-        {orders.length > 0 && (
+        {activeOrders.length > 0 && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -184,7 +185,7 @@ export default function MyOrders() {
                   : 'bg-white text-gray-700 border border-gray-300 hover:border-blue-500'
               }`}
             >
-              All Orders ({orders.length})
+              All Orders ({activeOrders.length})
             </button>
             <button
               onClick={() => setFilterStatus('delivered')}
@@ -194,7 +195,7 @@ export default function MyOrders() {
                   : 'bg-white text-gray-700 border border-gray-300 hover:border-green-500'
               }`}
             >
-              Delivered ({orders.filter(o => o.status?.toLowerCase() === 'delivered').length})
+              Delivered ({activeOrders.filter(o => o.status?.toLowerCase() === 'delivered').length})
             </button>
             <button
               onClick={() => setFilterStatus('shipped')}
@@ -204,7 +205,7 @@ export default function MyOrders() {
                   : 'bg-white text-gray-700 border border-gray-300 hover:border-blue-500'
               }`}
             >
-              Shipped ({orders.filter(o => o.status?.toLowerCase() === 'shipped').length})
+              Shipped ({activeOrders.filter(o => o.status?.toLowerCase() === 'shipped').length})
             </button>
             <button
               onClick={() => setFilterStatus('processing')}
@@ -214,7 +215,7 @@ export default function MyOrders() {
                   : 'bg-white text-gray-700 border border-gray-300 hover:border-yellow-500'
               }`}
             >
-              Processing ({orders.filter(o => o.status?.toLowerCase() === 'processing').length})
+              Processing ({activeOrders.filter(o => o.status?.toLowerCase() === 'processing').length})
             </button>
           </motion.div>
         )}
@@ -257,54 +258,46 @@ export default function MyOrders() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.05 }}
-                className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300"
               >
-                {/* Order Header - Flipkart Style */}
+                {/* Order Header - Modern Card Style */}
                 <div
-                  className="p-4 md:p-6 border-b border-gray-200 cursor-pointer hover:bg-gray-50 transition-colors"
+                  className="p-4 md:p-6 border-b border-gray-100 cursor-pointer hover:bg-blue-50 transition-colors"
                   onClick={() => setExpandedOrderId(expandedOrderId === order.id ? null : order.id)}
                 >
                   <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    {/* Order Number and Date */}
                     <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-gray-900">
-                        Order #{order.order_number}
-                      </h3>
-                      <p className="text-sm text-gray-600 mt-1 flex items-center gap-1">
+                      <div className="flex items-center gap-3 mb-2">
+                        <h3 className="text-lg font-bold text-gray-900">
+                          Order #{order.order_number}
+                        </h3>
+                        <div className={`px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 border ${getStatusColor(order.status)}`}>
+                          {getStatusIcon(order.status)}
+                          {order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}
+                        </div>
+                      </div>
+                      <p className="text-sm text-gray-500 flex items-center gap-1">
                         <Calendar className="w-4 h-4" />
                         {new Date(order.created_at).toLocaleDateString('en-IN', {
                           year: 'numeric',
                           month: 'short',
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
+                          day: 'numeric'
                         })}
                       </p>
                     </div>
 
-                    {/* Order Items Count */}
-                    <div className="flex items-center gap-6">
-                      <div>
-                        <p className="text-xs text-gray-600 uppercase tracking-wider">Items</p>
+                    <div className="flex items-center justify-between md:gap-8">
+                      <div className="text-right">
+                        <p className="text-xs text-gray-600 uppercase tracking-wider font-medium">Items</p>
                         <p className="text-2xl font-bold text-gray-900">{order.total_items || 0}</p>
                       </div>
 
-                      {/* Amount */}
-                      <div>
-                        <p className="text-xs text-gray-600 uppercase tracking-wider">Total</p>
-                        <p className="text-2xl font-bold text-blue-600">₹{order.total_amount?.toLocaleString()}</p>
+                      <div className="text-right min-w-[120px]">
+                        <p className="text-xs text-gray-600 uppercase tracking-wider font-medium">Amount</p>
+                        <p className="text-2xl font-bold text-blue-600">₹{(order.total_amount || 0).toLocaleString('en-IN')}</p>
                       </div>
 
-                      {/* Status Badge */}
-                      <div className={`px-4 py-2 rounded-full flex items-center gap-2 border ${getStatusColor(order.status)}`}>
-                        {getStatusIcon(order.status)}
-                        <span className="font-semibold uppercase text-xs">
-                          {order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}
-                        </span>
-                      </div>
-
-                      {/* Expand Icon */}
-                      <div className="text-gray-400">
+                      <div className="hidden md:flex text-gray-400">
                         {expandedOrderId === order.id ? (
                           <ChevronUp className="w-6 h-6" />
                         ) : (
@@ -321,27 +314,27 @@ export default function MyOrders() {
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="border-t border-gray-200"
+                    className="border-t border-gray-100"
                   >
                     {/* Order Items */}
-                    <div className="p-4 md:p-6 border-b border-gray-200">
+                    <div className="p-4 md:p-6 border-b border-gray-100">
                       <h4 className="font-semibold text-gray-900 mb-4 flex items-center gap-2">
                         <ShoppingBag className="w-5 h-5 text-blue-600" />
-                        Items in this order
+                        Order Items ({order.total_items || 0})
                       </h4>
-                      <div className="space-y-4">
+                      <div className="space-y-3">
                         {order.items && order.items.length > 0 ? (
                           order.items.map((item, itemIdx) => (
                             <motion.div
                               key={itemIdx}
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
-                              transition={{ delay: itemIdx * 0.1 }}
-                              className="flex gap-4 pb-4 border-b border-gray-100 last:border-0"
+                              transition={{ delay: itemIdx * 0.05 }}
+                              className="flex gap-4 pb-3 border-b border-gray-100 last:border-0 last:pb-0"
                             >
                               {/* Product Image */}
                               <div className="flex-shrink-0">
-                                <div className="w-20 h-20 md:w-24 md:h-24 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center border border-gray-200">
+                                <div className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center border border-gray-200">
                                   {item.product_image ? (
                                     <img
                                       src={item.product_image}
@@ -355,25 +348,21 @@ export default function MyOrders() {
                               </div>
 
                               {/* Product Details */}
-                              <div className="flex-1">
-                                <h5 className="font-medium text-gray-900 line-clamp-2">
+                              <div className="flex-1 min-w-0">
+                                <h5 className="font-semibold text-gray-900 text-sm line-clamp-2">
                                   {item.product_name}
                                 </h5>
-                                <div className="mt-2 space-y-1 text-sm text-gray-600">
-                                  <p>
-                                    <span className="font-medium">Quantity:</span> {item.quantity}
-                                  </p>
-                                  <p>
-                                    <span className="font-medium">Price per item:</span> ₹{item.price?.toLocaleString()}
-                                  </p>
+                                <div className="mt-2 flex items-center gap-4 text-xs text-gray-600">
+                                  <span>Qty: <span className="font-semibold text-gray-900">{item.quantity}</span></span>
+                                  <span>Price: <span className="font-semibold text-gray-900">₹{(item.price || 0).toLocaleString('en-IN')}</span></span>
                                 </div>
                               </div>
 
                               {/* Item Total */}
-                              <div className="text-right">
-                                <p className="text-sm text-gray-600 mb-1">Subtotal</p>
+                              <div className="text-right whitespace-nowrap">
+                                <p className="text-xs text-gray-600 mb-1">Subtotal</p>
                                 <p className="text-lg font-bold text-blue-600">
-                                  ₹{(item.price * item.quantity)?.toLocaleString()}
+                                  ₹{((item.price || 0) * (item.quantity || 0)).toLocaleString('en-IN')}
                                 </p>
                               </div>
                             </motion.div>
@@ -384,77 +373,78 @@ export default function MyOrders() {
                       </div>
                     </div>
 
-                    {/* Delivery Address */}
-                    <div className="p-4 md:p-6 border-b border-gray-200">
-                      <div className="flex gap-4">
+                    {/* Two Column Grid for Delivery & Summary */}
+                    <div className="grid md:grid-cols-2 gap-6 p-4 md:p-6 border-b border-gray-100">
+                      {/* Delivery Address */}
+                      <div className="flex gap-3">
                         <div className="flex-shrink-0">
-                          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                          <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                             <MapPin className="w-5 h-5 text-blue-600" />
                           </div>
                         </div>
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-gray-900 mb-1">Delivery Address</h4>
-                          <p className="text-gray-600 text-sm leading-relaxed">
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold text-gray-900 text-sm mb-1">Delivery Address</h4>
+                          <p className="text-gray-600 text-xs leading-relaxed">
                             {order.shipping_address}
                           </p>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Order Summary */}
-                    <div className="p-4 md:p-6 border-b border-gray-200">
-                      <h4 className="font-semibold text-gray-900 mb-4">Order Summary</h4>
-                      <div className="space-y-3 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-gray-600">Subtotal ({order.total_items} items)</span>
-                          <span className="text-gray-900 font-medium">
-                            ₹{(order.total_amount - (order.tax_amount || 0) - (order.shipping_amount || 0) + (order.discount_amount || 0))?.toLocaleString()}
-                          </span>
-                        </div>
-                        {order.discount_amount > 0 && (
+                      {/* Order Summary */}
+                      <div className="bg-blue-50 rounded-lg p-4 border border-blue-100">
+                        <h4 className="font-semibold text-gray-900 text-sm mb-3">Order Summary</h4>
+                        <div className="space-y-2 text-xs">
                           <div className="flex justify-between">
-                            <span className="text-gray-600">Discount</span>
-                            <span className="text-green-600 font-medium">
-                              −₹{order.discount_amount?.toLocaleString()}
+                            <span className="text-gray-600">Subtotal</span>
+                            <span className="text-gray-900 font-medium">
+                              ₹{((order.total_amount || 0) - (order.tax_amount || 0) - (order.shipping_amount || 0) + (order.discount_amount || 0)).toLocaleString('en-IN')}
                             </span>
                           </div>
-                        )}
-                        {order.tax_amount > 0 && (
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Taxes</span>
-                            <span className="text-gray-900 font-medium">₹{order.tax_amount?.toLocaleString()}</span>
+                          {(order.discount_amount || 0) > 0 && (
+                            <div className="flex justify-between">
+                              <span className="text-gray-600">Discount</span>
+                              <span className="text-green-600 font-medium">
+                                −₹{(order.discount_amount || 0).toLocaleString('en-IN')}
+                              </span>
+                            </div>
+                          )}
+                          {(order.tax_amount || 0) > 0 && (
+                            <div className="flex justify-between">
+                              <span className="text-gray-600">Tax</span>
+                              <span className="text-gray-900 font-medium">₹{(order.tax_amount || 0).toLocaleString('en-IN')}</span>
+                            </div>
+                          )}
+                          {(order.shipping_amount || 0) > 0 && (
+                            <div className="flex justify-between">
+                              <span className="text-gray-600">Shipping</span>
+                              <span className="text-gray-900 font-medium">₹{(order.shipping_amount || 0).toLocaleString('en-IN')}</span>
+                            </div>
+                          )}
+                          <div className="border-t border-blue-200 pt-2 flex justify-between font-bold">
+                            <span className="text-gray-900">Total</span>
+                            <span className="text-blue-600">₹{(order.total_amount || 0).toLocaleString('en-IN')}</span>
                           </div>
-                        )}
-                        {order.shipping_amount > 0 && (
-                          <div className="flex justify-between">
-                            <span className="text-gray-600">Shipping</span>
-                            <span className="text-gray-900 font-medium">₹{order.shipping_amount?.toLocaleString()}</span>
-                          </div>
-                        )}
-                        <div className="border-t border-gray-200 pt-3 flex justify-between">
-                          <span className="font-semibold text-gray-900">Total Amount</span>
-                          <span className="font-bold text-lg text-blue-600">₹{order.total_amount?.toLocaleString()}</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Payment Method */}
-                    <div className="p-4 md:p-6 border-b border-gray-200">
-                      <div className="flex gap-4">
+                    <div className="p-4 md:p-6 border-b border-gray-100">
+                      <div className="flex gap-3">
                         <div className="flex-shrink-0">
-                          <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                          <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
                             <CreditCard className="w-5 h-5 text-blue-600" />
                           </div>
                         </div>
                         <div className="flex-1">
-                          <h4 className="font-semibold text-gray-900 mb-1">Payment Method</h4>
-                          <p className="text-gray-600 text-sm capitalize">
-                            {order.payment_method?.replace(/_/g, ' ')}
+                          <h4 className="font-semibold text-gray-900 text-sm mb-1">Payment Details</h4>
+                          <p className="text-gray-600 text-xs capitalize mb-1">
+                            Method: {order.payment_method?.replace(/_/g, ' ')}
                           </p>
-                          <p className={`text-sm font-medium mt-2 ${
+                          <p className={`text-xs font-semibold ${
                             order.payment_status === 'completed' ? 'text-green-600' : 'text-orange-600'
                           }`}>
-                            Payment {order.payment_status}
+                            Status: Payment {order.payment_status}
                           </p>
                         </div>
                       </div>
@@ -465,7 +455,7 @@ export default function MyOrders() {
                       <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
+                        className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow-md"
                         onClick={() => navigate(`/order/${order.id}/track`)}
                       >
                         <Truck className="w-4 h-4" />
@@ -475,21 +465,21 @@ export default function MyOrders() {
                       <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className="flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-900 px-6 py-2 rounded-lg font-semibold transition-all duration-300"
+                        className="flex items-center gap-2 bg-gray-200 hover:bg-gray-300 text-gray-900 px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300"
                       >
                         <Download className="w-4 h-4" />
-                        Download Invoice
+                        Invoice
                       </motion.button>
 
                       {order.status !== 'delivered' && order.status !== 'cancelled' && (
                         <motion.button
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
-                          className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
+                          className="flex items-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 shadow-sm hover:shadow-md ml-auto"
                           onClick={() => handleCancelOrder(order.id)}
                         >
                           <X className="w-4 h-4" />
-                          Cancel Order
+                          Cancel
                         </motion.button>
                       )}
                     </div>
