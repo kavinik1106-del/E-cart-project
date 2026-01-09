@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import crypto from 'crypto';
+import pool from './config/database.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -10,16 +11,6 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const hashPassword = (password) => {
   return crypto.createHash('sha256').update(password).digest('hex');
 };
-
-const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'ecommerce',
-  password: '',
-  database:'ecommerce',
-  waitForConnections: true,
-  connectionLimit: 5,
-  queueLimit: 0
-});
 
 async function setupDatabase() {
   try {
