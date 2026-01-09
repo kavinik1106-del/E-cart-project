@@ -98,6 +98,12 @@ function AdminProductsContent() {
         (p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         p.type.toLowerCase().includes(searchTerm.toLowerCase()))
     );
+    const filtered = products.filter((p) => {
+      const name = (p.name || '').toLowerCase();
+      const type = (p.type || '').toLowerCase();
+      const q = (searchTerm || '').toLowerCase();
+      return name.includes(q) || type.includes(q);
+    });
     setFilteredProducts(filtered);
     setCurrentPage(1);
   }, [products, searchTerm]);
