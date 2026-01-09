@@ -389,7 +389,7 @@ function OrderPage() {
                     <button 
   onClick={() => navigate('/checkout')}
   className="w-full bg-secondary hover:bg-secondary 
-             text-gray-900 py-3 rounded-lg font-semibold 
+             text-white  py-3 rounded-lg font-semibold 
              transition-colors mt-4"
 >
   Proceed to Checkout

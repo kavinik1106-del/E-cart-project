@@ -846,7 +846,7 @@ function CollectionPage() {
 
 
       {/* Enhanced Categories Section */}
-      <section className="bg-white mt-2 p-6 shadow-lg border-b border-gray-100">
+      <section className="bg-white mt-2 p-6 border-b border-gray-200">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
@@ -862,7 +862,7 @@ function CollectionPage() {
             {canScrollLeft && (
               <button
                 onClick={() => scroll("left")}
-                className="absolute left-0 z-10 bg-white rounded-full p-3 shadow-lg hover:bg-gray-50 border border-gray-200 transition-all duration-200 hover:scale-105"
+                className="absolute left-0 z-10 bg-white rounded-full p-3 shadow-lg hover:bg-gray-50 border border-primary transition-all duration-200 hover:scale-10"
               >
                 <ChevronLeft className="w-5 h-5 text-gray-700" />
               </button>
@@ -882,15 +882,7 @@ function CollectionPage() {
                     : "hover:scale-102"
                 }`}
               >
-                <div
-                  className={`w-24 h-24 mx-auto rounded-2xl border-4 flex items-center justify-center text-3xl mb-3 transition-all duration-300 ${
-                    selectedCategory === "all"
-                      ? "border-primary bg-primary/10 shadow-lg shadow-primary/20"
-                      : "border-gray-200 bg-gray-50 hover:border-blue-300 hover:shadow-md"
-                  }`}
-                >
-                  🏪
-                </div>
+                
                 <p className="text-sm font-semibold text-gray-900">All</p>
                 <p className="text-xs text-gray-500">
                   {allProducts.length} items
@@ -910,7 +902,7 @@ function CollectionPage() {
                   }`}
                 >
                   <div
-                    className={`w-24 h-24 mx-auto rounded-2xl border-4 overflow-hidden flex items-center justify-center bg-gray-100 mb-3 transition-all duration-300 ${
+                    className={`w-24 h-24 mx-auto rounded-2xl border-2 overflow-hidden flex items-center justify-center bg-gray-100 mb-3 transition-all duration-300 ${
                       selectedCategory === cat.id
                         ? "border-blue-500 shadow-lg shadow-blue-200 ring-2 ring-blue-100"
                         : "border-gray-200 hover:border-blue-300 hover:shadow-md"
@@ -946,7 +938,7 @@ function CollectionPage() {
         <div className="flex gap-8">
           {/* Enhanced Sidebar */}
           <div className="hidden lg:block w-80 flex-shrink-0">
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 p-6 sticky top-24">
+            <div className="bg-white rounded-2xl  border border-gray-100 p-6 sticky top-24">
               <h3 className="text-lg font-bold text-gray-900 mb-4">Filters</h3>
               <p>Filters content here</p>
             </div>
@@ -1025,7 +1017,7 @@ function CollectionPage() {
             </div>
 
             {/* Enhanced Results Header */}
-            <div className="bg-white rounded-2xl p-6 mb-8 shadow-lg border border-gray-100">
+            <div className="bg-white rounded-2xl p-6 mb-8  border border-gray-100">
               <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                 <div>
                   <h2 className="text-3xl font-bold text-gray-900 mb-2 flex items-center gap-3">

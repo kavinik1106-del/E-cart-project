@@ -384,7 +384,7 @@ function HomePage() {
       </section>
 
       {/* Featured Products - FOURTH - AMAZON STYLE GRID */}
-      <section className="py-16 bg-white border-t-4 border-secondary">
+      <section className="py-16 bg-white border-t-1 border-primary">
         <div className="max-w-7xl mx-auto px-4">
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-2">Recommended For You</h2>
@@ -415,7 +415,7 @@ function HomePage() {
       </section>
 
       {/* Best Sellers Section */}
-      <section className="py-16 bg-secondary/10 border-t-4 border-secondary">
+      <section className="py-16 bg-secondary/10 border-t-1 border-secondary">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
             <div>

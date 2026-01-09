@@ -55,7 +55,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="sticky top-0 z-50 bg-primary text-white px-4 py-4 shadow-md md:px-8 lg:px-16">
+    <nav className="sticky top-0 z-50 bg-white text-primary px-4 py-4 shadow-md md:px-8 lg:px-16">
       <div className="flex items-center justify-between">
         {/* Logo */}
         <div
@@ -63,7 +63,7 @@ function Navbar() {
           onClick={() => navigate("/")}
         >
           <img
-            src="/logo5.jpg"
+            src="/logofinal.jpg"
             alt="StyleNest Logo"
             className="w-10 h-10 rounded-full border-2 border-white"
           />
@@ -78,7 +78,7 @@ function Navbar() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search for products, brands & more"
-              className="w-full px-4 py-3 pr-12 rounded-lg border border-primary bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-secondary shadow-sm"
+              className="w-full px-4 py-3 pr-12 rounded-lg border border-primary bg-white text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-primary shadow-sm"
             />
             <button
               type="submit"
@@ -91,7 +91,7 @@ function Navbar() {
 
         {/* Desktop Menu */}
         <div className="hidden md:flex gap-8 items-center">
-          {["Home", "About", "Collection", "Contact", "Order"].map((item) => (
+          {["Home", "About", "Collection", "Contact"].map((item) => (
             <button
               key={item}
               onClick={() => navigate(item === "Home" ? "/" : `/${item.toLowerCase()}`)}
@@ -100,6 +100,22 @@ function Navbar() {
               {item}
             </button>
           ))}
+          {/* Orders Link - Points to /my-orders with My Orders page */}
+          {user && (
+            <button
+              onClick={() => navigate("/my-orders")}
+              className="hover:text-secondary transition"
+            >
+              My Orders
+            </button>
+          )}
+          {/* Orders Link - Points to /orders with My Orders buttons */}
+          <button
+            onClick={() => navigate("/orders")}
+            className="hover:text-secondary transition"
+          >
+            Orders
+          </button>
 
           {/* Wishlist */}
           <button
@@ -108,7 +124,7 @@ function Navbar() {
           >
             <Heart size={24} />
             {wishlist.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+              <span className="absolute -top-2 -right-2 bg-secondary text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
                 {wishlist.length}
               </span>
             )}
@@ -117,11 +133,11 @@ function Navbar() {
           {/* Cart */}
           <button
             onClick={() => navigate("/cart")}
-            className="relative hover:text-secondary"
+            className="relative hover:text-primary"
           >
             <ShoppingCart size={24} />
             {getCartCount() > 0 && (
-              <span className="absolute -top-2 -right-2 bg-secondary text-primary text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
+              <span className="absolute -top-2 -right-2 bg-secondary text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">
                 {getCartCount()}
               </span>
             )}
@@ -130,16 +146,15 @@ function Navbar() {
           {/* Auth */}
           {user ? (
             <>
-              <div className="flex items-center gap-2 text-sm bg-white/10 px-4 py-2 rounded-lg">
-                <User size={18} />
-                <div>
-                  <div className="font-semibold">{user.first_name || user.email.split('@')[0]}</div>
-                  <div className="text-xs opacity-75">Profile</div>
-                </div>
+              <div 
+                className="w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold text-lg cursor-pointer hover:shadow-lg transition-shadow"
+                title={user.first_name || user.email.split('@')[0]}
+              >
+                {(user.first_name || user.email.split('@')[0]).charAt(0).toUpperCase()}
               </div>
               <button
                 onClick={handleLogout}
-                className="bg-white text-primary px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 flex items-center gap-2 text-sm"
+                className="bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 flex items-center gap-2 text-sm"
               >
                 <LogOut size={16} />
                 Logout
@@ -195,7 +210,7 @@ function Navbar() {
             </button>
           </form>
 
-          {["Home", "About", "Collection", "Contact", "Order"].map((item) => (
+          {["Home", "About", "Collection", "Contact"].map((item) => (
             <button
               key={item}
               onClick={() => {
@@ -207,6 +222,28 @@ function Navbar() {
               {item}
             </button>
           ))}
+
+          {/* Orders Link */}
+          {user && (
+            <button
+              onClick={() => {
+                navigate("/my-orders");
+                setOpen(false);
+              }}
+              className="block w-full text-left hover:text-primary font-medium"
+            >
+              My Orders
+            </button>
+          )}
+          <button
+            onClick={() => {
+              navigate("/orders");
+              setOpen(false);
+            }}
+            className="block w-full text-left hover:text-primary font-medium"
+          >
+            Orders
+          </button>
 
           <button
             onClick={() => {

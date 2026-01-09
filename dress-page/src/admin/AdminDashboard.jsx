@@ -187,7 +187,7 @@ function AdminDashboard() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-gray-300">
               <thead className="bg-gray-50 border-b">
                 <tr>
                   <th className="px-4 py-3 text-left font-semibold text-gray-700">Order ID</th>
@@ -261,7 +261,7 @@ function AdminDashboard() {
                         className={`h-full rounded transition-all`}
                         style={{
                           width: `${topProducts.length > 0 ? (product.sales / topProducts[0].sales) * 100 : 0}%`,
-                          backgroundColor: ["#3b82f6", "#f59e0b", "#10b981", "#ef4444", "#8b5cf6"][index] || "#6b7280",
+                          backgroundColor: ["#bdcadfff", "#f59e0b", "#10b981", "#ef4444", "#8b5cf6"][index] || "#6b7280",
                         }}
                       ></div>
                     </div>
