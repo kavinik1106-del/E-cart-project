@@ -3,6 +3,25 @@ import { X, Plus, Edit2, Trash2, Search, Eye } from "lucide-react";
 import { apiCall, API_ENDPOINTS } from "../config/apiConfig.js";
 import AdminLayout from "./AdminLayout";
 
+// Helper function to get proper image URL - use public folder
+const getImageUrl = (imagePath) => {
+  if (!imagePath) return '/sofa.webp';
+  
+  // If it's already a full URL (external), don't use it - use public image instead
+  if (imagePath.startsWith('http://') || imagePath.startsWith('https://')) {
+    // Map external URLs to local public images based on product type
+    return '/sofa.webp';
+  }
+  
+  // If path starts with /, it's already a public folder path
+  if (imagePath.startsWith('/')) {
+    return imagePath;
+  }
+  
+  // Otherwise add / prefix to make it a public folder path
+  return '/' + imagePath;
+};
+
 function AdminProductsContent() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -73,6 +92,12 @@ function AdminProductsContent() {
   };
 
   useEffect(() => {
+    const filtered = products.filter(
+      (p) =>
+        p.stock_quantity > 0 && // Only show in-stock items, exclude out of stock
+        (p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        p.type.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
     const filtered = products.filter((p) => {
       const name = (p.name || '').toLowerCase();
       const type = (p.type || '').toLowerCase();
@@ -100,7 +125,7 @@ function AdminProductsContent() {
       category: product.category,
       brand: product.brand || "",
       image: product.image,
-      stock: product.stock,
+      stock: product.stock_quantity,
     });
     setShowModal(true);
   };
@@ -277,9 +302,6 @@ function AdminProductsContent() {
                       Stock
                     </th>
                     <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-                      Status
-                    </th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
                       Actions
                     </th>
                   </tr>
@@ -288,18 +310,12 @@ function AdminProductsContent() {
                   {paginatedProducts.map((product) => (
                     <tr key={product.id} className="hover:bg-gray-50">
                       <td className="px-4 py-3 text-sm text-gray-900">
-                        {product.image ? (
-                          <img 
-                            src={product.image} 
-                            alt={product.name}
-                            className="h-10 w-10 object-cover rounded"
-                            onError={(e) => e.target.src = '/placeholder.png'}
-                          />
-                        ) : (
-                          <div className="h-10 w-10 bg-gray-200 rounded flex items-center justify-center">
-                            📦
-                          </div>
-                        )}
+                        <img 
+                          src={getImageUrl(product.image)} 
+                          alt={product.name}
+                          className="h-10 w-10 object-cover rounded"
+                          onError={(e) => e.target.src = '/sofa.webp'}
+                        />
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-900 font-medium max-w-xs truncate">
                         {product.name}
@@ -314,20 +330,7 @@ function AdminProductsContent() {
                         {product.mrp ? `₹${parseFloat(product.mrp).toFixed(2)}` : '-'}
                       </td>
                       <td className="px-4 py-3 text-sm text-gray-900">
-                        {product.stock}
-                      </td>
-                      <td className="px-4 py-3 text-sm">
-                        <span
-                          className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                            product.stock > 20
-                              ? "bg-green-100 text-green-800"
-                              : product.stock > 0
-                              ? "bg-yellow-100 text-yellow-800"
-                              : "bg-red-100 text-red-800"
-                          }`}
-                        >
-                          {product.stock > 20 ? "In Stock" : product.stock > 0 ? "Low Stock" : "Out of Stock"}
-                        </span>
+                        {product.stock_quantity}
                       </td>
                       <td className="px-4 py-3 text-sm flex gap-2">
                         <button
@@ -502,7 +505,7 @@ function AdminProductsContent() {
 
               <div>
                 <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Image URL
+                  Image Path (public folder)
                 </label>
                 <input
                   type="text"
@@ -510,7 +513,7 @@ function AdminProductsContent() {
                   value={form.image}
                   onChange={handleChange}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary"
-                  placeholder="https://example.com/image.jpg"
+                  placeholder="/sofa.webp or /dress1.webp"
                 />
               </div>
 

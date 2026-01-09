@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { TrendingUp, Users, Package, ShoppingCart, Eye, DollarSign } from "lucide-react"; 
+import { TrendingUp, Users, Package, ShoppingCart, Eye, DollarSign } from "lucide-react";
+import { apiCall, API_ENDPOINTS } from "../config/apiConfig.js";
 
 const StatCard = ({ icon: IconComponent, title, value, color, trend }) => (
   <div className="bg-white rounded-lg shadow-md p-6 border-l-4" style={{ borderColor: color }}>
@@ -25,36 +26,95 @@ const StatCard = ({ icon: IconComponent, title, value, color, trend }) => (
 function AdminDashboard() {
   console.log("AdminDashboard rendering");
   const [stats, setStats] = useState({
-    totalSales: 125450,
-    totalOrders: 1234,
-    totalProducts: 560,
-    totalCustomers: 8934,
+    totalSales: 0,
+    totalOrders: 0,
+    totalProducts: 0,
+    totalCustomers: 0,
   });
 
-  const [recentOrders, setRecentOrders] = useState([
-    { id: "ORD001", customer: "John Doe", amount: 2500, status: "Delivered", date: "2024-12-28" },
-    { id: "ORD002", customer: "Jane Smith", amount: 1800, status: "Processing", date: "2024-12-29" },
-    { id: "ORD003", customer: "Mike Johnson", amount: 3200, status: "Pending", date: "2024-12-29" }
-  ]);
-
-  const [topProducts, setTopProducts] = useState([
-    { id: 1, name: "Premium Cashew Nuts", sales: 450, revenue: 31500 },
-    { id: 2, name: "iPhone 15 Pro Max", sales: 89, revenue: 1111011 },
-    { id: 3, name: "Designer Kurta", sales: 234, revenue: 304266 }
-  ]);
-
-  const [salesOverview, setSalesOverview] = useState([
-    { month: "Jan", sales: 8000 },
-    { month: "Feb", sales: 12000 },
-    { month: "Mar", sales: 15000 },
-    { month: "Apr", sales: 22000 }
-  ]);
-  const [loading, setLoading] = useState(false);
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [topProducts, setTopProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // Data is already initialized in state
-    // No loading needed
+    fetchDashboardData();
   }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      
+      // Fetch orders from admin backend
+      const ordersRes = await apiCall(API_ENDPOINTS.ORDERS, {
+        method: 'GET'
+      });
+      
+      // Fetch customers from admin backend
+      const customersRes = await apiCall(API_ENDPOINTS.CUSTOMERS, {
+        method: 'GET'
+      });
+      
+      // Fetch products from admin backend
+      const productsRes = await apiCall(API_ENDPOINTS.ADMIN_PRODUCTS, {
+        method: 'GET'
+      });
+
+      // Check for API errors
+      if (!ordersRes.success && ordersRes.status !== 404) {
+        throw new Error(ordersRes.message || 'Failed to fetch orders');
+      }
+      if (!customersRes.success && customersRes.status !== 404) {
+        throw new Error(customersRes.message || 'Failed to fetch customers');
+      }
+      if (!productsRes.success && productsRes.status !== 404) {
+        throw new Error(productsRes.message || 'Failed to fetch products');
+      }
+
+      // Calculate stats
+      const orders = Array.isArray(ordersRes.data) ? ordersRes.data : [];
+      const customers = Array.isArray(customersRes.data) ? customersRes.data : [];
+      const products = Array.isArray(productsRes.data) ? productsRes.data : [];
+
+      const totalSales = orders.reduce((sum, order) => sum + (parseFloat(order.total_amount) || 0), 0);
+      const totalOrders = orders.length;
+      const totalProducts = products.length;
+      const totalCustomers = customers.length;
+
+      setStats({
+        totalSales: Math.round(totalSales),
+        totalOrders,
+        totalProducts,
+        totalCustomers,
+      });
+
+      // Set recent orders
+      const recent = orders.slice(-5).reverse().map(order => ({
+        id: order.order_number || order.id,
+        customer: order.customer || `User ${order.user_id}`,
+        amount: parseFloat(order.total_amount || 0),
+        status: order.status || 'Pending',
+        date: order.created_at ? order.created_at.split('T')[0] : new Date().toISOString().split('T')[0]
+      }));
+      setRecentOrders(recent);
+
+      // Set top products by orders
+      const topProds = products.slice(0, 3).map(product => ({
+        id: product.id,
+        name: product.name,
+        sales: Math.floor(Math.random() * 500), // Placeholder, would need order_items data
+        revenue: parseFloat(product.price) * 10 // Placeholder
+      }));
+      setTopProducts(topProds);
+
+    } catch (err) {
+      console.error('Error fetching dashboard data:', err);
+      setError(err.message || 'Failed to load dashboard data');
+    } finally {
+      setLoading(false);
+    }
+  };
 
 
   /* UI - Render immediately with initialized data */
@@ -63,8 +123,27 @@ function AdminDashboard() {
       {/* Test Heading */}
       <div className="bg-primary/20 p-4 rounded mb-4">
         <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
-        <p className="text-gray-600">Stats: Sales={stats.totalSales}, Orders={stats.totalOrders}</p>
+        <p className="text-gray-600">Stats: Sales=₹{stats.totalSales.toLocaleString()}, Orders={stats.totalOrders}, Customers={stats.totalCustomers}</p>
       </div>
+
+      {loading && (
+        <div className="bg-blue-50 p-4 rounded text-blue-700 text-center">
+          Loading dashboard data...
+        </div>
+      )}
+
+      {error && (
+        <div className="bg-red-50 p-4 rounded text-red-700 border border-red-200">
+          <p className="font-semibold">⚠️ Failed to Load</p>
+          <p className="text-sm">{error}</p>
+          <button
+            onClick={fetchDashboardData}
+            className="mt-2 px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 text-sm font-medium"
+          >
+            Try Again
+          </button>
+        </div>
+      )}
 
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -108,7 +187,7 @@ function AdminDashboard() {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="w-full text-gray-300">
               <thead className="bg-gray-50 border-b">
                 <tr>
                   <th className="px-4 py-3 text-left font-semibold text-gray-700">Order ID</th>
@@ -119,7 +198,14 @@ function AdminDashboard() {
                 </tr>
               </thead>
               <tbody>
-                {recentOrders.map((order) => (
+                {recentOrders.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" className="px-4 py-8 text-center text-gray-500">
+                      No orders yet. Orders will appear here when customers place them.
+                    </td>
+                  </tr>
+                ) : (
+                  recentOrders.map((order) => (
                   <tr key={order.id} className="border-b hover:bg-gray-50 transition">
                     <td className="px-4 py-3 font-semibold text-gray-800">#{order.id}</td>
                     <td className="px-4 py-3 text-gray-700">{order.customer}</td>
@@ -141,7 +227,8 @@ function AdminDashboard() {
                     </td>
                     <td className="px-4 py-3 text-gray-600">{order.date}</td>
                   </tr>
-                ))}
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -155,7 +242,12 @@ function AdminDashboard() {
           </div>
 
           <div className="space-y-4">
-            {topProducts.map((product, index) => (
+            {topProducts.length === 0 ? (
+              <div className="text-center text-gray-500 py-8">
+                No products yet. Add products to see them here.
+              </div>
+            ) : (
+              topProducts.map((product, index) => (
               <div key={product.id} className="border-b pb-4 last:border-b-0">
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
@@ -169,33 +261,19 @@ function AdminDashboard() {
                         className={`h-full rounded transition-all`}
                         style={{
                           width: `${topProducts.length > 0 ? (product.sales / topProducts[0].sales) * 100 : 0}%`,
-                          backgroundColor: ["#3b82f6", "#f59e0b", "#10b981", "#ef4444", "#8b5cf6"][index] || "#6b7280",
+                          backgroundColor: ["#bdcadfff", "#f59e0b", "#10b981", "#ef4444", "#8b5cf6"][index] || "#6b7280",
                         }}
                       ></div>
                     </div>
                   </div>
                 </div>
               </div>
-            ))}
+              ))
+            )}
           </div>
         </div>
       </div>
 
-      {/* Activity Feed */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold text-gray-800 mb-6">Sales Overview (This Month)</h2>
-        <div className="h-64 flex items-end gap-2 justify-around">
-          {salesOverview.map((item, index) => (
-            <div key={index} className="flex flex-col items-center gap-2">
-              <div
-                className="bg-primary w-6 rounded-t"
-                style={{ height: `${item.sales / 500}px` }}
-              ></div>
-              <span className="text-xs mt-1">{item.month}</span>
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   );
 }

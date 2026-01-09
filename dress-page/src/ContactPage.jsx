@@ -134,7 +134,7 @@ function ContactPage() {
             </div>
 
             <h1 className="text-4xl lg:text-6xl font-bold mb-6 leading-tight">
-              Get in <span className="text-secondary">Touch</span>
+              Get in <span className="text-white">Touch</span>
             </h1>
 
             <p className="text-xl lg:text-2xl mb-8 text-blue-100 leading-relaxed max-w-4xl mx-auto">
@@ -299,7 +299,7 @@ function ContactPage() {
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Information Card */}
-          <div className="bg-primary/10 rounded-3xl p-8 shadow-xl border border-primary/20">
+          <div className="bg-primary/10 rounded-3xl p-8 shadow-xl border border-white">
             <div className="mb-8">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">Get in Touch</h2>
               <p className="text-gray-600 leading-relaxed">
@@ -515,7 +515,7 @@ function ContactPage() {
 
       {/* Brand */}
       <div className="space-y-4">
-        <h3 className="text-2xl font-bold text-secondary">
+        <h3 className="text-2xl font-bold text-white">
           StyleNest
         </h3>
         <p className="text-blue-100 text-sm leading-relaxed">

@@ -141,7 +141,7 @@ function CartPage() {
                 <Link
   to="/checkout"
   className="block text-center bg-secondary hover:opacity-90 
-             text-gray-900 py-3 rounded-lg font-semibold 
+             text-white py-3 rounded-lg font-semibold 
              transition-colors"
 >
   Proceed to Checkout

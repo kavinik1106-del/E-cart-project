@@ -138,12 +138,12 @@ const startServer = async () => {
         console.log('📦 Returning', formattedProducts.length, 'products from local database');
         res.json({ 
           success: true, 
-          data: formattedProducts, 
+          data: formattedProducts || [], 
           count: formattedProducts.length 
         });
       } catch (error) {
-        console.error('❌ Error fetching products:', error);
-        res.status(500).json({ success: false, error: error.message });
+        console.error('❌ Error fetching products:', error.message);
+        res.status(500).json({ success: false, message: error.message, error: error.message });
       }
     });
 
@@ -300,9 +300,10 @@ const startServer = async () => {
 
         // Fallback to local database
         const orders = await Order.findAll();
-        res.json({ success: true, data: orders, count: orders.length });
+        res.json({ success: true, data: orders || [], count: orders.length });
       } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        console.error('Error fetching orders:', error.message);
+        res.status(500).json({ success: false, message: error.message, error: error.message });
       }
     });
 
@@ -429,9 +430,10 @@ const startServer = async () => {
         const customers = await Customer.findAll({
           order: [['createdAt', 'DESC']],
         });
-        res.json({ success: true, data: customers, count: customers.length });
+        res.json({ success: true, data: customers || [], count: customers.length });
       } catch (error) {
-        res.status(500).json({ success: false, error: error.message });
+        console.error('Error fetching customers:', error.message);
+        res.status(500).json({ success: false, message: error.message, error: error.message });
       }
     });
 

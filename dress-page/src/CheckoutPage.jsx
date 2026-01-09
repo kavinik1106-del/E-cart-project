@@ -439,7 +439,7 @@ function CheckoutPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-secondary text-primary py-4 rounded-lg font-semibold hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-all duration-200"
+                className="w-full bg-secondary text-white py-4 rounded-lg font-semibold hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-all duration-200"
               >
                 {loading ? (
                   <>

@@ -165,7 +165,7 @@ export default function AboutPage() {
             {values.map((v, i) => (
               <div
                 key={i}
-                className="bg-primary/5 border border-primary/20 p-8 rounded-2xl shadow hover:shadow-xl transition"
+                className="bg-primary/5 border border-primary p-8 rounded-2xl shadow hover:shadow-xl transition"
               >
                 <div className="w-16 h-16 bg-primary rounded-xl flex items-center justify-center mb-6">
                   <v.icon className="text-white w-8 h-8" />

@@ -9,10 +9,14 @@ import ContactPage from "./ContactPage.jsx";
 import CollectionPage from "./CollectionPage.jsx";
 import KidsWear from "./kidswear.jsx";
 import OrderPage from "./OrderPage.jsx";
+import OrderPageAPI from "./OrderPageAPI.jsx";
+import OrderTrackingPage from "./OrderTrackingPage.jsx";
+import MyOrders from "./MyOrders.jsx";
+
 import Electro from "./Electro.jsx";
 import WomenDress from "./WomenDress1.jsx";
 import MenDress from "./MenDress.jsx";
-import Vegetables from "./Vegetables.jsx";
+
 import Bicycles from "./bicycles.jsx";
 import Accessories from "./accessories.jsx";
 import Footwear from "./footwear.jsx";
@@ -32,6 +36,7 @@ import { useCart } from "./contexts/CartContext.jsx";
 import AdminPanel from "./admin/AdminPanel.jsx";
 import AdminLogin from "./admin/AdminLogin.jsx";
 import AdminProducts from "./admin/AdminProducts.jsx";
+import OutOfStockProducts from "./admin/OutOfStockProducts.jsx";
 import AdminOrders from "./admin/AdminOrders.jsx";
 import AdminCustomers from "./admin/AdminCustomers.jsx";
 import AdminSettings from "./admin/AdminSettings.jsx";
@@ -54,12 +59,16 @@ function AppContent() {
       <Route path="/product/:id" element={<ProductDetailPage />} />
 
       <Route path="/order" element={<OrderPage />} />
+      <Route path="/orders" element={<OrderPageAPI />} />
+      <Route path="/my-orders" element={<MyOrders />} />
+      <Route path="/order/:orderId/track" element={<OrderTrackingPage />} />
+      
       <Route path="/electro" element={<Electro />} />
       <Route path="/women" element={<WomenDress />} />
       <Route path="/men" element={<MenDress />} />
       <Route path="/footwear" element={<Footwear />} />
       <Route path="/accessories" element={<Accessories />} />
-      <Route path="/vegetables" element={<Vegetables />} />
+      
       <Route path="/appliances" element={<HomeAppliances />} />
       <Route path="/bicycles" element={<Bicycles />} />
       <Route path="/login" element={<LoginPage />} />
@@ -84,6 +93,14 @@ function AppContent() {
         element={
           <ProtectedRoute>
             <AdminProducts />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/out-of-stock"
+        element={
+          <ProtectedRoute>
+            <OutOfStockProducts />
           </ProtectedRoute>
         }
       />

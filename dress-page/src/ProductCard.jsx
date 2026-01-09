@@ -178,9 +178,7 @@ function ProductCard({ product, products = [], showRating = false }) {
           >
             {isLoading ? (
               <Loader2 className="w-4 h-4 animate-spin" />
-            ) : isInCart(product.id) ? (
-              <X className="w-4 h-4" />
-            ) : (
+            ) :   (
               <ShoppingCart className="w-4 h-4" />
             )}
             {isLoading ? 'Processing...' : isInCart(product.id) ? 'Added to Cart' : 'Add to Cart'}

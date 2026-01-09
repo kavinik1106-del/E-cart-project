@@ -13,7 +13,7 @@ function HomePage() {
     { name: "Electronics", image: "/mobile.jpg", route: "/electro", count: 245 },
     { name: "Women Dresses", image: "/dress1.webp", route: "/women", count: 189 },
     { name: "Men Dresses", image: "/men2.jpg", route: "/men", count: 156 },
-    { name: "Vegetables", image: "/veg2.webp", route: "/vegetables", count: 98 },
+    
     { name: "Home Appliances", image: "/OIP (1).jpg", route: "/appliances", count: 134 },
     { name: "Kids Wear", image: "/OIP (1).webp", route: "/kidswear", count: 87 },
     { name: "Footwear", image: "/OIP (2).webp", route: "/footwear", count: 203 },
@@ -384,14 +384,14 @@ function HomePage() {
       </section>
 
       {/* Featured Products - FOURTH - AMAZON STYLE GRID */}
-      <section className="py-16 bg-white border-t-4 border-secondary">
+      <section className="py-16 bg-white border-t-1 border-primary">
         <div className="max-w-7xl mx-auto px-4">
           <div className="mb-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-2">Recommended For You</h2>
             <p className="text-gray-600">Based on your browsing history and preferences</p>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-3">
             {products.map((product) => (
               <ProductCard
                 key={product.id}
@@ -415,7 +415,7 @@ function HomePage() {
       </section>
 
       {/* Best Sellers Section */}
-      <section className="py-16 bg-secondary/10 border-t-4 border-secondary">
+      <section className="py-16 bg-secondary/10 border-t-1 border-secondary">
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex items-center justify-between mb-8">
             <div>
@@ -430,7 +430,7 @@ function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-3">
             {products.slice(0, 24).map((product) => (
               <ProductCard
                 key={product.id}
@@ -458,7 +458,7 @@ function HomePage() {
     </div>
 
     {/* Products Grid */}
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-3">
       {products.slice(0, 18).map((product) => (
         <ProductCard
           key={product.id}
@@ -489,7 +489,7 @@ function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-3">
             {products.slice(5, 29).map((product) => (
               <ProductCard
                 key={product.id}
@@ -518,7 +518,7 @@ function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-3">
             {products.slice(10, 34).map((product) => (
               <ProductCard
                 key={product.id}
@@ -547,7 +547,7 @@ function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-3">
             {products.slice(15, 39).map((product) => (
               <ProductCard
                 key={product.id}
@@ -576,7 +576,7 @@ function HomePage() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-5 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-3">
             {products.slice(20, 44).map((product) => (
               <ProductCard
                 key={product.id}

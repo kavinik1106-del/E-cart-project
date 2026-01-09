@@ -17,10 +17,14 @@ function AdminLayout({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  
+  // Get username from localStorage (assuming it was stored during login)
+  const username = localStorage.getItem("username") || "Admin";
 
   const menuItems = [
     { icon: BarChart3, label: "Dashboard", path: "/admin" },
     { icon: Package, label: "Products", path: "/admin/products" },
+    { icon: Package, label: "Out of Stock", path: "/admin/out-of-stock" },
     { icon: ShoppingCart, label: "Orders", path: "/admin/orders" },
     { icon: Users, label: "Customers", path: "/admin/customers" },
     { icon: Settings, label: "Settings", path: "/admin/settings" },
@@ -48,7 +52,7 @@ function AdminLayout({ children }) {
           {/* Logo + Brand */}
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-secondary rounded-lg flex items-center justify-center font-bold text-white">
-              A
+              S
             </div>
 
             {sidebarOpen && (
@@ -126,7 +130,7 @@ function AdminLayout({ children }) {
 
           <div className="flex items-center gap-4">
             {/* Search */}
-            <div className="hidden md:flex items-center bg-primary/10 border border-primary/20 rounded-lg px-3 py-2">
+            <div className="hidden md:flex items-center bg-primary/10 border border-primary rounded-lg px-3 py-2">
               <Search size={18} className="text-blue-500" />
               <input
                 type="text"
@@ -143,12 +147,11 @@ function AdminLayout({ children }) {
 
             {/* Profile */}
             <div className="flex items-center gap-3 pl-4 border-l">
-              <div className="text-right">
-                <p className="font-semibold text-sm">Admin User</p>
-                <p className="text-xs text-gray-500">Administrator</p>
-              </div>
-              <div className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-white font-bold">
-                A
+              <div 
+                className="w-10 h-10 bg-secondary rounded-full flex items-center justify-center text-white font-bold text-lg cursor-pointer hover:shadow-lg transition-shadow"
+                title={username}
+              >
+                S
               </div>
             </div>
           </div>

@@ -7,6 +7,10 @@ function AdminOrdersContent() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [expandedOrder, setExpandedOrder] = useState(null);
+  const [filter, setFilter] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Fetch orders from API
   const fetchOrders = async () => {
@@ -14,7 +18,7 @@ function AdminOrdersContent() {
       setLoading(true);
       setError(null);
       
-      // Fetch from main backend, not admin API
+      // Fetch from main backend
       const response = await apiCall(`${API_ENDPOINTS.USER_ORDERS}`, {
         method: 'GET'
       });
@@ -55,13 +59,6 @@ function AdminOrdersContent() {
     fetchOrders();
   }, []);
 
-  const [expandedOrder, setExpandedOrder] = useState(null);
-  const [filter, setFilter] = useState("All");
-
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-
   const statusConfig = {
     pending: { color: "text-gray-600", bg: "bg-gray-100", icon: Clock },
     processing: { color: "text-primary", bg: "bg-primary/20", icon: Package },
@@ -73,6 +70,13 @@ function AdminOrdersContent() {
     filter === "All" 
       ? orders 
       : orders.filter((o) => o.status === filter.toLowerCase());
+
+  // Pagination
+  const totalPages = Math.ceil(filteredOrders.length / itemsPerPage);
+  const paginatedOrders = filteredOrders.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   const updateOrderStatus = async (orderId, newStatus) => {
     try {
@@ -110,7 +114,7 @@ function AdminOrdersContent() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold text-gray-800">Orders</h1>
-          <p className="text-gray-500 text-sm mt-1">Manage and track customer orders</p>
+          <p className="text-gray-500 text-sm mt-1">Manage and track all customer orders</p>
         </div>
         <button
           onClick={fetchOrders}
@@ -121,14 +125,6 @@ function AdminOrdersContent() {
           Refresh
         </button>
       </div>
-
-      {/* Loading State */}
-      {loading && (
-        <div className="text-center py-8">
-          <RefreshCw size={40} className="animate-spin mx-auto text-primary mb-4" />
-          <p className="text-gray-600">Loading orders...</p>
-        </div>
-      )}
 
       {/* Error State */}
       {error && (
@@ -144,110 +140,195 @@ function AdminOrdersContent() {
       )}
 
       {/* Status Filter */}
-
       <div className="flex gap-2 flex-wrap">
         {["All", "Pending", "Processing", "Shipped", "Delivered"].map((status) => (
           <button
             key={status}
-            onClick={() => setFilter(status)}
+            onClick={() => {
+              setFilter(status);
+              setCurrentPage(1);
+            }}
             className={`px-4 py-2 rounded-lg font-medium transition ${
               filter === status
                 ? "bg-primary text-white shadow-md"
                 : "bg-white border border-gray-200 text-gray-700 hover:bg-gray-50"
             }`}
           >
-            {status}
+            {status} ({filter === status ? filteredOrders.length : orders.filter((o) => status === "All" || o.status === status.toLowerCase()).length})
           </button>
         ))}
       </div>
 
-      <div className="space-y-3">
-        {filteredOrders.length > 0 ? (
-          filteredOrders.map((order) => {
-            const statusKey = order.status.toLowerCase();
-            const StatusIcon = statusConfig[statusKey]?.icon || Clock;
-            const isExpanded = expandedOrder === order.id;
+      {/* Orders Table */}
+      {paginatedOrders.length > 0 ? (
+        <>
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50 border-b">
+                <tr>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                    Order ID
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                    Customer
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                    Email
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                    Date
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                    Amount
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                    Items
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                    Status
+                  </th>
+                  <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                    Action
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y">
+                {paginatedOrders.map((order) => {
+                  const statusKey = order.status.toLowerCase();
+                  const isExpanded = expandedOrder === order.id;
 
-            return (
-              <div
-                key={order.id}
-                className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden"
-              >
-                <div
-                  onClick={() => setExpandedOrder(isExpanded ? null : order.id)}
-                  className="p-4 cursor-pointer hover:bg-gray-50 transition"
-                >
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      <div className={`p-2 rounded-lg ${statusConfig[statusKey]?.bg}`}>
-                        <StatusIcon size={20} className={statusConfig[statusKey]?.color} />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-gray-800">
-                          {order.id} - {order.customer}
-                        </h3>
-                        <p className="text-sm text-gray-500">{order.date}</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="font-semibold text-gray-800">${order.amount}</p>
-                      <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${statusConfig[statusKey]?.bg} ${statusConfig[statusKey]?.color}`}>
-                        {order.status}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {isExpanded && (
-                  <div className="bg-gray-50 border-t p-4 space-y-4">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                      <div>
-                        <p className="text-sm text-gray-600">Email</p>
-                        <p className="font-semibold text-gray-900">{order.email}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-600">Items</p>
-                        <p className="font-semibold text-gray-900">{order.items}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-600">Address</p>
-                        <p className="font-semibold text-gray-900">{order.address}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-600">Status</p>
-                        <p className="font-semibold text-gray-900 capitalize">{order.status}</p>
-                      </div>
-                    </div>
-
-                    <div className="border-t pt-4">
-                      <p className="text-sm text-gray-600 mb-2">Update Status:</p>
-                      <div className="flex gap-2 flex-wrap">
-                        {["pending", "processing", "shipped", "delivered"].map((status) => (
-                          <button
-                            key={status}
-                            onClick={() => updateOrderStatus(order.id, status)}
-                            className={`px-3 py-1 rounded text-sm font-medium transition ${
-                              order.status === status
-                                ? "bg-primary text-white"
-                                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                            }`}
+                  return (
+                    <React.Fragment key={order.id}>
+                      <tr className="hover:bg-gray-50">
+                        <td className="px-4 py-3 text-sm font-semibold text-gray-900">
+                          {order.order_number}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-gray-900">
+                          {order.customer}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-gray-600">
+                          {order.email}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-gray-600">
+                          {order.date}
+                        </td>
+                        <td className="px-4 py-3 text-sm font-semibold text-gray-900">
+                          ₹{order.amount.toFixed(2)}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-gray-600">
+                          {order.items}
+                        </td>
+                        <td className="px-4 py-3 text-sm">
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                              statusConfig[statusKey]?.bg
+                            } ${statusConfig[statusKey]?.color}`}
                           >
-                            {status.charAt(0).toUpperCase() + status.slice(1)}
+                            {order.status}
+                          </span>
+                        </td>
+                        <td className="px-4 py-3 text-sm">
+                          <button
+                            onClick={() => setExpandedOrder(isExpanded ? null : order.id)}
+                            className="text-primary hover:text-blue-700 font-medium flex items-center gap-1"
+                          >
+                            <ChevronDown
+                              size={18}
+                              className={`transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+                            />
+                            Details
                           </button>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            );
-          })
-        ) : (
-          <div className="text-center py-8 text-gray-500">
-            No orders found
+                        </td>
+                      </tr>
+
+                      {/* Expanded Details Row */}
+                      {isExpanded && (
+                        <tr className="bg-gray-50">
+                          <td colSpan="8" className="px-4 py-4">
+                            <div className="space-y-4">
+                              {/* Customer Info */}
+                              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div>
+                                  <p className="text-xs text-gray-600 font-semibold">PHONE</p>
+                                  <p className="text-sm font-medium text-gray-900">{order.phone}</p>
+                                </div>
+                                <div>
+                                  <p className="text-xs text-gray-600 font-semibold">CITY</p>
+                                  <p className="text-sm font-medium text-gray-900">{order.city}</p>
+                                </div>
+                                <div>
+                                  <p className="text-xs text-gray-600 font-semibold">STATE</p>
+                                  <p className="text-sm font-medium text-gray-900">{order.state}</p>
+                                </div>
+                                <div>
+                                  <p className="text-xs text-gray-600 font-semibold">PINCODE</p>
+                                  <p className="text-sm font-medium text-gray-900">{order.pincode}</p>
+                                </div>
+                              </div>
+
+                              {/* Address */}
+                              <div>
+                                <p className="text-xs text-gray-600 font-semibold mb-2">DELIVERY ADDRESS</p>
+                                <p className="text-sm text-gray-900 bg-white p-3 rounded border border-gray-200">
+                                  {order.address}
+                                </p>
+                              </div>
+
+                              {/* Status Update */}
+                              <div>
+                                <p className="text-xs text-gray-600 font-semibold mb-2">UPDATE STATUS</p>
+                                <div className="flex gap-2 flex-wrap">
+                                  {["pending", "processing", "shipped", "delivered"].map((status) => (
+                                    <button
+                                      key={status}
+                                      onClick={() => updateOrderStatus(order.id, status)}
+                                      className={`px-3 py-1 rounded text-sm font-medium transition ${
+                                        order.status === status
+                                          ? "bg-primary text-white"
+                                          : "bg-white border border-gray-300 text-gray-700 hover:bg-gray-50"
+                                      }`}
+                                    >
+                                      {status.charAt(0).toUpperCase() + status.slice(1)}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
-        )}
-      </div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex justify-center gap-2 mt-6">
+              {Array.from({ length: totalPages }).map((_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => setCurrentPage(i + 1)}
+                  className={`px-3 py-2 rounded ${
+                    currentPage === i + 1
+                      ? "bg-primary text-white"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
+          )}
+        </>
+      ) : (
+        <div className="text-center py-12 text-gray-500">
+          <p className="text-lg mb-4">📦 No orders found</p>
+          <p className="text-sm">Start creating orders to see them here.</p>
+        </div>
+      )}
     </div>
   );
 }
