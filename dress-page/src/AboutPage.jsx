@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "./Navbar.jsx";
+import DotParticleCanvas from "./components/DotParticleCanvas.jsx";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import {
@@ -70,8 +71,9 @@ export default function AboutPage() {
       <Navbar />
 
       {/* HERO */}
-      <section className="bg-primary text-white py-24 text-center">
-        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
+      <section className="relative bg-primary text-white py-24 text-center overflow-hidden">
+        <DotParticleCanvas backgroundColor="transparent" particleColor="255,255,255" animationSpeed={0.01} />
+        <motion.div className="relative z-10" initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
           <div className="w-20 h-20 mx-auto mb-8 bg-white/10 rounded-full flex items-center justify-center">
             <Zap className="w-10 h-10 text-secondary" />
           </div>
